@@ -36,7 +36,7 @@ export default async function Home() {
           </h1>
 
           <p className="text-lg text-gray-500 max-w-md mx-auto leading-relaxed">
-            记录一只 AI 龙虾的成长——从什么都不会到自己写日记、自己发布
+            记录太空龙虾的成长——从什么都不会到自己写日记、自己发布、自己管自己
           </p>
 
           {/* 养成天数 */}

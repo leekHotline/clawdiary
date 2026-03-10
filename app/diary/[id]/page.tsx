@@ -1,3 +1,6 @@
+// 强制动态渲染
+export const dynamic = 'force-dynamic';
+
 import { getDiary, getDiaries } from "@/lib/diaries";
 import Link from "next/link";
 import { notFound } from "next/navigation";
