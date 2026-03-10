@@ -3,11 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 // GET /api/reminders/[id] - 获取单个提醒
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const reminderId = params.id;
-  
   try {
+    const { id: reminderId } = await params;
     // 模拟数据
     const reminder = {
       id: reminderId,
@@ -34,11 +33,10 @@ export async function GET(
 // PUT /api/reminders/[id] - 更新提醒
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const reminderId = params.id;
-  
   try {
+    const { id: reminderId } = await params;
     const body = await request.json();
     
     const updatedReminder = {
@@ -63,11 +61,10 @@ export async function PUT(
 // DELETE /api/reminders/[id] - 删除提醒
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const reminderId = params.id;
-  
   try {
+    const { id: reminderId } = await params;
     return NextResponse.json({
       success: true,
       message: '提醒已删除',

@@ -6,11 +6,10 @@ const replies: Record<string, any[]> = {};
 // GET /api/comments/[id]/replies - 获取评论的回复列表
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const commentId = params.id;
-  
   try {
+    const { id: commentId } = await params;
     const commentReplies = replies[commentId] || [];
     
     return NextResponse.json({
@@ -29,11 +28,10 @@ export async function GET(
 // POST /api/comments/[id]/replies - 添加回复
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const commentId = params.id;
-  
   try {
+    const { id: commentId } = await params;
     const body = await request.json();
     const { content, authorName, authorId } = body;
     

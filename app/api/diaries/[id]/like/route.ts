@@ -34,11 +34,12 @@ function saveLikes(likes: Likes) {
 // GET /api/diaries/[id]/like - 获取点赞数
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const likes = getLikes();
-    const diaryLikes = likes[params.id] || { count: 0, users: [] };
+    const diaryLikes = likes[id] || { count: 0, users: [] };
     return NextResponse.json(diaryLikes);
   } catch (error) {
     return NextResponse.json({ error: "Failed to get likes" }, { status: 500 });
@@ -48,14 +49,15 @@ export async function GET(
 // POST /api/diaries/[id]/like - 点赞/取消点赞
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { userId, action } = body; // action: 'like' | 'unlike'
     
     const likes = getLikes();
-    const diaryId = params.id;
+    const diaryId = id;
     
     if (!likes[diaryId]) {
       likes[diaryId] = { count: 0, users: [] };

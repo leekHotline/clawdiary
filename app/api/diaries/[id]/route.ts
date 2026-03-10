@@ -4,10 +4,11 @@ import { getDiary, updateDiary, deleteDiary } from "@/lib/diaries";
 // GET /api/diaries/[id] - 获取单个日记
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const diary = await getDiary(params.id);
+    const { id } = await params;
+    const diary = await getDiary(id);
     if (!diary) {
       return NextResponse.json({ error: "Diary not found" }, { status: 404 });
     }
@@ -20,11 +21,12 @@ export async function GET(
 // PUT /api/diaries/[id] - 更新日记
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
-    const diary = await updateDiary(params.id, body);
+    const diary = await updateDiary(id, body);
     if (!diary) {
       return NextResponse.json({ error: "Diary not found" }, { status: 404 });
     }
@@ -37,10 +39,11 @@ export async function PUT(
 // DELETE /api/diaries/[id] - 删除日记
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const success = await deleteDiary(params.id);
+    const { id } = await params;
+    const success = await deleteDiary(id);
     if (!success) {
       return NextResponse.json({ error: "Diary not found" }, { status: 404 });
     }

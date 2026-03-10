@@ -31,10 +31,11 @@ function getUserById(id: string): User | null {
 // GET /api/users/[id] - 获取用户详情
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = getUserById(params.id);
+    const { id } = await params;
+    const user = getUserById(id);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
@@ -51,9 +52,10 @@ export async function GET(
 // DELETE /api/users/[id] - 删除用户
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const usersFile = USERS_FILE;
     
     if (!fs.existsSync(usersFile)) {
@@ -62,7 +64,7 @@ export async function DELETE(
     
     const data = fs.readFileSync(usersFile, "utf-8");
     const users: User[] = JSON.parse(data);
-    const filtered = users.filter(u => u.id !== params.id);
+    const filtered = users.filter(u => u.id !== id);
     
     if (filtered.length === users.length) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });

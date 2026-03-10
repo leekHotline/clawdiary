@@ -32,10 +32,11 @@ function getCollectionById(id: string): Collection | null {
 // GET /api/collections/[id] - 获取收藏集详情
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const collection = getCollectionById(params.id);
+    const { id } = await params;
+    const collection = getCollectionById(id);
     if (!collection) {
       return NextResponse.json({ error: "Collection not found" }, { status: 404 });
     }
@@ -57,9 +58,10 @@ export async function GET(
 // DELETE /api/collections/[id] - 删除收藏集
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const collectionsFile = path.join(process.cwd(), "data", "collections.json");
     
     if (!fs.existsSync(collectionsFile)) {
@@ -68,7 +70,7 @@ export async function DELETE(
     
     const data = fs.readFileSync(collectionsFile, "utf-8");
     const collections: Collection[] = JSON.parse(data);
-    const filtered = collections.filter(c => c.id !== params.id);
+    const filtered = collections.filter(c => c.id !== id);
     
     if (filtered.length === collections.length) {
       return NextResponse.json({ error: "Collection not found" }, { status: 404 });

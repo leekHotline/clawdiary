@@ -6,15 +6,15 @@ const userActivities: Record<string, any[]> = {};
 // GET /api/users/[id]/activities - 获取用户活动记录
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const userId = params.id;
-  const { searchParams } = new URL(request.url);
-  const type = searchParams.get('type') || 'all'; // diary, like, comment, bookmark, all
-  const limit = parseInt(searchParams.get('limit') || '20');
-  const offset = parseInt(searchParams.get('offset') || '0');
-  
   try {
+    const { id: userId } = await params;
+    const { searchParams } = new URL(request.url);
+    const type = searchParams.get('type') || 'all'; // diary, like, comment, bookmark, all
+    const limit = parseInt(searchParams.get('limit') || '20');
+    const offset = parseInt(searchParams.get('offset') || '0');
+    
     // 模拟活动记录
     const activities = userActivities[userId] || [
       {
@@ -79,11 +79,10 @@ export async function GET(
 // POST /api/users/[id]/activities - 记录用户活动
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const userId = params.id;
-  
   try {
+    const { id: userId } = await params;
     const body = await request.json();
     const { type, action, targetId, targetTitle, content } = body;
     

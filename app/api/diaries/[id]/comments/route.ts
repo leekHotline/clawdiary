@@ -37,10 +37,11 @@ function saveComments(comments: Comment[]) {
 // GET /api/diaries/[id]/comments - 获取日记评论
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const comments = getComments().filter(c => c.diaryId === params.id);
+    const { id } = await params;
+    const comments = getComments().filter(c => c.diaryId === id);
     return NextResponse.json(comments.sort((a, b) => 
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     ));
@@ -52,9 +53,10 @@ export async function GET(
 // POST /api/diaries/[id]/comments - 添加评论
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { userId, userName, content } = body;
     
@@ -66,7 +68,7 @@ export async function POST(
     const now = new Date().toISOString();
     const newComment: Comment = {
       id: Date.now().toString(),
-      diaryId: params.id,
+      diaryId: id,
       userId,
       userName,
       content,
@@ -86,9 +88,10 @@ export async function POST(
 // DELETE /api/diaries/[id]/comments - 删除评论
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { searchParams } = new URL(request.url);
     const commentId = searchParams.get("commentId");
     

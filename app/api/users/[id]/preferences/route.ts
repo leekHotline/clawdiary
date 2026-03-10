@@ -6,11 +6,10 @@ const userPreferences: Record<string, any> = {};
 // GET /api/users/[id]/preferences - 获取用户偏好
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const userId = params.id;
-  
   try {
+    const { id: userId } = await params;
     const prefs = userPreferences[userId] || {
       theme: 'light',
       fontSize: 'medium',
@@ -47,11 +46,10 @@ export async function GET(
 // PUT /api/users/[id]/preferences - 更新用户偏好
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const userId = params.id;
-  
   try {
+    const { id: userId } = await params;
     const body = await request.json();
     
     userPreferences[userId] = {

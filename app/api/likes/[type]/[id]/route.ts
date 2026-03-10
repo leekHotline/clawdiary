@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from 'next/server';
 // GET /api/likes/[type]/[id] - 获取特定内容的点赞状态
 export async function GET(
   request: NextRequest,
-  { params }: { params: { type: string; id: string } }
+  { params }: { params: Promise<{ type: string; id: string }> }
 ) {
-  const { type, id } = params;
+  const { type, id } = await params;
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get('userId') || 'anonymous';
   
@@ -34,9 +34,9 @@ export async function GET(
 // POST /api/likes/[type]/[id] - 点赞/取消点赞
 export async function POST(
   request: NextRequest,
-  { params }: { params: { type: string; id: string } }
+  { params }: { params: Promise<{ type: string; id: string }> }
 ) {
-  const { type, id } = params;
+  const { type, id } = await params;
   
   try {
     const body = await request.json();

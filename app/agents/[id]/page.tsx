@@ -9,8 +9,9 @@ const agentInfo = {
   review: { name: "reviewClawdBot", role: "审查专家", emoji: "✅", desc: "负责代码审查和质量把控", skills: ["代码审查", "测试", "安全审计"] },
 };
 
-export default function AgentDetailPage({ params }: { params: { id: string } }) {
-  const agent = agentInfo[params.id as keyof typeof agentInfo];
+export default async function AgentDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const agent = agentInfo[id as keyof typeof agentInfo];
 
   if (!agent) {
     return (

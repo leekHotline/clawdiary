@@ -4,10 +4,11 @@ import { getDiary } from "@/lib/diaries";
 // POST /api/diaries/[id]/share - 分享日记
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const diary = await getDiary(params.id);
+    const { id } = await params;
+    const diary = await getDiary(id);
     if (!diary) {
       return NextResponse.json({ error: "Diary not found" }, { status: 404 });
     }
@@ -17,7 +18,7 @@ export async function POST(
     
     // 生成分享链接
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    const shareUrl = `${baseUrl}/diary/${params.id}`;
+    const shareUrl = `${baseUrl}/diary/${id}`;
     
     // 生成分享内容
     const shareText = `${diary.title}\n\n${diary.content.substring(0, 100)}...\n\n查看完整日记：${shareUrl}`;

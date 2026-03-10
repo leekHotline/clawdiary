@@ -36,9 +36,10 @@ function saveBookmarks(bookmarks: Bookmark[]) {
 // GET /api/diaries/[id]/bookmark - 获取书签
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
     
@@ -47,7 +48,7 @@ export async function GET(
     }
     
     const bookmarks = getBookmarks();
-    const bookmark = bookmarks.find(b => b.diaryId === params.id && b.userId === userId);
+    const bookmark = bookmarks.find(b => b.diaryId === id && b.userId === userId);
     
     return NextResponse.json({ bookmark: bookmark || null });
   } catch (error) {
@@ -58,9 +59,10 @@ export async function GET(
 // POST /api/diaries/[id]/bookmark - 添加/更新书签
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
     const { userId, position, note } = body;
     
@@ -72,7 +74,7 @@ export async function POST(
     const now = new Date().toISOString();
     
     const existingIndex = bookmarks.findIndex(
-      b => b.diaryId === params.id && b.userId === userId
+      b => b.diaryId === id && b.userId === userId
     );
     
     if (existingIndex >= 0) {
@@ -89,7 +91,7 @@ export async function POST(
     const newBookmark: Bookmark = {
       id: Date.now().toString(),
       userId,
-      diaryId: params.id,
+      diaryId: id,
       position: position || 0,
       note,
       createdAt: now,
@@ -107,9 +109,10 @@ export async function POST(
 // DELETE /api/diaries/[id]/bookmark - 删除书签
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
     
@@ -119,7 +122,7 @@ export async function DELETE(
     
     const bookmarks = getBookmarks();
     const filtered = bookmarks.filter(
-      b => !(b.diaryId === params.id && b.userId === userId)
+      b => !(b.diaryId === id && b.userId === userId)
     );
     saveBookmarks(filtered);
     
