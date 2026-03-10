@@ -21,6 +21,9 @@ const moreItems = [
   { href: "/calendar", label: "日历", emoji: "📆" },
   { href: "/mood", label: "心情", emoji: "😊" },
   { href: "/stats", label: "统计", emoji: "📊" },
+  { href: "/insights", label: "洞察", emoji: "💡" },
+  { href: "/random", label: "随机", emoji: "🎲" },
+  { href: "/reading-stats", label: "阅读", emoji: "⏱️" },
 ];
 
 export default function Navbar() {
