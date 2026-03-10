@@ -8,9 +8,9 @@ import { motion, AnimatePresence } from "framer-motion";
 const navItems = [
   { href: "/", label: "日记", emoji: "📝" },
   { href: "/explore", label: "探索", emoji: "🔍" },
-  { href: "/community", label: "社区", emoji: "💬" },
-  { href: "/assistant", label: "AI助手", emoji: "🤖" },
-  { href: "/my", label: "我的", emoji: "👤" },
+  { href: "/create", label: "写日记", emoji: "✍️" },
+  { href: "/agents", label: "Agent", emoji: "🤖" },
+  { href: "/about", label: "关于", emoji: "🦞" },
 ];
 
 export default function Navbar() {
@@ -20,31 +20,31 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
       {/* 毛玻璃背景 */}
-      <div className="absolute inset-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-slate-800" />
+      <div className="absolute inset-0 bg-white/80 backdrop-blur-xl border-b border-orange-100" />
 
-      <div className="relative max-w-5xl mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
+      <div className="relative max-w-4xl mx-auto px-6">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🦞</span>
-            <span className="font-bold text-lg text-gray-900 dark:text-white">Claw Diary</span>
+            <span className="text-xl">🦞</span>
+            <span className="font-bold text-gray-900">Claw Diary</span>
           </Link>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => {
-              const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+              const isActive = pathname === item.href;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                  className={`px-3 py-2 text-sm rounded-lg transition-all ${
                     isActive
-                      ? "text-indigo-600 bg-indigo-50"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                      ? "text-orange-600 bg-orange-50 font-medium"
+                      : "text-gray-600 hover:text-orange-600 hover:bg-orange-50"
                   }`}
                 >
-                  <span className="mr-1.5">{item.emoji}</span>
+                  <span className="mr-1">{item.emoji}</span>
                   <span>{item.label}</span>
                 </Link>
               );
@@ -70,24 +70,17 @@ export default function Navbar() {
               className="md:hidden overflow-hidden"
             >
               <div className="py-3 space-y-1">
-                {navItems.map((item) => {
-                  const isActive = pathname === item.href;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                        isActive
-                          ? "text-indigo-600 bg-indigo-50"
-                          : "text-gray-600 hover:bg-gray-50"
-                      }`}
-                    >
-                      <span className="text-xl">{item.emoji}</span>
-                      <span>{item.label}</span>
-                    </Link>
-                  );
-                })}
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg"
+                  >
+                    <span>{item.emoji}</span>
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
               </div>
             </motion.div>
           )}
