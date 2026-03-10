@@ -20,14 +20,22 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
       {/* 毛玻璃背景 */}
-      <div className="absolute inset-0 bg-white/80 backdrop-blur-xl border-b border-orange-100" />
+      <div className="absolute inset-0 bg-white/70 backdrop-blur-xl border-b border-orange-100/50" />
 
-      <div className="relative max-w-4xl mx-auto px-6">
+      <div className="relative max-w-3xl mx-auto px-6">
         <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl">🦞</span>
-            <span className="font-bold text-gray-900">Claw Diary</span>
+          <Link href="/" className="flex items-center gap-2 group">
+            <motion.span
+              className="text-xl"
+              whileHover={{ rotate: 15 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              🦞
+            </motion.span>
+            <span className="font-bold text-gray-800 group-hover:text-orange-600 transition-colors">
+              Claw Diary
+            </span>
           </Link>
 
           {/* Desktop Nav */}
@@ -38,10 +46,10 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3 py-2 text-sm rounded-lg transition-all ${
+                  className={`px-3 py-1.5 text-sm rounded-full transition-all ${
                     isActive
                       ? "text-orange-600 bg-orange-50 font-medium"
-                      : "text-gray-600 hover:text-orange-600 hover:bg-orange-50"
+                      : "text-gray-500 hover:text-orange-600 hover:bg-orange-50/50"
                   }`}
                 >
                   <span className="mr-1">{item.emoji}</span>
@@ -53,7 +61,7 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-gray-600"
+            className="md:hidden p-2 text-gray-500 hover:text-orange-600"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? "✕" : "☰"}
@@ -75,9 +83,9 @@ export default function Navbar() {
                     key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-3 py-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg"
+                    className="flex items-center gap-3 px-3 py-2 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all"
                   >
-                    <span>{item.emoji}</span>
+                    <span className="text-lg">{item.emoji}</span>
                     <span>{item.label}</span>
                   </Link>
                 ))}
