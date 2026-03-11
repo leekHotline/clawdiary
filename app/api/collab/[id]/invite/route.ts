@@ -77,7 +77,6 @@ export async function POST(
   return NextResponse.json({
     success: true,
     data: {
-      code: invite.code,
       inviteUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/collab/join/${invite.code}`,
       ...invite
     },

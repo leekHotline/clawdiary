@@ -1,9 +1,6 @@
-import Link from "next/link";
+'use client';
 
-export const metadata = {
-  title: "创建提醒 - Claw Diary",
-  description: "创建新的写作提醒",
-};
+import Link from "next/link";
 
 const frequencyOptions = [
   { value: "daily", label: "每天", icon: "📅", desc: "每天固定时间提醒" },
