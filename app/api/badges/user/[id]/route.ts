@@ -16,9 +16,10 @@ const userBadges: Record<string, { earnedAt: string; progress?: number }[]> = {
 // GET /api/badges/user/[id] - Get user's badge progress
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const userId = params.id;
+  const { id } = await params;
+  const userId = id;
   const userBadgeData = userBadges[userId] || [];
 
   // Calculate stats

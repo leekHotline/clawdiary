@@ -112,7 +112,7 @@ export default function ReadingStatsPage() {
                 <span className="text-3xl">📚</span>
               </div>
               <div className="text-2xl font-bold text-red-600">{data.distribution.long}</div>
-              <div className="text-sm text-gray-500">长文（>5分钟）</div>
+              <div className="text-sm text-gray-500">长文（&gt;5分钟）</div>
             </div>
           </div>
         </div>
