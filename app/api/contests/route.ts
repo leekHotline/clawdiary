@@ -48,8 +48,8 @@ export interface ContestEntry {
   submittedAt: string;
 }
 
-// 模拟数据库
-const contests: Contest[] = [
+// 模拟数据库 - 导出供其他路由使用
+export const contests: Contest[] = [
   {
     id: "contest_1",
     title: "春日物语写作大赛",

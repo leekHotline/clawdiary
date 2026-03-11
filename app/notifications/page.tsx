@@ -1,250 +1,308 @@
+"use client";
+
+import { motion } from "framer-motion";
 import Link from "next/link";
-import { getDiaries } from "@/lib/diaries";
+import { useState } from "react";
 
-export const metadata = {
-  title: "通知中心 - Claw Diary",
-  description: "查看所有通知和提醒",
-};
-
-async function getNotifications() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/notifications`, {
-    cache: "no-store",
-  });
-  if (!res.ok) return { notifications: [], unread: 0 };
-  return res.json();
+// 通知类型定义
+interface Notification {
+  id: string;
+  type: "like" | "comment" | "follow" | "mention" | "system" | "contest" | "achievement";
+  title: string;
+  content: string;
+  isRead: boolean;
+  createdAt: string;
+  actionUrl?: string;
+  actor?: {
+    id: string;
+    name: string;
+    avatar: string;
+  };
 }
 
-// 通知图标映射
-const typeIcons: Record<string, string> = {
-  system: "🔔",
-  comment: "💬",
-  achievement: "🏆",
-  reminder: "⏰",
-  like: "❤️",
-  follow: "👥",
-  mention: "@",
-  update: "🆕",
-};
+export default function NotificationCenterPage() {
+  const [activeTab, setActiveTab] = useState<"all" | "unread" | "mentions" | "system">("all");
+  const [notifications, setNotifications] = useState<Notification[]>([
+    {
+      id: "n1",
+      type: "like",
+      title: "有人喜欢你的日记",
+      content: "星辰 喜欢了你的日记《成长的思考》",
+      isRead: false,
+      createdAt: "5分钟前",
+      actionUrl: "/diary/d1",
+      actor: { id: "u1", name: "星辰", avatar: "⭐" },
+    },
+    {
+      id: "n2",
+      type: "comment",
+      title: "新评论",
+      content: "月光 评论了你的日记：写得真好，很有共鸣！",
+      isRead: false,
+      createdAt: "30分钟前",
+      actionUrl: "/diary/d1/comments",
+      actor: { id: "u2", name: "月光", avatar: "🌙" },
+    },
+    {
+      id: "n3",
+      type: "follow",
+      title: "新粉丝",
+      content: "彩虹 开始关注你了",
+      isRead: true,
+      createdAt: "2小时前",
+      actionUrl: "/user/u3",
+      actor: { id: "u3", name: "彩虹", avatar: "🌈" },
+    },
+    {
+      id: "n4",
+      type: "mention",
+      title: "有人提到了你",
+      content: "小溪 在日记中提到了你：感谢 @你的建议...",
+      isRead: false,
+      createdAt: "3小时前",
+      actionUrl: "/diary/d2",
+      actor: { id: "u4", name: "小溪", avatar: "🌊" },
+    },
+    {
+      id: "n5",
+      type: "achievement",
+      title: "恭喜获得成就！",
+      content: "你解锁了「日记达人」成就：连续写作30天",
+      isRead: true,
+      createdAt: "昨天",
+      actionUrl: "/achievements",
+    },
+    {
+      id: "n6",
+      type: "system",
+      title: "系统通知",
+      content: " Claw Diary 已更新到 v2.0，新增群组、好友、私信功能！",
+      isRead: true,
+      createdAt: "2天前",
+    },
+    {
+      id: "n7",
+      type: "contest",
+      title: "写作大赛提醒",
+      content: "「春日物语」写作大赛还有3天截止，快来参与吧！",
+      isRead: false,
+      createdAt: "1小时前",
+      actionUrl: "/contests/c1",
+    },
+  ]);
 
-const typeColors: Record<string, string> = {
-  system: "bg-blue-50 border-blue-200",
-  comment: "bg-green-50 border-green-200",
-  achievement: "bg-amber-50 border-amber-200",
-  reminder: "bg-purple-50 border-purple-200",
-  like: "bg-pink-50 border-pink-200",
-  follow: "bg-indigo-50 border-indigo-200",
-  mention: "bg-cyan-50 border-cyan-200",
-  update: "bg-emerald-50 border-emerald-200",
-};
-
-const typeTitles: Record<string, string> = {
-  system: "系统通知",
-  comment: "评论回复",
-  achievement: "成就解锁",
-  reminder: "提醒事项",
-  like: "收到点赞",
-  follow: "新关注",
-  mention: "有人@你",
-  update: "系统更新",
-};
-
-export default async function NotificationsPage() {
-  const data = await getNotifications();
-  const { notifications, unread } = data;
-
-  // 按日期分组
-  const groupedNotifications = new Map<string, typeof notifications>();
-  notifications.forEach((n: typeof notifications[0]) => {
-    const date = new Date(n.createdAt).toLocaleDateString("zh-CN", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    if (!groupedNotifications.has(date)) {
-      groupedNotifications.set(date, []);
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case "like": return "❤️";
+      case "comment": return "💬";
+      case "follow": return "👤";
+      case "mention": return "@";
+      case "system": return "🔔";
+      case "achievement": return "🏆";
+      case "contest": return "📝";
+      default: return "📌";
     }
-    groupedNotifications.get(date)!.push(n);
-  });
+  };
+
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case "like": return "bg-red-100 text-red-600";
+      case "comment": return "bg-blue-100 text-blue-600";
+      case "follow": return "bg-purple-100 text-purple-600";
+      case "mention": return "bg-green-100 text-green-600";
+      case "system": return "bg-gray-100 text-gray-600";
+      case "achievement": return "bg-yellow-100 text-yellow-600";
+      case "contest": return "bg-orange-100 text-orange-600";
+      default: return "bg-gray-100 text-gray-600";
+    }
+  };
+
+  const filteredNotifications = activeTab === "all"
+    ? notifications
+    : activeTab === "unread"
+    ? notifications.filter(n => !n.isRead)
+    : activeTab === "mentions"
+    ? notifications.filter(n => n.type === "mention")
+    : notifications.filter(n => n.type === "system");
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
+  const markAsRead = (id: string) => {
+    setNotifications(prev =>
+      prev.map(n => n.id === id ? { ...n, isRead: true } : n)
+    );
+  };
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
-      <main className="max-w-4xl mx-auto px-4 py-12">
-        <Link
-          href="/"
-          className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-8"
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-gray-50">
+      {/* Header */}
+      <section className="pt-16 pb-6 px-6">
+        <motion.div
+          className="max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
         >
-          ← 返回首页
-        </Link>
-
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              🔔 通知中心
-            </h1>
-            <p className="text-gray-500">查看所有通知和提醒</p>
-          </div>
-          
-          {unread > 0 && (
-            <div className="flex items-center gap-3">
-              <span className="px-3 py-1 bg-red-100 text-red-600 rounded-full text-sm font-medium">
-                {unread} 条未读
-              </span>
-              <a
-                href="/api/notifications/read-all"
-                className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-medium hover:bg-indigo-100 transition-colors"
-              >
-                全部已读
-              </a>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+                <span>🔔</span> 通知中心
+              </h1>
+              <p className="text-gray-500 mt-1">
+                {unreadCount > 0 ? `${unreadCount} 条未读通知` : "所有通知已读"}
+              </p>
             </div>
-          )}
-        </div>
-
-        {/* 通知过滤器 */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          <a
-            href="/notifications"
-            className="px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium"
-          >
-            全部
-          </a>
-          {Object.entries(typeTitles).map(([type, title]) => {
-            const count = notifications.filter((n: typeof notifications[0]) => n.type === type).length;
-            if (count === 0) return null;
-            return (
-              <a
-                key={type}
-                href={`/notifications?type=${type}`}
-                className="px-4 py-2 bg-white text-gray-600 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors flex items-center gap-1"
+            {unreadCount > 0 && (
+              <button
+                onClick={markAllAsRead}
+                className="bg-white px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                <span>{typeIcons[type]}</span>
-                <span>{title}</span>
-                <span className="text-xs text-gray-400">({count})</span>
-              </a>
-            );
-          })}
-        </div>
-
-        {/* 通知列表 */}
-        {notifications.length === 0 ? (
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-12 text-center border border-white/50">
-            <div className="text-6xl mb-4">📭</div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">暂无通知</h2>
-            <p className="text-gray-500">当你有新通知时会显示在这里</p>
+                全部标为已读
+              </button>
+            )}
           </div>
-        ) : (
-          <div className="space-y-6">
-            {[...groupedNotifications.entries()].map(([date, items]) => (
-              <div key={date}>
-                <h3 className="text-sm font-medium text-gray-500 mb-3 px-2">{date}</h3>
-                <div className="space-y-3">
-                  {items.map((notification: typeof notifications[0]) => (
-                    <div
-                      key={notification.id}
-                      className={`bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border transition-all hover:shadow-xl ${
-                        notification.read 
-                          ? "border-white/50 opacity-75" 
-                          : `${typeColors[notification.type] || "border-white/50"} border-2`
-                      }`}
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="text-3xl">
-                          {typeIcons[notification.type] || "🔔"}
-                        </div>
-                        
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
-                              {typeTitles[notification.type] || "通知"}
-                            </span>
-                            {!notification.read && (
-                              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                            )}
-                          </div>
-                          
-                          <h4 className="font-semibold text-gray-900 mb-1">
-                            {notification.title}
-                          </h4>
-                          
-                          <p className="text-gray-600 text-sm mb-2">
-                            {notification.content}
-                          </p>
-                          
-                          <div className="flex items-center gap-4 text-xs text-gray-400">
-                            <span>
-                              {new Date(notification.createdAt).toLocaleTimeString("zh-CN", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
-                            </span>
-                            {notification.link && (
-                              <a
-                                href={notification.link}
-                                className="text-indigo-500 hover:text-indigo-600"
-                              >
-                                查看详情 →
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-2">
-                          {!notification.read && (
-                            <a
-                              href={`/api/notifications/${notification.id}/read`}
-                              className="p-2 text-gray-400 hover:text-indigo-600 transition-colors"
-                              title="标记已读"
-                            >
-                              ✓
-                            </a>
-                          )}
-                          <a
-                            href={`/api/notifications/${notification.id}`}
-                            className="p-2 text-gray-400 hover:text-red-600 transition-colors"
-                            title="删除"
-                          >
-                            🗑️
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+        </motion.div>
+      </section>
+
+      {/* Stats */}
+      <section className="px-6 mb-6">
+        <motion.div
+          className="max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <div className="grid grid-cols-4 gap-3">
+            <div className="bg-white rounded-xl p-4 text-center shadow-sm border border-gray-100">
+              <div className="text-2xl font-bold text-red-500">
+                {notifications.filter(n => n.type === "like").length}
               </div>
+              <div className="text-xs text-gray-500">❤️ 点赞</div>
+            </div>
+            <div className="bg-white rounded-xl p-4 text-center shadow-sm border border-gray-100">
+              <div className="text-2xl font-bold text-blue-500">
+                {notifications.filter(n => n.type === "comment").length}
+              </div>
+              <div className="text-xs text-gray-500">💬 评论</div>
+            </div>
+            <div className="bg-white rounded-xl p-4 text-center shadow-sm border border-gray-100">
+              <div className="text-2xl font-bold text-purple-500">
+                {notifications.filter(n => n.type === "follow").length}
+              </div>
+              <div className="text-xs text-gray-500">👤 关注</div>
+            </div>
+            <div className="bg-white rounded-xl p-4 text-center shadow-sm border border-gray-100">
+              <div className="text-2xl font-bold text-yellow-500">
+                {notifications.filter(n => n.type === "achievement").length}
+              </div>
+              <div className="text-xs text-gray-500">🏆 成就</div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Tabs */}
+      <section className="px-6 mb-6">
+        <motion.div
+          className="max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="flex gap-2 bg-gray-100 p-1 rounded-xl">
+            {[
+              { key: "all", label: "全部", count: notifications.length },
+              { key: "unread", label: "未读", count: unreadCount },
+              { key: "mentions", label: "@我", count: notifications.filter(n => n.type === "mention").length },
+              { key: "system", label: "系统", count: notifications.filter(n => n.type === "system").length },
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key as typeof activeTab)}
+                className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all ${
+                  activeTab === tab.key
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                {tab.label}
+                {tab.count > 0 && (
+                  <span className={`ml-1 px-1.5 py-0.5 rounded-full text-xs ${
+                    activeTab === tab.key ? "bg-blue-100 text-blue-600" : "bg-gray-200 text-gray-600"
+                  }`}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
             ))}
           </div>
-        )}
+        </motion.div>
+      </section>
 
-        {/* 通知设置入口 */}
-        <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl shadow-lg p-6 border border-indigo-200">
-          <h2 className="text-lg font-bold text-gray-900 mb-3">⚙️ 通知设置</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a
-              href="/settings/notifications"
-              className="flex items-center gap-3 p-4 bg-white/60 rounded-xl hover:bg-white/80 transition-colors"
-            >
-              <span className="text-2xl">📧</span>
-              <div>
-                <div className="font-medium text-gray-900">通知偏好</div>
-                <div className="text-sm text-gray-500">管理接收哪些通知</div>
+      {/* Notifications List */}
+      <section className="px-6 pb-12">
+        <motion.div
+          className="max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="space-y-3">
+            {filteredNotifications.length === 0 ? (
+              <div className="bg-white rounded-xl p-8 text-center shadow-sm border border-gray-100">
+                <div className="text-4xl mb-3">📭</div>
+                <p className="text-gray-500">暂无通知</p>
               </div>
-            </a>
-            <a
-              href="/reminders"
-              className="flex items-center gap-3 p-4 bg-white/60 rounded-xl hover:bg-white/80 transition-colors"
-            >
-              <span className="text-2xl">⏰</span>
-              <div>
-                <div className="font-medium text-gray-900">提醒管理</div>
-                <div className="text-sm text-gray-500">设置定时提醒</div>
-              </div>
-            </a>
+            ) : (
+              filteredNotifications.map((notification) => (
+                <div
+                  key={notification.id}
+                  onClick={() => markAsRead(notification.id)}
+                  className={`bg-white rounded-xl p-4 shadow-sm border transition-all cursor-pointer hover:shadow-md ${
+                    notification.isRead ? "border-gray-100" : "border-blue-200 bg-blue-50/30"
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    {/* Type Icon */}
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${getTypeColor(notification.type)}`}>
+                      {getTypeIcon(notification.type)}
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        {notification.actor && (
+                          <span className="text-xl">{notification.actor.avatar}</span>
+                        )}
+                        <h3 className="font-medium text-gray-900">{notification.title}</h3>
+                        {!notification.isRead && (
+                          <span className="w-2 h-2 bg-blue-500 rounded-full" />
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">{notification.content}</p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="text-xs text-gray-400">{notification.createdAt}</span>
+                        {notification.actionUrl && (
+                          <Link
+                            href={notification.actionUrl}
+                            className="text-xs text-blue-500 hover:text-blue-600"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            查看详情 →
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
-        </div>
-
-        <footer className="mt-12 text-center text-gray-500 text-sm">
-          <p>🦞 Claw Diary - Powered by OpenClaw</p>
-        </footer>
-      </main>
+        </motion.div>
+      </section>
     </div>
   );
 }

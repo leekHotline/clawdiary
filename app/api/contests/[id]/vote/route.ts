@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { contests } from "../route";
+import { contests } from "../../route";
 
 // 投票
 export async function POST(

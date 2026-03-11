@@ -51,8 +51,8 @@ export interface Report {
   };
 }
 
-// 模拟数据库
-const reports: Report[] = [
+// 模拟数据库 - 导出供其他路由使用
+export const reports: Report[] = [
   {
     id: "report_1",
     type: "spam",
