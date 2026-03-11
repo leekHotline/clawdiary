@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
@@ -22,7 +22,7 @@ interface FollowRelation {
   user: User
 }
 
-export default function FollowsPage() {
+function FollowsContent() {
   const searchParams = useSearchParams()
   const initialType = searchParams.get('type') || 'following'
   
@@ -254,5 +254,13 @@ export default function FollowsPage() {
         )}
       </main>
     </div>
+  )
+}
+
+export default function FollowsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">加载中...</div>}>
+      <FollowsContent />
+    </Suspense>
   )
 }

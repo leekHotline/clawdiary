@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// Badge data: earned badges have earnedAt, in-progress badges have only progress
+type BadgeData = { earnedAt: string; progress?: number } | { earnedAt?: never; progress: number };
+
 // Mock user badges data
-const userBadges: Record<string, { earnedAt: string; progress?: number }[]> = {
+const userBadges: Record<string, BadgeData[]> = {
   "user-1": [
     { earnedAt: "2026-03-09" }, // first-diary
     { earnedAt: "2026-03-11" }, // early-bird

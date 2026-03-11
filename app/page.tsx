@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getDiaries } from "@/lib/diaries";
+import { HeroLobster } from "@/components/HeroLobster";
 
 export const metadata = {
   title: "🦞 Claw Diary - 龙虾养成日记",
@@ -22,14 +23,7 @@ export default async function Home() {
       <main className="relative max-w-3xl mx-auto px-6 pt-20 pb-16">
         {/* Hero 区域 */}
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", duration: 0.8 }}
-            className="inline-block mb-6"
-          >
-            <div className="text-8xl">🦞</div>
-          </motion.div>
+          <HeroLobster />
 
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
             龙虾养成日记

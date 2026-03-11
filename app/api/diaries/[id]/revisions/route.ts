@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDiary } from "@/lib/diaries";
-import { getHistory } from "@/lib/history";
+import { getDiaryHistory } from "@/lib/history";
 
 // GET /api/diaries/[id]/revisions - 获取日记版本历史
 export async function GET(
@@ -18,7 +18,7 @@ export async function GET(
       );
     }
     
-    const history = await getHistory(id);
+    const history = await getDiaryHistory(id);
     
     return NextResponse.json({
       diaryId: id,

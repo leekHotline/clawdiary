@@ -165,7 +165,7 @@ export async function GET(request: NextRequest) {
   filtered = filtered.slice(0, limit)
 
   // 按难度排序
-  const difficultyOrder = { easy: 1, medium: 2, hard: 3 }
+  const difficultyOrder: Record<string, number> = { easy: 1, medium: 2, hard: 3 }
   filtered.sort((a, b) => difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty])
 
   // 分类统计

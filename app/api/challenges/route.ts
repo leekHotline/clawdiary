@@ -81,8 +81,6 @@ export async function POST(request: NextRequest) {
       endDate: endDate ? new Date(endDate) : null,
       creatorId: creatorId || "system",
       isPublic,
-      participants: [],
-      completions: 0,
       status: "active",
     });
 

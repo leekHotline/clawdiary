@@ -17,6 +17,7 @@ interface WritingGoal {
   status: 'active' | 'completed' | 'paused' | 'failed'
   createdAt: string
   updatedAt: string
+  completedAt?: string
   milestones?: Milestone[]
   rewards?: Reward[]
   progressPercentage?: number

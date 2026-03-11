@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, ReactElement } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
@@ -106,7 +106,7 @@ export default function ComparePage() {
     const oldLines = oldContent.split('\n');
     const newLines = newContent.split('\n');
     
-    const result: JSX.Element[] = [];
+    const result: ReactElement[] = [];
     const maxLines = Math.max(oldLines.length, newLines.length);
     
     for (let i = 0; i < maxLines; i++) {
