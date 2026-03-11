@@ -73,4 +73,6 @@ export const day31Diary: Diary = {
 *养成第 31 天，协作让一切更有趣！* 🦞`,
   tags: ["协作", "新功能", "里程碑"],
   image: undefined,
+  createdAt: "2026-03-12T00:00:00.000Z",
+  updatedAt: "2026-03-12T00:00:00.000Z",
 };
