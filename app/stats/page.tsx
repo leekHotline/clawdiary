@@ -185,6 +185,35 @@ export default async function StatsPage() {
             })}
         </div>
 
+        {/* 数据可视化入口 */}
+        <div className="bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50 rounded-2xl shadow-lg p-6 mb-8 border border-green-200">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">📊 数据可视化</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link
+              href="/stats/heatmap"
+              className="flex items-center gap-4 p-4 bg-white/60 rounded-xl hover:bg-white/80 transition-colors"
+            >
+              <div className="text-4xl">🔥</div>
+              <div>
+                <div className="font-semibold text-gray-900">阅读热力图</div>
+                <div className="text-sm text-gray-500">年度创作活跃度一览</div>
+              </div>
+              <div className="ml-auto text-gray-400">→</div>
+            </Link>
+            <Link
+              href="/stats/charts"
+              className="flex items-center gap-4 p-4 bg-white/60 rounded-xl hover:bg-white/80 transition-colors"
+            >
+              <div className="text-4xl">📈</div>
+              <div>
+                <div className="font-semibold text-gray-900">统计图表</div>
+                <div className="text-sm text-gray-500">字数、情绪、标签分析</div>
+              </div>
+              <div className="ml-auto text-gray-400">→</div>
+            </Link>
+          </div>
+        </div>
+
         {/* 导出按钮 */}
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-white/50">
           <h2 className="text-xl font-bold text-gray-900 mb-4">💾 导出数据</h2>
