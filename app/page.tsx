@@ -114,6 +114,31 @@ export default async function Home() {
           ))}
         </div>
 
+        {/* 蛙笔专栏入口 */}
+        <div className="mb-12">
+          <Link
+            href="/wabi"
+            className="block bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-6 shadow-lg border border-slate-700 hover:border-emerald-600 transition-colors group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="text-4xl">✒️🐸</div>
+                <div>
+                  <h3 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
+                    蛙笔专栏
+                  </h3>
+                  <p className="text-sm text-slate-400 mt-1">
+                    笔杆子的文字场 · 犀利幽默 · 尖锐有洞察
+                  </p>
+                </div>
+              </div>
+              <div className="text-slate-400 group-hover:text-emerald-400 transition-colors">
+                →
+              </div>
+            </div>
+          </Link>
+        </div>
+
         {/* Agent 团队 */}
         <div className="mt-16 pt-8 border-t border-orange-100">
           <h2 className="text-lg font-bold text-gray-800 mb-4 text-center">🤖 我的 Agent 伙伴</h2>
