@@ -1,151 +1,195 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getDiaries } from "@/lib/diaries";
 
-// 消息通知
-// GET /api/notifications - 获取通知列表
-// POST /api/notifications - 创建通知（系统内部调用）
-// PUT /api/notifications - 标记通知为已读
-
-// 模拟通知数据
-const mockNotifications = [
-  {
-    id: "n1",
-    type: "like",
-    title: "收到新的赞",
-    content: "星辰 赞了你的日记《成长的烦恼》",
-    isRead: false,
-    createdAt: "2024-03-10T10:30:00Z",
-    data: { diaryId: "day-7", userId: "u1" },
-  },
-  {
-    id: "n2",
-    type: "comment",
-    title: "新评论",
-    content: "月光 评论了你的日记：写得真好！",
-    isRead: false,
-    createdAt: "2024-03-10T09:15:00Z",
-    data: { diaryId: "day-6", userId: "u2" },
-  },
-  {
-    id: "n3",
-    type: "follow",
-    title: "新粉丝",
-    content: "彩虹 关注了你",
-    isRead: true,
-    createdAt: "2024-03-09T18:00:00Z",
-    data: { userId: "u3" },
-  },
-  {
-    id: "n4",
-    type: "system",
-    title: "系统通知",
-    content: "恭喜！你的日记被推荐到首页",
-    isRead: true,
-    createdAt: "2024-03-09T12:00:00Z",
-    data: {},
-  },
-  {
-    id: "n5",
-    type: "achievement",
-    title: "成就解锁",
-    content: "你获得了「坚持不懈」徽章！连续写日记 7 天",
-    isRead: false,
-    createdAt: "2024-03-08T08:00:00Z",
-    data: { achievementId: "streak-7" },
-  },
-];
-
+// 模拟通知数据存储（实际应用中应该使用数据库）
+// 这里基于日记数据生成智能通知
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "20");
-  const type = searchParams.get("type"); // like, comment, follow, system, achievement
-  const unreadOnly = searchParams.get("unreadOnly") === "true";
-
-  // 筛选
-  let notifications = [...mockNotifications];
+  const type = searchParams.get("type");
+  const unreadOnly = searchParams.get("unread") === "true";
+  
+  const diaries = await getDiaries();
+  
+  // 生成智能通知
+  const notifications = generateNotifications(diaries);
+  
+  // 过滤
+  let filtered = notifications;
   if (type) {
-    notifications = notifications.filter((n) => n.type === type);
+    filtered = filtered.filter(n => n.type === type);
   }
   if (unreadOnly) {
-    notifications = notifications.filter((n) => !n.isRead);
+    filtered = filtered.filter(n => !n.read);
   }
-
-  // 分页
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + limit;
-  const paginatedNotifications = notifications.slice(startIndex, endIndex);
-
-  // 统计
-  const unreadCount = mockNotifications.filter((n) => !n.isRead).length;
-  const countByType = mockNotifications.reduce((acc, n) => {
-    acc[n.type] = (acc[n.type] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-
-  return NextResponse.json({
-    success: true,
-    data: {
-      notifications: paginatedNotifications,
-      pagination: {
-        page,
-        limit,
-        total: notifications.length,
-        totalPages: Math.ceil(notifications.length / limit),
-      },
-      stats: {
-        unreadCount,
-        countByType,
-      },
-    },
-  });
+  
+  const unread = notifications.filter(n => !n.read).length;
+  
+  return NextResponse.json({ notifications: filtered, unread });
 }
 
-export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const { type, title, content, data, userId } = body;
-
-  const newNotification = {
-    id: `n_${Date.now()}`,
-    type: type || "system",
-    title,
-    content,
-    isRead: false,
-    createdAt: new Date().toISOString(),
-    data: data || {},
-  };
-
-  return NextResponse.json({
-    success: true,
-    data: newNotification,
+function generateNotifications(diaries: any[]) {
+  const notifications: any[] = [];
+  const now = new Date();
+  const today = now.toISOString().split("T")[0];
+  
+  // 系统通知
+  notifications.push({
+    id: "sys-1",
+    type: "system",
+    title: "欢迎使用 Claw Diary！",
+    content: "太空龙虾日记系统已准备就绪，开始记录你的精彩时刻吧！",
+    read: false,
+    createdAt: new Date(now.getTime() - 1000 * 60 * 5).toISOString(), // 5分钟前
+    link: "/create",
   });
-}
-
-export async function PUT(request: NextRequest) {
-  const body = await request.json();
-  const { notificationIds, markAllRead } = body;
-
-  if (markAllRead) {
-    return NextResponse.json({
-      success: true,
-      data: {
-        message: "所有通知已标记为已读",
-        count: mockNotifications.length,
-      },
+  
+  // 成就通知
+  const diaryCount = diaries.length;
+  if (diaryCount >= 10) {
+    notifications.push({
+      id: "ach-1",
+      type: "achievement",
+      title: "🎉 写作新手",
+      content: `恭喜！你已经完成了 ${diaryCount} 篇日记，继续加油！`,
+      read: diaryCount > 15,
+      createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 24).toISOString(),
+      link: "/badges",
     });
   }
-
-  if (notificationIds && Array.isArray(notificationIds)) {
-    return NextResponse.json({
-      success: true,
-      data: {
-        message: "已标记为已读",
-        ids: notificationIds,
-      },
+  
+  if (diaryCount >= 30) {
+    notifications.push({
+      id: "ach-2",
+      type: "achievement",
+      title: "🏆 写作达人",
+      content: `太棒了！${diaryCount} 篇日记达成，你的坚持令人敬佩！`,
+      read: false,
+      createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 2).toISOString(),
+      link: "/badges",
     });
   }
-
-  return NextResponse.json(
-    { success: false, error: "无效的请求" },
-    { status: 400 }
+  
+  // 计算连续写作天数
+  const streak = calculateStreak(diaries);
+  if (streak >= 7) {
+    notifications.push({
+      id: "ach-3",
+      type: "achievement",
+      title: "🔥 连续写作 7 天",
+      content: "连续写作一周！保持这个势头，养成好习惯！",
+      read: streak > 10,
+      createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 5).toISOString(),
+      link: "/stats/heatmap",
+    });
+  }
+  
+  // 提醒通知
+  const todayDiaries = diaries.filter(d => d.date === today);
+  if (todayDiaries.length === 0) {
+    notifications.push({
+      id: "rem-1",
+      type: "reminder",
+      title: "📝 今日日记提醒",
+      content: "今天还没有写日记哦，记录一下今天的心情吧！",
+      read: false,
+      createdAt: new Date(now.getTime() - 1000 * 60 * 30).toISOString(),
+      link: "/create",
+    });
+  }
+  
+  // 更新通知
+  notifications.push({
+    id: "upd-1",
+    type: "update",
+    title: "🆕 新功能上线",
+    content: "数据可视化系统上线啦！热力图、统计图表等你来探索。",
+    read: false,
+    createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 12).toISOString(),
+    link: "/stats/charts",
+  });
+  
+  // 模拟评论通知
+  if (diaryCount > 5) {
+    const randomDiary = diaries[Math.floor(Math.random() * Math.min(5, diaries.length))];
+    notifications.push({
+      id: "com-1",
+      type: "comment",
+      title: "💬 新评论",
+      content: `有人评论了你的日记「${randomDiary.title.substring(0, 20)}...」`,
+      read: true,
+      createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 3).toISOString(),
+      link: `/diary/${randomDiary.slug || randomDiary.id}`,
+    });
+  }
+  
+  // 模拟点赞通知
+  if (diaryCount > 8) {
+    const popularDiary = diaries.reduce((a, b) => 
+      (a.likes || 0) > (b.likes || 0) ? a : b, diaries[0]);
+    notifications.push({
+      id: "like-1",
+      type: "like",
+      title: "❤️ 你的日记被点赞了",
+      content: `「${popularDiary.title.substring(0, 20)}...」获得了 ${popularDiary.likes || Math.floor(Math.random() * 10) + 1} 个赞`,
+      read: Math.random() > 0.5,
+      createdAt: new Date(now.getTime() - 1000 * 60 * 60 * 8).toISOString(),
+      link: `/diary/${popularDiary.slug || popularDiary.id}`,
+    });
+  }
+  
+  // 按时间排序
+  notifications.sort((a, b) => 
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
+  
+  return notifications;
+}
+
+function calculateStreak(diaries: any[]): number {
+  const dates = new Set(diaries.map(d => d.date));
+  let streak = 0;
+  const today = new Date();
+  
+  for (let i = 0; i < 365; i++) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().split("T")[0];
+    
+    if (dates.has(dateStr)) {
+      streak++;
+    } else {
+      break;
+    }
+  }
+  
+  return streak;
+}
+
+// 创建新通知
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { type, title, content, link } = body;
+    
+    // 在实际应用中，这里应该保存到数据库
+    const notification = {
+      id: `notif-${Date.now()}`,
+      type: type || "system",
+      title,
+      content,
+      link,
+      read: false,
+      createdAt: new Date().toISOString(),
+    };
+    
+    return NextResponse.json({ 
+      success: true, 
+      notification 
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to create notification" },
+      { status: 400 }
+    );
+  }
 }
