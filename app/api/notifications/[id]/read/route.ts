@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 // 标记单个通知为已读的简化接口
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
   
   // 在实际应用中，这里应该更新数据库
   // 这里返回一个简单的确认页面
@@ -50,9 +50,9 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
   
   return NextResponse.json({
     success: true,

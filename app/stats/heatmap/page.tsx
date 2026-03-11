@@ -70,7 +70,7 @@ export default function HeatmapPage() {
     }
   };
 
-  const getIntensity = (day: HeatmapDay | undefined) => {
+  const getIntensity = (day: HeatmapDay | undefined | null) => {
     if (!day) return "bg-gray-100";
     if (day.count >= 4) return "bg-green-600";
     if (day.count >= 3) return "bg-green-500";

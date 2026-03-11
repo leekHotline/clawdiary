@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 // 删除提醒
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
   
   // 在实际应用中，这里应该从数据库删除
   return NextResponse.json({
@@ -17,9 +17,9 @@ export async function DELETE(
 // 获取单个提醒详情
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
   
   // 模拟返回提醒详情
   return NextResponse.json({

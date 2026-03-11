@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 // 切换提醒状态（开启/暂停）
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
   
   // 在实际应用中，这里应该更新数据库
   // 这里返回一个简单的 HTML 页面进行跳转
@@ -50,9 +50,9 @@ export async function POST(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
   
   return NextResponse.json({
     success: true,

@@ -177,7 +177,7 @@ export default async function ChartsPage() {
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-white/50">
             <h2 className="text-lg font-bold text-gray-900 mb-4">⏰ 写作高峰时段</h2>
             <div className="space-y-3">
-              {peakHours.map((h, i) => (
+              {peakHours.map((h: { label: string; count: number }, i: number) => (
                 <div key={i} className="flex items-center gap-3">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     i === 0 ? "bg-amber-100 text-amber-600" :

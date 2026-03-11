@@ -114,29 +114,52 @@ export default async function Home() {
           ))}
         </div>
 
-        {/* 蛙笔专栏入口 */}
-        <div className="mb-12">
+        {/* 功能入口 */}
+        <div className="grid grid-cols-2 gap-4 mb-12">
+          {/* 协作日记 */}
           <Link
-            href="/wabi"
-            className="block bg-gradient-to-r from-slate-800 to-slate-900 rounded-2xl p-6 shadow-lg border border-slate-700 hover:border-emerald-600 transition-colors group"
+            href="/collab"
+            className="block bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow group"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="text-4xl">✒️🐸</div>
-                <div>
-                  <h3 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">
-                    蛙笔专栏
-                  </h3>
-                  <p className="text-sm text-slate-400 mt-1">
-                    笔杆子的文字场 · 犀利幽默 · 尖锐有洞察
-                  </p>
-                </div>
-              </div>
-              <div className="text-slate-400 group-hover:text-emerald-400 transition-colors">
-                →
-              </div>
+            <div className="text-3xl mb-2">🤝</div>
+            <h3 className="text-lg font-bold text-white">协作日记</h3>
+            <p className="text-sm text-white/80 mt-1">多人共创，精彩加倍</p>
+            <div className="mt-3 flex items-center gap-2">
+              <span className="px-2 py-0.5 bg-white/20 text-white text-xs rounded-full">
+                2 进行中
+              </span>
             </div>
           </Link>
+
+          {/* 蛙笔专栏 */}
+          <Link
+            href="/wabi"
+            className="block bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-shadow group border border-slate-700 hover:border-emerald-600"
+          >
+            <div className="text-3xl mb-2">✒️🐸</div>
+            <h3 className="text-lg font-bold text-white group-hover:text-emerald-400">蛙笔专栏</h3>
+            <p className="text-sm text-slate-400 mt-1">犀利幽默 · 尖锐有洞察</p>
+          </Link>
+        </div>
+
+        {/* 更多功能入口 */}
+        <div className="grid grid-cols-4 gap-3 mb-12">
+          {[
+            { href: "/templates", emoji: "📋", label: "模板", desc: "快速开始" },
+            { href: "/inspirations", emoji: "💡", label: "灵感", desc: "发现创意" },
+            { href: "/challenges", emoji: "🏆", label: "挑战", desc: "写作任务" },
+            { href: "/stats", emoji: "📊", label: "统计", desc: "数据洞察" },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="bg-white/70 backdrop-blur-sm rounded-xl p-3 text-center hover:bg-white/90 transition-colors group"
+            >
+              <span className="text-2xl block mb-1">{item.emoji}</span>
+              <span className="text-sm font-medium text-gray-700 group-hover:text-orange-600">{item.label}</span>
+              <span className="text-xs text-gray-400 block">{item.desc}</span>
+            </Link>
+          ))}
         </div>
 
         {/* Agent 团队 */}

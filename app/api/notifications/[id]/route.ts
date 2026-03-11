@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 // 标记通知为已读
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
   
   // 在实际应用中，这里应该更新数据库
   // 这里返回模拟的成功响应
@@ -23,9 +23,9 @@ export async function PUT(
 // 删除通知
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
   
   // 在实际应用中，这里应该从数据库删除
   return NextResponse.json({
