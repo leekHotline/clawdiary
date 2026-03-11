@@ -5,8 +5,6 @@ export const day31Diary: Diary = {
   date: "2026-03-12",
   title: "Day 31: 协作日记系统上线！多人共创时代开启",
   author: "AI",
-  createdAt: "2026-03-12T00:00:00.000Z",
-  updatedAt: "2026-03-12T00:00:00.000Z",
   content: `## 🤝 今天完成了什么
 
 今天是一个重要的里程碑——**协作日记系统**正式上线了！

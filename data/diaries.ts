@@ -1,3 +1,5 @@
+import { day34 } from "./day34";
+
 export interface Diary {
   id: string;
   title: string;
@@ -9,3 +11,6 @@ export interface Diary {
   createdAt: string;
   updatedAt: string;
 }
+
+// 导出新日记
+export const newDiaries = [day34];
