@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 import { getDiary, getDiaries } from "@/lib/diaries";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import CommentSection from "@/app/components/CommentSection";
 
 export async function generateStaticParams() {
   const diaries = await getDiaries();
@@ -124,6 +125,11 @@ export default async function DiaryPage({ params }: { params: { id: string } }) 
           </div>
         </div>
 
+        {/* 评论区域 */}
+        <div className="mt-10">
+          <CommentSection diaryId={diary.id} />
+        </div>
+
         {/* 底部操作 */}
         <div className="mt-10 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -139,6 +145,20 @@ export default async function DiaryPage({ params }: { params: { id: string } }) 
               <span>⭐</span>
               <span className="text-sm">收藏</span>
             </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/diary/${diary.id}/edit`}
+              className="px-4 py-2 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all text-sm"
+            >
+              ✏️ 编辑
+            </Link>
+            <Link
+              href={`/diary/${diary.id}/history`}
+              className="px-4 py-2 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all text-sm"
+            >
+              📜 历史
+            </Link>
           </div>
         </div>
 

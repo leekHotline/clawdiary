@@ -1,31 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// 模拟评论回复数据存储
-const replies: Record<string, any[]> = {};
+// 模拟回复数据
+let replies: any[] = [];
 
-// GET /api/comments/[id]/replies - 获取评论的回复列表
+// 获取评论的回复列表
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const { id: commentId } = await params;
-    const commentReplies = replies[commentId] || [];
-    
-    return NextResponse.json({
-      success: true,
-      data: commentReplies,
-      total: commentReplies.length,
-    });
-  } catch (error) {
-    return NextResponse.json(
-      { success: false, error: '获取回复失败' },
-      { status: 500 }
-    );
-  }
+  const { id } = await params;
+  const { searchParams } = new URL(request.url);
+  const page = parseInt(searchParams.get('page') || '1');
+  const limit = parseInt(searchParams.get('limit') || '5');
+
+  const commentReplies = replies.filter(r => r.commentId === id);
+
+  // 按时间正序排列（回复是对话，应该按时间顺序显示）
+  commentReplies.sort((a, b) => 
+    new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
+
+  const total = commentReplies.length;
+  const totalPages = Math.ceil(total / limit);
+  const startIndex = (page - 1) * limit;
+  const paginatedReplies = commentReplies.slice(startIndex, startIndex + limit);
+
+  return NextResponse.json({
+    success: true,
+    data: {
+      replies: paginatedReplies,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages,
+        hasMore: page < totalPages
+      }
+    }
+  });
 }
 
-// POST /api/comments/[id]/replies - 添加回复
+// 创建回复
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -33,40 +48,47 @@ export async function POST(
   try {
     const { id: commentId } = await params;
     const body = await request.json();
-    const { content, authorName, authorId } = body;
-    
-    if (!content || !authorName) {
-      return NextResponse.json(
-        { success: false, error: '内容或作者名称不能为空' },
-        { status: 400 }
-      );
+    const { userId, userName, userAvatar, content, replyToUserId, replyToUserName } = body;
+
+    if (!content || !userId) {
+      return NextResponse.json({
+        success: false,
+        error: '缺少必要参数'
+      }, { status: 400 });
     }
-    
-    if (!replies[commentId]) {
-      replies[commentId] = [];
+
+    // 内容长度限制
+    if (content.length > 500) {
+      return NextResponse.json({
+        success: false,
+        error: '回复内容不能超过500字'
+      }, { status: 400 });
     }
-    
+
     const newReply = {
-      id: Date.now().toString(),
+      id: `reply-${Date.now()}`,
       commentId,
-      content,
-      authorId: authorId || 'anonymous',
-      authorName,
-      likes: 0,
+      userId,
+      userName: userName || '匿名用户',
+      userAvatar: userAvatar || '👤',
+      content: content.trim(),
+      replyToUserId,
+      replyToUserName,
       createdAt: new Date().toISOString(),
+      likes: 0,
+      likedBy: []
     };
-    
-    replies[commentId].push(newReply);
-    
+
+    replies.push(newReply);
+
     return NextResponse.json({
       success: true,
-      data: newReply,
-      message: '回复成功',
+      data: newReply
     });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: '添加回复失败' },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      success: false,
+      error: '创建回复失败'
+    }, { status: 500 });
   }
 }
