@@ -1,12 +1,15 @@
 import { NextResponse } from 'next/server'
 
 // 任务类型定义
+type QuestType = 'writing' | 'social' | 'exploration' | 'creativity' | 'mindfulness'
+type QuestDifficulty = 'easy' | 'medium' | 'hard'
+
 interface Quest {
   id: string
   title: string
   description: string
-  type: 'writing' | 'social' | 'exploration' | 'creativity' | 'mindfulness'
-  difficulty: 'easy' | 'medium' | 'hard'
+  type: QuestType
+  difficulty: QuestDifficulty
   target: number
   progress: number
   reward: number
@@ -17,13 +20,25 @@ interface Quest {
   completedAt?: string
 }
 
+interface QuestTemplate {
+  title: string
+  description: string
+  type: QuestType
+  difficulty: QuestDifficulty
+  target: number
+  reward: number
+  bonusReward?: number
+  icon: string
+  category: string
+}
+
 // 生成每日任务
 const generateDailyQuests = (): Quest[] => {
   const now = new Date()
   const endOfDay = new Date(now)
   endOfDay.setHours(23, 59, 59, 999)
 
-  const questTemplates = [
+  const questTemplates: QuestTemplate[] = [
     // 写作任务
     { title: '日记新手', description: '完成今天的日记', type: 'writing', difficulty: 'easy', target: 1, reward: 10, icon: '✍️', category: '写作' },
     { title: '文字工匠', description: '写一篇至少300字的日记', type: 'writing', difficulty: 'medium', target: 300, reward: 25, icon: '📝', category: '写作' },

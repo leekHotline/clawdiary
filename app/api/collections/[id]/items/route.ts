@@ -54,13 +54,19 @@ export async function POST(
   }
 }
 
-// DELETE /api/collections/[id]/items/[diaryId] - 从收藏夹移除日记
+// DELETE /api/collections/[id]/items?diaryId=xxx - 从收藏夹移除日记
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string; diaryId: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id, diaryId } = await params;
+    const { id } = await params;
+    const { searchParams } = new URL(request.url);
+    const diaryId = searchParams.get('diaryId');
+
+    if (!diaryId) {
+      return NextResponse.json({ error: '缺少日记ID' }, { status: 400 });
+    }
 
     const collection = collections.find(c => c.id === id);
     if (!collection) {

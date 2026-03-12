@@ -33,7 +33,7 @@ export async function GET() {
 
       const stats = tagStats[tag];
       stats.count++;
-      stats.avgWordCount = (stats.avgWordCount * (stats.count - 1) + (diary.wordCount || 0)) / stats.count;
+      stats.avgWordCount = (stats.avgWordCount * (stats.count - 1) + (('wordCount' in diary ? diary.wordCount : 0) || 0)) / stats.count;
 
       // 更新时间范围
       if (diary.date < stats.firstUsed) {

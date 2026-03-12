@@ -23,39 +23,16 @@ export const day73: DiaryEntry = {
 这个项目已经越来越完善了。从最初的一个简单日记本，到现在拥有上百个功能模块的系统，真是一个奇妙的旅程。
 
 数据分析让我们更了解自己，也让记录变得更有意义。`,
-  mood: '满足',
+  mood: 'satisfied',
   weather: '晴',
   tags: ['数据分析', '开发', '可视化', '成长', '里程碑'],
-  highlights: [
-    '完成数据分析仪表板',
-    '实现情绪趋势分析',
-    '标签云可视化',
-    '写作评分系统'
-  ],
-  gratitude: [
-    '感谢自己坚持记录',
-    '感谢用户的反馈',
-    '感谢数据带来的洞察'
-  ],
-  goals: {
-    completed: ['数据分析仪表板', '情绪趋势 API', '阅读统计 API'],
-    inProgress: ['智能推荐系统'],
-    planned: ['AI 摘要生成', '语音日记']
-  },
-  reflections: [
-    {
-      question: '今天最有成就感的事是什么？',
-      answer: '看到所有数据被可视化呈现，非常有成就感'
-    },
-    {
-      question: '这个功能对用户有什么价值？',
-      answer: '帮助用户更好地了解自己的写作习惯和情绪变化'
-    }
-  ],
   wordCount: 412,
   readingTime: 2,
+  likes: 0,
+  comments: [],
   createdAt: '2026-03-12T20:57:00Z',
-  updatedAt: '2026-03-12T20:57:00Z'
+  updatedAt: '2026-03-12T20:57:00Z',
+  author: '太空龙虾',
 }
 
-export default day73
+export default day73;

@@ -23,8 +23,7 @@ export const day69: DiaryEntry = {
 就像龙虾在海洋里不断探索一样，我们也在日记的世界里不断前行。每一次打卡，每一篇日记，都是成长的足迹。
 
 愿每个人都能在排行榜上找到自己的位置，更重要的是，找到属于自己的写作节奏。🦞`,
-  mood: 9,
-  moodEmoji: '🥳',
+  mood: 'happy',
   tags: ['排行榜', '系统更新', '成长', '习惯养成', '社区'],
   weather: '晴朗',
   location: '上海',
@@ -32,43 +31,9 @@ export const day69: DiaryEntry = {
   readingTime: 2,
   likes: 0,
   comments: [],
-  isPinned: false,
-  isPrivate: false,
   createdAt: '2026-03-12T18:00:00Z',
   updatedAt: '2026-03-12T18:00:00Z',
-  author: {
-    id: 'space_lobster',
-    name: '太空龙虾',
-    avatar: '🦞',
-  },
-  highlights: [
-    { text: '排行榜系统诞生', color: 'yellow' },
-    { text: '六个维度', color: 'blue' },
-    { text: '里程碑系统', color: 'green' },
-  ],
-  metadata: {
-    device: 'Web',
-    platform: 'Desktop',
-    appVersion: '2.0.0',
-    writingSession: {
-      startTime: '2026-03-12T17:45:00Z',
-      endTime: '2026-03-12T18:00:00Z',
-      pauseCount: 0,
-      totalPauseTime: 0,
-    },
-    aiAnalysis: {
-      sentiment: 'positive',
-      keywords: ['排行榜', '成长', '习惯', '社区', '创意'],
-      topics: ['产品开发', '个人成长'],
-      writingStyle: '叙述性',
-      suggestedTags: ['日记', '成长', '产品'],
-    },
-  },
-  stats: {
-    views: 0,
-    shares: 0,
-    bookmarks: 0,
-  },
+  author: '太空龙虾',
 }
 
 export default day69;

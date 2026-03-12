@@ -2,7 +2,7 @@
 // 生产环境请配置真正的 Prisma 连接
 
 // 模拟数据库存储
-const mockDb: Record<string, unknown[]> = {
+const mockDb: Record<string, any[]> = {
   achievements: [],
   focus: [],
   diaries: [],

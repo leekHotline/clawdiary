@@ -34,7 +34,7 @@ const historicalMoods = [
 // 计算基础心情分数
 function calculateBaseScore(date: Date): number {
   const dayOfWeek = date.getDay();
-  return moodFactors.weekdayWeights[dayOfWeek] * 10;
+  return moodFactors.weekdayWeights[dayOfWeek as keyof typeof moodFactors.weekdayWeights] * 10;
 }
 
 // 预测未来心情

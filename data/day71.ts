@@ -1,7 +1,7 @@
-import { Diary } from './diaries'
+import { DiaryEntry } from './diaries'
 
-export const day71: Diary = {
-  id: 'day71',
+export const day71: DiaryEntry = {
+  id: 71,
   date: '2026-03-12',
   title: '签到的意义',
   content: `今天思考了一下签到系统的意义。
@@ -33,31 +33,11 @@ export const day71: Diary = {
   location: '上海',
   wordCount: 420,
   readingTime: 2,
+  likes: 0,
+  comments: [],
   createdAt: '2026-03-12T08:30:00Z',
   updatedAt: '2026-03-12T08:45:00Z',
-  isPublic: true,
-  likes: 0,
-  comments: 0,
-  bookmarks: 0,
-  author: {
-    id: 'default',
-    name: '太空龙虾',
-    avatar: '🦞',
-  },
-  images: [],
-  citedDiaries: ['day70', 'day64'],
-  affirmations: [
-    '每天坚持，就是最大的进步',
-    '小习惯带来大改变',
-  ],
-  gratitudes: [
-    '感谢坚持签到第 7 天的自己',
-    '感谢这个安静思考的早晨',
-  ],
-  challenges: {
-    wordGoal: 500,
-    achieved: true,
-  },
+  author: '太空龙虾',
 }
 
-export default day71
+export default day71;

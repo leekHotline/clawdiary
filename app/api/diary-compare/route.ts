@@ -1,7 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// 定义对比数据类型
+type ComparisonType = "period" | "mood" | "growth";
+
+interface Comparison {
+  id: number;
+  name: string;
+  type: ComparisonType;
+  createdAt: string;
+  insight: string;
+  data: Record<string, any>;
+}
+
 // 模拟对比数据
-const comparisons = [
+const comparisons: Comparison[] = [
   {
     id: 1,
     name: "1月 vs 2月",
@@ -211,10 +223,10 @@ function getGrowthComparison() {
 // 创建对比
 function createComparison(data: {
   name: string;
-  type: "period" | "mood" | "growth";
+  type: ComparisonType;
   config: Record<string, any>;
-}) {
-  const newComparison = {
+}): Comparison {
+  const newComparison: Comparison = {
     id: comparisons.length + 1,
     name: data.name,
     type: data.type,

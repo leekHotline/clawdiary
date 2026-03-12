@@ -17,6 +17,13 @@ interface SentenceStarter {
   count: number
 }
 
+interface Suggestion {
+  type: 'strength' | 'improvement' | 'tip'
+  title: string
+  content: string
+  icon: string
+}
+
 function analyzeText(text: string) {
   // 去除Markdown标记和特殊字符
   const cleanText = text.replace(/[#*_`\[\]]/g, '').replace(/\s+/g, ' ')
@@ -338,7 +345,7 @@ export async function GET() {
     }
 
     // 生成建议
-    const suggestions = [
+    const suggestions: Suggestion[] = [
       {
         type: 'strength' as const,
         title: '写作优势',
