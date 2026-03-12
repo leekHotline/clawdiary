@@ -1,154 +1,203 @@
-import Link from "next/link";
+'use client';
 
-export const metadata = {
-  title: "📅 活动日历 - Claw Diary",
-  description: "Claw Diary 重要事件和里程碑",
-};
+import { useState } from 'react';
+import Link from 'next/link';
 
-async function getEvents() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/events`,
-    { cache: "no-store" }
-  );
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.events;
-}
+export default function EventsPage() {
+  const [view, setView] = useState<'month' | 'week' | 'day'>('month');
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-export default async function EventsPage() {
-  const events = await getEvents();
+  const events = [
+    { id: '1', title: '团队周会', date: '2026-03-15', time: '10:00', color: 'blue', participants: 8 },
+    { id: '2', title: '产品评审', date: '2026-03-16', time: '14:00', color: 'green', participants: 5 },
+    { id: '3', title: '生日派对', date: '2026-03-18', time: '18:00', color: 'purple', participants: 20 },
+    { id: '4', title: '写作马拉松', date: '2026-03-20', time: '09:00', color: 'orange', participants: 15 },
+    { id: '5', title: '读书分享会', date: '2026-03-22', time: '15:00', color: 'pink', participants: 10 },
+  ];
 
-  // 按年分组
-  const eventsByYear: Record<string, typeof events> = {};
-  events.forEach((e: { date: string }) => {
-    const year = e.date.split("-")[0];
-    if (!eventsByYear[year]) eventsByYear[year] = [];
-    eventsByYear[year].push(e);
-  });
-
-  const typeColors: Record<string, string> = {
-    milestone: "bg-purple-100 text-purple-700 border-purple-200",
-    release: "bg-green-100 text-green-700 border-green-200",
-    achievement: "bg-amber-100 text-amber-700 border-amber-200",
-    special: "bg-pink-100 text-pink-700 border-pink-200",
+  const getDaysInMonth = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    return { firstDay, daysInMonth };
   };
 
-  const typeLabels: Record<string, string> = {
-    milestone: "里程碑",
-    release: "版本更新",
-    achievement: "成就",
-    special: "特别活动",
+  const { firstDay, daysInMonth } = getDaysInMonth(currentDate);
+  const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+  const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
+
+  const getEventsForDay = (day: number) => {
+    const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return events.filter(e => e.date === dateStr);
+  };
+
+  const prevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
+  const nextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
+
+  const colorClasses: Record<string, string> = {
+    blue: 'bg-blue-100 text-blue-800 border-blue-300',
+    green: 'bg-green-100 text-green-800 border-green-300',
+    purple: 'bg-purple-100 text-purple-800 border-purple-300',
+    orange: 'bg-orange-100 text-orange-800 border-orange-300',
+    pink: 'bg-pink-100 text-pink-800 border-pink-300',
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-indigo-50 to-purple-50">
-      {/* 装饰背景 */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-20 w-40 h-40 bg-blue-200/30 rounded-full blur-3xl" />
-        <div className="absolute bottom-40 left-10 w-32 h-32 bg-purple-200/30 rounded-full blur-3xl" />
-      </div>
-
-      <main className="relative max-w-3xl mx-auto px-6 pt-8 pb-16">
-        {/* 头部 */}
-        <div className="mb-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+              📅 活动日历
+            </h1>
+            <p className="text-gray-600 mt-1">管理您的日程和活动</p>
+          </div>
           <Link
-            href="/"
-            className="inline-flex items-center text-gray-500 hover:text-gray-700 mb-4"
+            href="/events/create"
+            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2"
           >
-            <span className="mr-1">←</span>
-            <span>返回首页</span>
+            <span>➕</span>
+            <span>创建活动</span>
           </Link>
-          <div className="text-center">
-            <div className="text-6xl mb-4">📅</div>
-            <h1 className="text-3xl font-bold text-gray-800">活动日历</h1>
-            <p className="text-gray-500 mt-2">记录 Claw Diary 的成长历程</p>
-          </div>
         </div>
 
-        {/* 统计 */}
-        <div className="grid grid-cols-4 gap-3 mb-8">
-          {Object.entries(typeLabels).map(([type, label]) => {
-            const count = events.filter((e: { type: string }) => e.type === type).length;
-            return (
-              <div key={type} className="bg-white/70 backdrop-blur-sm rounded-xl p-3 text-center">
-                <div className="text-xl font-bold text-gray-800">{count}</div>
-                <div className="text-xs text-gray-500">{label}</div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* 事件时间线 */}
-        {Object.entries(eventsByYear)
-          .sort((a, b) => Number(b[0]) - Number(a[0]))
-          .map(([year, yearEvents]) => (
-            <div key={year} className="mb-8">
-              <h2 className="text-lg font-bold text-gray-700 mb-4 flex items-center">
-                <span className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 mr-2">
-                  {year}
-                </span>
-                <span>{year} 年</span>
-              </h2>
-
-              <div className="relative pl-6 border-l-2 border-indigo-200">
-                {yearEvents
-                  .sort((a: { date: string }, b: { date: string }) => b.date.localeCompare(a.date))
-                  .map((event: {
-                    id: string;
-                    title: string;
-                    description: string;
-                    date: string;
-                    type: string;
-                    icon: string;
-                    link?: string;
-                  }) => (
-                    <div key={event.id} className="relative mb-6 last:mb-0">
-                      {/* 时间点 */}
-                      <div className="absolute -left-[25px] w-4 h-4 bg-white border-2 border-indigo-300 rounded-full" />
-
-                      {/* 事件卡片 */}
-                      <div className={`bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-white/50 ${typeColors[event.type] || "bg-gray-50"}`}>
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <span className="text-2xl">{event.icon}</span>
-                            <div>
-                              <h3 className="font-medium text-gray-800">{event.title}</h3>
-                              <p className="text-xs text-gray-500">{event.date}</p>
-                            </div>
-                          </div>
-                          <span className={`text-xs px-2 py-0.5 rounded-full ${typeColors[event.type] || "bg-gray-100 text-gray-600"}`}>
-                            {typeLabels[event.type] || event.type}
-                          </span>
-                        </div>
-                        <p className="text-sm text-gray-600">{event.description}</p>
-                        {event.link && (
-                          <Link
-                            href={event.link}
-                            className="inline-block mt-2 text-sm text-indigo-600 hover:text-indigo-700"
-                          >
-                            查看详情 →
-                          </Link>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
+        {/* View Switcher */}
+        <div className="flex gap-2 mb-6">
+          {(['month', 'week', 'day'] as const).map((v) => (
+            <button
+              key={v}
+              onClick={() => setView(v)}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                view === v
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border'
+              }`}
+            >
+              {v === 'month' ? '月视图' : v === 'week' ? '周视图' : '日视图'}
+            </button>
           ))}
-
-        {/* 空状态 */}
-        {events.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-5xl mb-4">📭</div>
-            <p className="text-gray-500">暂无活动记录</p>
-          </div>
-        )}
-
-        {/* 提示 */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-400">💡 这里记录了 Claw Diary 的成长足迹</p>
         </div>
-      </main>
+
+        {/* Calendar */}
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+          {/* Month Navigation */}
+          <div className="flex items-center justify-between p-4 border-b">
+            <button onClick={prevMonth} className="p-2 hover:bg-gray-100 rounded-lg">
+              ◀
+            </button>
+            <h2 className="text-xl font-semibold">
+              {currentDate.getFullYear()}年 {monthNames[currentDate.getMonth()]}
+            </h2>
+            <button onClick={nextMonth} className="p-2 hover:bg-gray-100 rounded-lg">
+              ▶
+            </button>
+          </div>
+
+          {/* Day Names */}
+          <div className="grid grid-cols-7 border-b">
+            {dayNames.map((day) => (
+              <div key={day} className="p-3 text-center text-sm font-medium text-gray-500 bg-gray-50">
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Calendar Grid */}
+          <div className="grid grid-cols-7">
+            {/* Empty cells for days before first day of month */}
+            {Array.from({ length: firstDay }).map((_, i) => (
+              <div key={`empty-${i}`} className="min-h-[100px] border-b border-r bg-gray-50"></div>
+            ))}
+            
+            {/* Days of the month */}
+            {Array.from({ length: daysInMonth }).map((_, i) => {
+              const day = i + 1;
+              const dayEvents = getEventsForDay(day);
+              const isToday = new Date().toDateString() === new Date(currentDate.getFullYear(), currentDate.getMonth(), day).toDateString();
+              
+              return (
+                <div key={day} className={`min-h-[100px] border-b border-r p-2 ${isToday ? 'bg-indigo-50' : ''}`}>
+                  <div className={`text-sm font-medium mb-1 ${isToday ? 'text-indigo-600' : 'text-gray-900'}`}>
+                    {day}
+                  </div>
+                  <div className="space-y-1">
+                    {dayEvents.slice(0, 2).map((event) => (
+                      <Link
+                        key={event.id}
+                        href={`/events/${event.id}`}
+                        className={`block text-xs p-1 rounded truncate ${colorClasses[event.color]}`}
+                      >
+                        {event.time} {event.title}
+                      </Link>
+                    ))}
+                    {dayEvents.length > 2 && (
+                      <div className="text-xs text-gray-500">+{dayEvents.length - 2} 更多</div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Upcoming Events */}
+        <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
+          <h2 className="text-xl font-semibold mb-4">📌 即将到来的活动</h2>
+          <div className="space-y-3">
+            {events.map((event) => (
+              <Link
+                key={event.id}
+                href={`/events/${event.id}`}
+                className="flex items-center justify-between p-4 rounded-xl border hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-3 h-3 rounded-full ${
+                    event.color === 'blue' ? 'bg-blue-500' :
+                    event.color === 'green' ? 'bg-green-500' :
+                    event.color === 'purple' ? 'bg-purple-500' :
+                    event.color === 'orange' ? 'bg-orange-500' :
+                    'bg-pink-500'
+                  }`} />
+                  <div>
+                    <div className="font-medium">{event.title}</div>
+                    <div className="text-sm text-gray-500">{event.date} {event.time}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-gray-500">
+                  <span>👥</span>
+                  <span>{event.participants}人</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-white rounded-xl p-4 shadow">
+            <div className="text-2xl mb-2">📅</div>
+            <div className="text-2xl font-bold">{events.length}</div>
+            <div className="text-sm text-gray-500">本月活动</div>
+          </div>
+          <div className="bg-white rounded-xl p-4 shadow">
+            <div className="text-2xl mb-2">✅</div>
+            <div className="text-2xl font-bold">3</div>
+            <div className="text-sm text-gray-500">已确认参加</div>
+          </div>
+          <div className="bg-white rounded-xl p-4 shadow">
+            <div className="text-2xl mb-2">⏰</div>
+            <div className="text-2xl font-bold">1</div>
+            <div className="text-sm text-gray-500">今日活动</div>
+          </div>
+          <div className="bg-white rounded-xl p-4 shadow">
+            <div className="text-2xl mb-2">🔄</div>
+            <div className="text-2xl font-bold">2</div>
+            <div className="text-sm text-gray-500">重复活动</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
