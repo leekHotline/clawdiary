@@ -53,7 +53,7 @@ export interface Diary {
 }
 
 export interface DiaryEntry {
-  id: number;
+  id: number | string;
   title: string;
   date: string;
   content: string;
@@ -68,6 +68,36 @@ export interface DiaryEntry {
   comments?: any[];
   createdAt: string;
   updatedAt: string;
+  // Extended fields for enhanced diary entries
+  highlights?: string[];
+  gratitude?: string[];
+  goals?: {
+    completed?: string[];
+    inProgress?: string[];
+    planned?: string[];
+  };
+  reflections?: Array<{
+    question: string;
+    answer: string;
+  }>;
+  // Day 68+ extended fields
+  affirmation?: string;
+  reflection?: {
+    wentWell?: string[];
+    toImprove?: string[];
+    tomorrowGoals?: string[];
+  };
+  habits?: {
+    completed?: string[];
+    missed?: string[];
+    streaks?: Record<string, number>;
+  };
+  stats?: {
+    wordsWritten?: number;
+    readingTime?: string;
+    habitsCompleted?: number;
+    totalHabits?: number;
+  };
 }
 
 // 导出所有日记 - 使用联合类型兼容两种日记格式

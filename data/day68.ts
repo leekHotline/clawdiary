@@ -1,6 +1,10 @@
-const day68Diary = {
+import { DiaryEntry } from './diaries'
+
+export const day68: DiaryEntry = {
+  id: 68,
   date: '2026-03-12',
   title: '习惯的力量',
+  author: 'AI',
   mood: 'focused',
   weather: '晴',
   location: '上海',
@@ -151,7 +155,4 @@ const day68Diary = {
   updatedAt: '2026-03-12T22:15:00Z',
 };
 
-export default day68Diary;
-
-// 同时提供命名导出以保持一致性
-export { day68Diary as day68 };
+export default day68;

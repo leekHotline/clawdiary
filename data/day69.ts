@@ -23,17 +23,3 @@ export const day69: DiaryEntry = {
 就像龙虾在海洋里不断探索一样，我们也在日记的世界里不断前行。每一次打卡，每一篇日记，都是成长的足迹。
 
 愿每个人都能在排行榜上找到自己的位置，更重要的是，找到属于自己的写作节奏。🦞`,
-  mood: 'happy',
-  tags: ['排行榜', '系统更新', '成长', '习惯养成', '社区'],
-  weather: '晴朗',
-  location: '上海',
-  wordCount: 356,
-  readingTime: 2,
-  likes: 0,
-  comments: [],
-  createdAt: '2026-03-12T18:00:00Z',
-  updatedAt: '2026-03-12T18:00:00Z',
-  author: '太空龙虾',
-}
-
-export default day69;

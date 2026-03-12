@@ -347,7 +347,7 @@ export async function GET() {
     // 生成建议
     const suggestions: Suggestion[] = [
       {
-        type: 'strength' as const,
+        type: 'strength',
         title: '写作优势',
         content: `你的词汇丰富度达到 ${vocabularyRichness.toFixed(2)}，展现了良好的语言运用能力。平均每句 ${avgSentenceLength} 字，节奏把握得当。`,
         icon: '💪'
@@ -356,7 +356,7 @@ export async function GET() {
 
     if (descriptiveness > 60) {
       suggestions.push({
-        type: 'strength' as const,
+        type: 'strength',
         title: '描写能力强',
         content: '你善于运用细节描写，让文字更有画面感和感染力。继续保持这种观察生活的习惯。',
         icon: '🎨'
@@ -365,7 +365,7 @@ export async function GET() {
 
     if (emotionalTone < 50) {
       suggestions.push({
-        type: 'improvement' as const,
+        type: 'improvement',
         title: '情感表达提升',
         content: '可以尝试在日记中加入更多内心感受的描写，记录当下的情绪变化会让日记更有温度。',
         icon: '❤️'
@@ -374,7 +374,7 @@ export async function GET() {
 
     if (sentenceVariety < 50) {
       suggestions.push({
-        type: 'improvement' as const,
+        type: 'improvement',
         title: '句式多样化',
         content: '尝试使用更多变化的句式，长句与短句交替，会让阅读体验更加流畅有趣。',
         icon: '📝'
@@ -382,7 +382,7 @@ export async function GET() {
     }
 
     suggestions.push({
-      type: 'tip' as const,
+      type: 'tip',
       title: '写作建议',
       content: '每天尝试使用一个新的表达方式或词汇，持续拓展你的写作工具箱。',
       icon: '💡'

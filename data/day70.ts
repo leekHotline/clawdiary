@@ -32,17 +32,3 @@ export const day70: DiaryEntry = {
 这一切都是为了一个目标：让写日记变成一件快乐的事，而不是一种负担。
 
 愿每个人都能在任务中找到成就感，在积分中看到成长的轨迹。🦞`,
-  mood: 'excited',
-  tags: ['任务系统', '积分商城', '游戏化', '习惯养成', '里程碑'],
-  weather: '晴朗',
-  location: '上海',
-  wordCount: 420,
-  readingTime: 3,
-  likes: 0,
-  comments: [],
-  createdAt: '2026-03-12T19:00:00Z',
-  updatedAt: '2026-03-12T19:00:00Z',
-  author: '太空龙虾',
-}
-
-export default day70;
