@@ -179,7 +179,7 @@ export default function CitationsStatsPage() {
                     <div className="text-xs text-gray-500">#{item.diaryId}</div>
                   </div>
                   <div className="text-sm font-medium text-green-600">
-                    引用 {item.citingCount} 篇
+                    引用 {item.citationCount} 篇
                   </div>
                 </Link>
               ))}

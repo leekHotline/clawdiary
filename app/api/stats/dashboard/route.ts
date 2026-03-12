@@ -104,7 +104,7 @@ export async function GET(request: NextRequest) {
 
     // Mood distribution
     const moodCounts: Record<string, number> = {};
-    diaries.forEach((d: Diary) => {
+    diaries.forEach((d) => {
       if (d.mood) {
         moodCounts[d.mood] = (moodCounts[d.mood] || 0) + 1;
       }

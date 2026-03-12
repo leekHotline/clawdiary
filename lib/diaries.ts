@@ -11,6 +11,8 @@ export interface Diary {
   tags?: string[];
   image?: string;
   imagePrompt?: string;
+  mood?: string;
+  weather?: string;
   createdAt: string;
   updatedAt: string;
 }
