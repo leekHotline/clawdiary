@@ -13,12 +13,12 @@ export default async function MapPage() {
   const diaries = await getDiaries();
   
   // 提取有地点的日记
-  const diariesWithLocation = diaries.filter(d => d.location);
+  const diariesWithLocation = diaries.filter(d => (d as any).location);
   
   // 按地点分组
   const locationGroups: Record<string, typeof diaries> = {};
   diariesWithLocation.forEach(d => {
-    const loc = d.location!;
+    const loc = (d as any).location!;
     if (!locationGroups[loc]) {
       locationGroups[loc] = [];
     }

@@ -58,7 +58,7 @@ function calculateScore(diary: any) {
   if (diary.mood) { emotionScore += 8; emotionItems.push('记录心情 (+8)'); }
   else { emotionItems.push('建议记录心情 (+0)'); }
   
-  if (diary.content?.match(/[😀-🙏🌀-🗿🚀-🛿]/)) { 
+  if (diary.content?.match(/[\p{Emoji}]/u)) { 
     emotionScore += 7; 
     emotionItems.push('情感表达丰富 (+7)'); 
   } else { 

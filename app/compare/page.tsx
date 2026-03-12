@@ -18,8 +18,8 @@ export default async function ComparePage({
   const leftId = typeof searchParams.left === 'string' ? parseInt(searchParams.left) : null;
   const rightId = typeof searchParams.right === 'string' ? parseInt(searchParams.right) : null;
 
-  const leftDiary = leftId ? diaries.find(d => d.id === leftId) : null;
-  const rightDiary = rightId ? diaries.find(d => d.id === rightId) : null;
+  const leftDiary = leftId ? diaries.find(d => parseInt(d.id) === leftId) : null;
+  const rightDiary = rightId ? diaries.find(d => parseInt(d.id) === rightId) : null;
 
   // 计算差异
   const getDifferences = (left: string, right: string) => {

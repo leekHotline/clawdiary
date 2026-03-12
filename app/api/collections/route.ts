@@ -1,143 +1,86 @@
-import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { NextRequest, NextResponse } from 'next/server';
+
+// 模拟数据存储
+let collections: Collection[] = [
+  {
+    id: '1',
+    name: '最佳日记',
+    description: '我最喜欢的日记',
+    color: 'bg-yellow-500',
+    icon: '⭐',
+    diaryIds: [1, 5, 10],
+    createdAt: '2026-03-01T00:00:00Z',
+    updatedAt: '2026-03-10T00:00:00Z',
+  },
+  {
+    id: '2',
+    name: '技术笔记',
+    description: '技术相关的日记',
+    color: 'bg-blue-500',
+    icon: '💻',
+    diaryIds: [2, 7, 15],
+    createdAt: '2026-03-05T00:00:00Z',
+    updatedAt: '2026-03-12T00:00:00Z',
+  },
+  {
+    id: '3',
+    name: '生活点滴',
+    description: '日常生活中的美好瞬间',
+    color: 'bg-pink-500',
+    icon: '❤️',
+    diaryIds: [3, 8, 12, 20],
+    createdAt: '2026-03-08T00:00:00Z',
+    updatedAt: '2026-03-15T00:00:00Z',
+  },
+];
 
 interface Collection {
   id: string;
-  userId: string;
   name: string;
   description?: string;
-  diaryIds: string[];
-  isPublic: boolean;
+  color: string;
+  icon: string;
+  diaryIds: number[];
   createdAt: string;
   updatedAt: string;
 }
 
-const COLLECTIONS_FILE = path.join(process.cwd(), "data", "collections.json");
-
-function getCollections(): Collection[] {
-  try {
-    if (!fs.existsSync(COLLECTIONS_FILE)) {
-      return [];
-    }
-    const data = fs.readFileSync(COLLECTIONS_FILE, "utf-8");
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
+// GET /api/collections - 获取所有收藏夹
+export async function GET() {
+  return NextResponse.json({
+    collections,
+    total: collections.length,
+  });
 }
 
-function saveCollections(collections: Collection[]) {
-  const dataDir = path.dirname(COLLECTIONS_FILE);
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-  fs.writeFileSync(COLLECTIONS_FILE, JSON.stringify(collections, null, 2));
-}
-
-// GET /api/collections - 获取收藏集列表
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
-    const publicOnly = searchParams.get("public") === "true";
-    
-    let collections = getCollections();
-    
-    if (userId) {
-      collections = collections.filter(c => c.userId === userId);
-    }
-    
-    if (publicOnly) {
-      collections = collections.filter(c => c.isPublic);
-    }
-    
-    return NextResponse.json(collections.sort((a, b) => 
-      new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-    ));
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch collections" }, { status: 500 });
-  }
-}
-
-// POST /api/collections - 创建收藏集
+// POST /api/collections - 创建收藏夹
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { userId, name, description, diaryIds, isPublic } = body;
-    
-    if (!userId || !name) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    const { name, description, color, icon } = body;
+
+    if (!name || !name.trim()) {
+      return NextResponse.json({ error: '名称不能为空' }, { status: 400 });
     }
-    
-    const collections = getCollections();
-    const now = new Date().toISOString();
+
     const newCollection: Collection = {
       id: Date.now().toString(),
-      userId,
-      name,
-      description,
-      diaryIds: diaryIds || [],
-      isPublic: isPublic || false,
-      createdAt: now,
-      updatedAt: now,
-    };
-    
-    collections.push(newCollection);
-    saveCollections(collections);
-    
-    return NextResponse.json(newCollection, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to create collection" }, { status: 500 });
-  }
-}
-
-// PUT /api/collections - 更新收藏集
-export async function PUT(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { id, ...updates } = body;
-    
-    if (!id) {
-      return NextResponse.json({ error: "Missing collection id" }, { status: 400 });
-    }
-    
-    const collections = getCollections();
-    const index = collections.findIndex(c => c.id === id);
-    
-    if (index === -1) {
-      return NextResponse.json({ error: "Collection not found" }, { status: 404 });
-    }
-    
-    collections[index] = {
-      ...collections[index],
-      ...updates,
+      name: name.trim(),
+      description: description?.trim() || undefined,
+      color: color || 'bg-blue-500',
+      icon: icon || '📚',
+      diaryIds: [],
+      createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    
-    saveCollections(collections);
-    return NextResponse.json(collections[index]);
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to update collection" }, { status: 500 });
-  }
-}
 
-// DELETE /api/collections - 删除收藏集
-export async function DELETE(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-    
-    if (!id) {
-      return NextResponse.json({ error: "Missing collection id" }, { status: 400 });
-    }
-    
-    const collections = getCollections();
-    const filtered = collections.filter(c => c.id !== id);
-    saveCollections(filtered);
-    
-    return NextResponse.json({ success: true });
+    collections.push(newCollection);
+
+    return NextResponse.json({
+      success: true,
+      collection: newCollection,
+    });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to delete collection" }, { status: 500 });
+    return NextResponse.json({ error: '创建失败' }, { status: 500 });
   }
 }

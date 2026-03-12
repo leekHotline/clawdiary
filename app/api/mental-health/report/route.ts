@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
 
     diaries.forEach(diary => {
       totalDiaries++;
-      totalWordCount += diary.wordCount || 0;
+      totalWordCount += (diary as any).wordCount || 0;
       if (diary.mood) {
         moodCounts[diary.mood] = (moodCounts[diary.mood] || 0) + 1;
       }
