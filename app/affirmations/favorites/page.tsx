@@ -268,7 +268,7 @@ export default function AffirmationsHistoryPage() {
                     )}
                     {entry.reflection && (
                       <p className="mt-2 text-sm text-gray-500 italic">
-                        "{entry.reflection}"
+                        &ldquo;{entry.reflection}&rdquo;
                       </p>
                     )}
                   </div>

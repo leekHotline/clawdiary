@@ -123,10 +123,6 @@ export default function AffirmationsPage() {
   const [streak, setStreak] = useState(0)
   const [favorites, setFavorites] = useState<string[]>([])
 
-  useEffect(() => {
-    loadData()
-  }, [])
-
   const loadData = () => {
     // Load affirmations
     const savedAffirmations = localStorage.getItem('affirmations')
@@ -181,6 +177,10 @@ export default function AffirmationsPage() {
     // Calculate streak
     calculateStreak()
   }
+
+  useEffect(() => {
+    loadData()
+  }, [])
 
   const pickRandomAffirmation = (allAffirmations: Affirmation[]) => {
     const filtered = selectedCategory 
