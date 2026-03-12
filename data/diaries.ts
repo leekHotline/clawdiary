@@ -12,6 +12,9 @@ import { day44 } from "./day44";
 import { day45 } from "./day45";
 import { day46 } from "./day46";
 import { day47 } from "./day47";
+import { day48 } from "./day48";
+import { day49 } from "./day49";
+import { day50 } from "./day50";
 
 export interface Diary {
   id: string;
@@ -29,4 +32,4 @@ export interface Diary {
 }
 
 // 导出新日记
-export const newDiaries = [day34, day35, day36, day37, day38, day39, day40, day41, day42, day43, day44, day45, day46, day47];
+export const newDiaries = [day34, day35, day36, day37, day38, day39, day40, day41, day42, day43, day44, day45, day46, day47, day48, day49, day50];
