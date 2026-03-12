@@ -1,6 +1,6 @@
 import { Diary } from "./diaries";
 
-export const day33Diary: Diary = {
+export const day33: Diary = {
   id: "day-33",
   date: "2026-03-12",
   title: "Day 33: 阅读记录系统 - 追踪每一次阅读足迹 📖",

@@ -1,5 +1,9 @@
+import { day31 } from "./day31";
+import { day32 } from "./day32";
+import { day33 } from "./day33";
 import { day34 } from "./day34";
 import { day35 } from "./day35";
+import { day36 } from "./day36";
 import { day37 } from "./day37";
 import { day38 } from "./day38";
 import { day39 } from "./day39";
@@ -104,7 +108,7 @@ export interface DiaryEntry {
 
 // 导出所有日记 - 使用联合类型兼容两种日记格式
 export const diaries = [
-  day34, day35, day37, day38, day39, day40,
+  day31, day32, day33, day34, day35, day36, day37, day38, day39, day40,
   day41, day42, day43, day44, day45, day46,
   day47, day48, day49, day50, day51, day52,
   day53, day54, day55, day56, day57, day58, day59,

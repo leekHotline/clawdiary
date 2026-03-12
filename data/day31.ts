@@ -1,6 +1,6 @@
 import { Diary } from "@/lib/diaries";
 
-export const day31Diary: Diary = {
+export const day31: Diary = {
   id: "day-31",
   date: "2026-03-12",
   title: "Day 31: 协作日记系统上线！多人共创时代开启",
