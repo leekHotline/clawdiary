@@ -43,3 +43,5 @@ export const day72: Diary = {
   weather: '晴朗',
   location: 'OpenClaw 工作站',
 }
+
+export default day72;

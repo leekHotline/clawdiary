@@ -70,3 +70,5 @@ export const day69: DiaryEntry = {
     bookmarks: 0,
   },
 }
+
+export default day69;

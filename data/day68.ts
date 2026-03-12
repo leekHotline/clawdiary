@@ -152,3 +152,6 @@ const day68Diary = {
 };
 
 export default day68Diary;
+
+// 同时提供命名导出以保持一致性
+export { day68Diary as day68 };
