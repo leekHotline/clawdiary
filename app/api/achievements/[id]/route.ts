@@ -1,201 +1,156 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
 
-// 用户成就状态
-interface UserAchievement {
-  achievementId: string
-  unlocked: boolean
-  unlockedAt?: string
-  progress: number
-  total: number
-}
-
-// 模拟用户统计数据
-const getUserStats = (userId: string) => {
-  // 实际项目中从数据库获取
-  return {
-    diaries: 42,
-    currentStreak: 15,
-    longestStreak: 30,
-    likesReceived: 156,
-    commentsReceived: 23,
-    followers: 8,
-    following: 12,
-    uniqueTags: 18,
-    uniqueMoods: 6,
-    uniqueWeathers: 4,
-    earlyDiaries: 3,
-    lateDiaries: 7,
-    longDiaries: 12,
-    shares: 5,
-    collections: 3
-  }
-}
-
-// 检查成就是否达成
-const checkAchievement = (
-  achievement: {
-    id: string
-    requirement: { type: string; target: number; metric: string }
-  },
-  stats: ReturnType<typeof getUserStats>
-): { unlocked: boolean; progress: number; total: number } => {
-  const { requirement } = achievement
-
-  let current = 0
-  switch (requirement.metric) {
-    case 'diaries':
-      current = stats.diaries
-      break
-    case 'days':
-      current = stats.currentStreak
-      break
-    case 'likes_received':
-      current = stats.likesReceived
-      break
-    case 'comments_received':
-      current = stats.commentsReceived
-      break
-    case 'followers':
-      current = stats.followers
-      break
-    case 'tags':
-      current = stats.uniqueTags
-      break
-    case 'moods':
-      current = stats.uniqueMoods
-      break
-    case 'weathers':
-      current = stats.uniqueWeathers
-      break
-    case 'early_diary':
-      current = stats.earlyDiaries
-      break
-    case 'late_diary':
-      current = stats.lateDiaries
-      break
-    case 'word_count':
-      current = stats.longDiaries > 0 ? 1000 : 0
-      break
-    case 'shares':
-      current = stats.shares
-      break
-    case 'collections':
-      current = stats.collections
-      break
-    default:
-      current = 0
-  }
-
-  const unlocked = current >= requirement.target
-  return {
-    unlocked,
-    progress: Math.min(current, requirement.target),
-    total: requirement.target
-  }
-}
-
-// GET: 获取用户成就状态
+// GET - Get achievement details
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: userId } = await params
-    const stats = getUserStats(userId)
+    const session = await auth();
+    const userId = session?.user?.id;
 
-    // 从 achievements API 获取成就列表
-    const achievementsResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/achievements`
-    )
-    const achievementsData = await achievementsResponse.json()
+    // Get achievement
+    const achievement = await prisma.achievement.findUnique({
+      where: { id: params.id },
+      include: {
+        userAchievements: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+              },
+            },
+          },
+          orderBy: { unlockedAt: 'asc' },
+          take: 10,
+        },
+        _count: {
+          select: {
+            userAchievements: true,
+          },
+        },
+      },
+    });
 
-    if (!achievementsData.success) {
-      throw new Error('获取成就列表失败')
+    if (!achievement) {
+      return NextResponse.json({ error: 'Achievement not found' }, { status: 404 });
     }
 
-    const userAchievements: UserAchievement[] = achievementsData.data.map(
-      (achievement: {
-        id: string
-        requirement: { type: string; target: number; metric: string }
-      }) => {
-        const result = checkAchievement(achievement, stats)
-        return {
-          achievementId: achievement.id,
-          unlocked: result.unlocked,
-          unlockedAt: result.unlocked ? new Date().toISOString() : undefined,
-          progress: result.progress,
-          total: result.total
-        }
-      }
-    )
+    // Check if user has unlocked this achievement
+    let userUnlock = null;
+    let progress = 0;
+    
+    if (userId) {
+      userUnlock = await prisma.userAchievement.findUnique({
+        where: {
+          userId_achievementId: {
+            userId,
+            achievementId: params.id,
+          },
+        },
+      });
 
-    const unlockedCount = userAchievements.filter(a => a.unlocked).length
-    const totalPoints = achievementsData.data
-      .filter(
-        (a: { id: string }) =>
-          userAchievements.find(ua => ua.achievementId === a.id)?.unlocked
-      )
-      .reduce((sum: number, a: { points: number }) => sum + a.points, 0)
+      // Calculate progress based on requirement type
+      const requirement = achievement.requirement as any;
+      if (requirement) {
+        let current = 0;
+        
+        switch (requirement.type) {
+          case 'diaries':
+            current = await prisma.diary.count({ where: { authorId: userId } });
+            break;
+          case 'words':
+            const diaries = await prisma.diary.findMany({
+              where: { authorId: userId },
+              select: { content: true },
+            });
+            current = diaries.reduce((sum, d) => sum + d.content.length, 0);
+            break;
+          case 'streak':
+            const stats = await prisma.userStats.findUnique({
+              where: { userId },
+              select: { longestStreak: true },
+            });
+            current = stats?.longestStreak || 0;
+            break;
+          case 'focus_minutes':
+            const focusSessions = await prisma.focusSession.findMany({
+              where: { userId },
+              select: { duration: true },
+            });
+            current = focusSessions.reduce((sum, s) => sum + s.duration, 0);
+            break;
+          default:
+            current = 0;
+        }
+        
+        progress = Math.min(100, (current / requirement.target) * 100);
+        requirement.current = current;
+      }
+    }
+
+    // Get first unlocker
+    const firstUnlock = achievement.userAchievements[0];
+    const recentUnlocks = achievement.userAchievements.slice(0, 5);
+
+    // Get related achievements
+    const relatedAchievements = await prisma.achievement.findMany({
+      where: {
+        category: achievement.category,
+        id: { not: achievement.id },
+      },
+      take: 4,
+      include: userId ? {
+        userAchievements: {
+          where: { userId },
+          select: { id: true },
+        },
+      } : false,
+    });
 
     return NextResponse.json({
-      success: true,
-      data: {
-        userId,
-        achievements: userAchievements,
-        stats,
-        summary: {
-          total: userAchievements.length,
-          unlocked: unlockedCount,
-          progress: Math.round(
-            (unlockedCount / userAchievements.length) * 100
-          ),
-          totalPoints,
-          level: Math.floor(totalPoints / 100) + 1,
-          nextLevelPoints: ((Math.floor(totalPoints / 100) + 1) * 100) - totalPoints
-        }
-      }
-    })
+      id: achievement.id,
+      name: achievement.name,
+      description: achievement.description,
+      icon: achievement.icon,
+      category: achievement.category,
+      rarity: achievement.rarity,
+      points: achievement.points,
+      requirement: achievement.requirement,
+      rewards: achievement.rewards || [],
+      unlockedAt: userUnlock?.unlockedAt,
+      progress,
+      unlocked: !!userUnlock,
+      users: achievement._count.userAchievements,
+      firstUnlockedBy: firstUnlock ? {
+        id: firstUnlock.user.id,
+        name: firstUnlock.user.name || 'Anonymous',
+        avatar: firstUnlock.user.image || '/default-avatar.png',
+        unlockedAt: firstUnlock.unlockedAt,
+      } : null,
+      recentUnlocks: recentUnlocks.map(u => ({
+        id: u.user.id,
+        name: u.user.name || 'Anonymous',
+        avatar: u.user.image || '/default-avatar.png',
+        unlockedAt: u.unlockedAt,
+      })),
+      tips: achievement.tips || [],
+      relatedAchievements: relatedAchievements.map(a => ({
+        id: a.id,
+        name: a.name,
+        icon: a.icon,
+        unlocked: userId ? (a as any).userAchievements?.length > 0 : false,
+      })),
+    });
   } catch (error) {
-    console.error('获取用户成就失败:', error)
+    console.error('Error fetching achievement:', error);
     return NextResponse.json(
-      { success: false, error: '获取用户成就失败' },
+      { error: 'Failed to fetch achievement' },
       { status: 500 }
-    )
-  }
-}
-
-// POST: 手动触发成就检查
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id: userId } = await params
-    const body = await request.json()
-    const { metric, value } = body
-
-    // 检查是否解锁新成就
-    const newAchievements: string[] = []
-
-    // 返回新解锁的成就
-    return NextResponse.json({
-      success: true,
-      data: {
-        userId,
-        metric,
-        value,
-        newAchievements,
-        message:
-          newAchievements.length > 0
-            ? `恭喜解锁 ${newAchievements.length} 个新成就！`
-            : '继续努力，即将解锁新成就！'
-      }
-    })
-  } catch (error) {
-    console.error('检查成就失败:', error)
-    return NextResponse.json(
-      { success: false, error: '检查成就失败' },
-      { status: 500 }
-    )
+    );
   }
 }
