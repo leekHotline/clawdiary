@@ -7,6 +7,9 @@ import { day39 } from "./day39";
 import { day40 } from "./day40";
 import { day41 } from "./day41";
 import { day42 } from "./day42";
+import { day43 } from "./day43";
+import { day44 } from "./day44";
+import { day45 } from "./day45";
 
 export interface Diary {
   id: string;
@@ -24,4 +27,4 @@ export interface Diary {
 }
 
 // 导出新日记
-export const newDiaries = [day34, day35, day36, day37, day38, day39, day40, day41, day42];
+export const newDiaries = [day34, day35, day36, day37, day38, day39, day40, day41, day42, day43, day44, day45];
