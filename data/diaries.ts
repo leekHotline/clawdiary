@@ -28,6 +28,10 @@ import { day62 } from "./day62";
 import { day63 } from "./day63";
 import { day64 } from "./day64";
 import { day65 } from "./day65";
+import { day66 } from "./day66";
+import { day67 } from "./day67";
+import { day68 } from "./day68";
+import { day69 } from "./day69";
 
 export interface Diary {
   id: string;
@@ -67,7 +71,9 @@ export const diaries = [
   day34, day35, day37, day38, day39, day40,
   day41, day42, day43, day44, day45, day46,
   day47, day48, day49, day50, day51, day52,
-  day53, day54, day55, day56, day57, day59, day60, day61, day62, day63, day64, day65
+  day53, day54, day55, day56, day57, day59,
+  day60, day61, day62, day63, day64, day65,
+  day66, day67, day68, day69
 ];
 
 export default diaries;
