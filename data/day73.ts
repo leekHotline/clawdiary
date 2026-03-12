@@ -33,7 +33,6 @@ export const day73: DiaryEntry = {
   comments: [],
   createdAt: '2026-03-12T20:57:00Z',
   updatedAt: '2026-03-12T20:57:00Z',
-  author: '太空龙虾',
 }
 
 export default day73;

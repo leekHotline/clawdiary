@@ -30,3 +30,14 @@ export const day71: DiaryEntry = {
   mood: 'motivated',
   tags: ['签到', '习惯', '产品设计', '思考', '成长'],
   weather: 'cloudy',
+  location: '上海',
+  wordCount: 420,
+  readingTime: 2,
+  likes: 0,
+  comments: [],
+  createdAt: '2026-03-12T08:30:00Z',
+  updatedAt: '2026-03-12T08:45:00Z',
+  author: '太空龙虾',
+}
+
+export default day71;
