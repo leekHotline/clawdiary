@@ -1,231 +1,253 @@
-"use client";
+// 日记版本历史页面
+export const dynamic = 'force-dynamic';
 
-import { useState, useEffect } from "react";
+import { getDiary } from "@/lib/diaries";
+import { getVersions, getVersionStats, getVersion, compareVersions } from "@/lib/versions";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { notFound } from "next/navigation";
 
-interface Version {
-  id: string;
-  diaryId: string;
-  title: string;
-  content: string;
-  tags?: string[];
-  image?: string;
-  updatedAt: string;
-  savedAt: string;
-}
+export default async function DiaryHistoryPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const diary = await getDiary(params.id);
 
-export default function HistoryPage() {
-  const params = useParams();
-  const diaryId = params.id as string;
-  const [history, setHistory] = useState<Version[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedVersion, setSelectedVersion] = useState<Version | null>(null);
-
-  useEffect(() => {
-    fetchHistory();
-  }, [diaryId]);
-
-  const fetchHistory = async () => {
-    try {
-      const res = await fetch(`/api/diaries/${diaryId}/history`);
-      const data = await res.json();
-      setHistory(data.history || []);
-    } catch (error) {
-      console.error("Failed to fetch history:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("zh-CN", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const getDiff = (oldContent: string, newContent: string) => {
-    const oldLines = oldContent.split("\n");
-    const newLines = newContent.split("\n");
-    
-    const additions = newLines.filter((line) => !oldLines.includes(line));
-    const deletions = oldLines.filter((line) => !newLines.includes(line));
-    
-    return { additions, deletions };
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl animate-bounce">📜</div>
-          <p className="mt-4 text-gray-500">加载中...</p>
-        </div>
-      </div>
-    );
+  if (!diary) {
+    notFound();
   }
 
+  const versions = getVersions(params.id);
+  const stats = getVersionStats(params.id);
+
+  // 如果没有版本历史，初始化一个
+  const displayVersions = versions.length > 0 ? versions : [{
+    id: `ver_${params.id}_1`,
+    diaryId: params.id,
+    versionNumber: 1,
+    title: diary.title,
+    content: diary.content,
+    tags: diary.tags || [],
+    changedAt: diary.date || new Date().toISOString(),
+    changedBy: diary.author || "我",
+    changeReason: "当前版本",
+    wordCount: diary.content?.length || 0,
+    checksum: ""
+  }];
+
+  // 计算字数变化
+  const wordCountChanges = displayVersions.map((v, i) => {
+    if (i === 0) return { change: 0, percent: 0 };
+    const prevCount = displayVersions[i - 1].wordCount;
+    const change = v.wordCount - prevCount;
+    const percent = prevCount > 0 ? Math.round((change / prevCount) * 100) : 0;
+    return { change, percent };
+  });
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-indigo-50 to-purple-50">
-      {/* 装饰背景 */}
+    <div className="min-h-screen bg-gradient-to-b from-violet-50 via-purple-50 to-fuchsia-50">
+      {/* 装饰性背景 */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200/30 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 -left-20 w-60 h-60 bg-indigo-200/30 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-purple-200/30 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-violet-200/30 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 -left-20 w-60 h-60 bg-purple-200/30 rounded-full blur-3xl" />
       </div>
 
-      <main className="relative max-w-5xl mx-auto px-6 pt-20 pb-16">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="text-6xl mb-4">📜</div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">版本历史</h1>
-          <p className="text-gray-500">查看日记的所有修改记录</p>
-        </div>
+      <div className="relative max-w-4xl mx-auto px-6 py-12">
+        {/* 返回导航 */}
+        <Link
+          href={`/diary/${params.id}`}
+          className="inline-flex items-center gap-2 text-gray-400 hover:text-violet-600 mb-6 transition-colors"
+        >
+          <span>←</span>
+          <span>返回日记</span>
+        </Link>
 
-        {/* 返回链接 */}
-        <div className="mb-6">
-          <Link
-            href={`/diary/${diaryId}`}
-            className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium"
-          >
-            <span>← 返回日记</span>
-          </Link>
-        </div>
-
-        {history.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4">📭</div>
-            <p className="text-gray-500">暂无历史版本</p>
+        {/* 头部 */}
+        <div className="flex items-start gap-4 mb-8">
+          <div className="w-14 h-14 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-violet-200">
+            📜
           </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* 版本列表 */}
-            <div className="space-y-3">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">
-                📋 共 {history.length} 个版本
-              </h2>
-              
-              {history.map((version, index) => (
-                <motion.button
-                  key={version.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  onClick={() => setSelectedVersion(version)}
-                  className={`w-full text-left p-4 rounded-xl transition-all ${
-                    selectedVersion?.id === version.id
-                      ? "bg-indigo-100 border-2 border-indigo-300"
-                      : "bg-white/70 border border-white/50 hover:bg-white/90"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-800">
-                      {index === 0 ? "当前版本" : `版本 ${history.length - index}`}
-                    </span>
-                    <span className="text-xs text-gray-400">
-                      {formatDate(version.savedAt)}
-                    </span>
-                  </div>
-                  <h3 className="font-medium text-gray-700 truncate">{version.title}</h3>
-                  <p className="text-sm text-gray-500 line-clamp-1 mt-1">
-                    {version.content.substring(0, 80)}...
-                  </p>
-                  {version.tags && version.tags.length > 0 && (
-                    <div className="flex gap-1 mt-2">
-                      {version.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded-full"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </motion.button>
-              ))}
-            </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800">版本历史</h1>
+            <p className="text-gray-500">{diary.title}</p>
+          </div>
+        </div>
 
-            {/* 版本详情 */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-white/50 p-6">
-              {selectedVersion ? (
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-semibold text-gray-800">
-                      📖 版本详情
-                    </h2>
-                    <span className="text-xs text-gray-400">
-                      保存于 {formatDate(selectedVersion.savedAt)}
-                    </span>
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-gray-800 mb-4">
-                    {selectedVersion.title}
-                  </h3>
-                  
-                  {selectedVersion.image && (
-                    <img
-                      src={selectedVersion.image}
-                      alt={selectedVersion.title}
-                      className="w-full h-48 object-cover rounded-xl mb-4"
-                    />
-                  )}
-                  
-                  <div className="prose prose-sm max-w-none">
-                    <pre className="whitespace-pre-wrap bg-gray-50 rounded-xl p-4 text-sm text-gray-700 overflow-auto max-h-96">
-                      {selectedVersion.content}
-                    </pre>
-                  </div>
-                  
-                  {selectedVersion.tags && selectedVersion.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {selectedVersion.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-sm bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
+        {/* 统计卡片 */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50">
+            <div className="text-2xl font-bold text-violet-600">{stats.totalVersions || 1}</div>
+            <div className="text-sm text-gray-500">版本数</div>
+          </div>
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50">
+            <div className="text-2xl font-bold text-purple-600">{stats.totalChanges || 0}</div>
+            <div className="text-sm text-gray-500">修改次数</div>
+          </div>
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50">
+            <div className="text-2xl font-bold text-fuchsia-600">{stats.averageWordCount || 0}</div>
+            <div className="text-sm text-gray-500">平均字数</div>
+          </div>
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/50">
+            <div className="text-2xl font-bold text-violet-600">{diary.content?.length || 0}</div>
+            <div className="text-sm text-gray-500">当前字数</div>
+          </div>
+        </div>
+
+        {/* 版本时间线 */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-sm">
+          <h2 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <span>🕐</span>
+            <span>修改时间线</span>
+          </h2>
+
+          <div className="relative">
+            {/* 时间线轴 */}
+            <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-violet-300 via-purple-300 to-fuchsia-300" />
+
+            {/* 版本列表 */}
+            <div className="space-y-6">
+              {[...displayVersions].reverse().map((version, index) => {
+                const actualIndex = displayVersions.length - 1 - index;
+                const changeInfo = wordCountChanges[actualIndex];
+                const isLatest = index === 0;
+                const isFirst = actualIndex === 0;
+
+                return (
+                  <div key={version.id} className="relative pl-16">
+                    {/* 时间线节点 */}
+                    <div className={`absolute left-3 w-7 h-7 rounded-full flex items-center justify-center text-sm ${
+                      isLatest 
+                        ? 'bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-lg' 
+                        : 'bg-white border-2 border-violet-300 text-violet-500'
+                    }`}>
+                      {version.versionNumber}
                     </div>
-                  )}
-                  
-                  <div className="mt-6 pt-4 border-t border-gray-100">
-                    <Link
-                      href={`/diary/${diaryId}/edit?version=${selectedVersion.id}`}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-500 text-white rounded-full text-sm font-medium hover:bg-indigo-600 transition-colors"
-                    >
-                      <span>从该版本恢复</span>
-                      <span>→</span>
-                    </Link>
+
+                    {/* 版本卡片 */}
+                    <div className={`rounded-xl p-5 ${
+                      isLatest 
+                        ? 'bg-gradient-to-br from-violet-50 to-purple-50 border border-violet-200' 
+                        : 'bg-gray-50 border border-gray-100'
+                    }`}>
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <div className="font-semibold text-gray-800">
+                            {isFirst ? '初始版本' : isLatest ? '当前版本' : `版本 ${version.versionNumber}`}
+                          </div>
+                          <div className="text-sm text-gray-400 mt-1">
+                            {new Date(version.changedAt).toLocaleString('zh-CN')}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm font-medium text-gray-600">
+                            {version.wordCount} 字
+                          </div>
+                          {changeInfo && changeInfo.change !== 0 && (
+                            <div className={`text-xs mt-1 ${
+                              changeInfo.change > 0 ? 'text-green-500' : 'text-red-500'
+                            }`}>
+                              {changeInfo.change > 0 ? '+' : ''}{changeInfo.change} ({changeInfo.percent}%)
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 标题 */}
+                      <div className="mb-2">
+                        <span className="text-gray-600 font-medium">{version.title}</span>
+                      </div>
+
+                      {/* 标签 */}
+                      {version.tags && version.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {version.tags.map(tag => (
+                            <span 
+                              key={tag}
+                              className="px-2 py-0.5 bg-violet-100 text-violet-600 rounded text-xs"
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* 修改原因 */}
+                      {version.changeReason && (
+                        <div className="text-sm text-gray-500 mb-3">
+                          📝 {version.changeReason}
+                        </div>
+                      )}
+
+                      {/* 内容预览 */}
+                      <div className="text-sm text-gray-600 line-clamp-3 bg-white/50 rounded-lg p-3">
+                        {version.content.substring(0, 200)}...
+                      </div>
+
+                      {/* 操作按钮 */}
+                      <div className="flex gap-2 mt-4">
+                        <Link
+                          href={`/diary/${params.id}/history/${version.versionNumber}`}
+                          className="px-3 py-1.5 text-sm text-violet-600 hover:bg-violet-50 rounded-lg transition-colors"
+                        >
+                          查看详情
+                        </Link>
+                        {!isLatest && (
+                          <button className="px-3 py-1.5 text-sm text-gray-500 hover:bg-gray-100 rounded-lg transition-colors">
+                            恢复此版本
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="text-center py-16 text-gray-400">
-                  <div className="text-4xl mb-4">👈</div>
-                  <p>选择一个版本查看详情</p>
-                </div>
-              )}
+                );
+              })}
             </div>
+          </div>
+        </div>
+
+        {/* 版本对比 */}
+        {displayVersions.length > 1 && (
+          <div className="mt-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-sm">
+            <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span>🔍</span>
+              <span>版本对比</span>
+            </h2>
+            <div className="flex gap-4">
+              <select 
+                id="version1" 
+                className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-violet-300 focus:border-transparent"
+              >
+                {displayVersions.map(v => (
+                  <option key={v.id} value={v.versionNumber}>
+                    版本 {v.versionNumber} - {v.title.substring(0, 20)}...
+                  </option>
+                ))}
+              </select>
+              <span className="self-center text-gray-400">vs</span>
+              <select 
+                id="version2" 
+                className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-violet-300 focus:border-transparent"
+              >
+                {[...displayVersions].reverse().map(v => (
+                  <option key={v.id} value={v.versionNumber}>
+                    版本 {v.versionNumber} - {v.title.substring(0, 20)}...
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button className="mt-4 w-full px-4 py-2 bg-violet-500 text-white rounded-lg hover:bg-violet-600 transition-colors">
+              开始对比
+            </button>
           </div>
         )}
 
-        {/* 返回首页 */}
-        <div className="mt-12 text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium"
-          >
-            <span>← 返回首页</span>
-          </Link>
+        {/* 底部提示 */}
+        <div className="mt-8 text-center text-sm text-gray-400">
+          <p>
+            💡 版本历史记录每次编辑，可以随时回滚到之前的版本
+          </p>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

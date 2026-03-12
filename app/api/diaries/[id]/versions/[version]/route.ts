@@ -1,81 +1,78 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getVersion, compareVersions, rollbackToVersion } from "@/lib/versions";
 
-// 获取特定版本
+// GET /api/diaries/[id]/versions/[version] - 获取特定版本详情
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string; version: string }> }
+  { params }: { params: { id: string; version: string } }
 ) {
-  const { id, version } = await params;
-  const versionNum = parseInt(version.replace("v", ""));
-  
   try {
-    // 模拟获取特定版本
-    const versionData = {
-      id: `${id}-v${versionNum}`,
-      diaryId: id,
-      version: versionNum,
-      title: `版本 ${versionNum} 的标题`,
-      content: `这是版本 ${versionNum} 的具体内容...`,
-      mood: versionNum % 2 === 0 ? "happy" : "peaceful",
-      tags: ["日常", "生活"],
-      createdAt: new Date(Date.now() - (10 - versionNum) * 24 * 60 * 60 * 1000).toISOString(),
-      changeSummary: `版本 ${versionNum} 的修改说明`,
-      wordCount: 150 + versionNum * 50,
-    };
-    
-    return NextResponse.json(versionData);
+    const diaryId = params.id;
+    const versionNumber = parseInt(params.version, 10);
+
+    if (isNaN(versionNumber)) {
+      return NextResponse.json(
+        { error: "Invalid version number" },
+        { status: 400 }
+      );
+    }
+
+    const version = getVersion(diaryId, versionNumber);
+
+    if (!version) {
+      return NextResponse.json(
+        { error: "Version not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(version);
   } catch (error) {
-    console.error("获取版本详情失败:", error);
+    console.error("Get version error:", error);
     return NextResponse.json(
-      { error: "获取版本详情失败" },
+      { error: "Failed to get version" },
       { status: 500 }
     );
   }
 }
 
-// 恢复到特定版本
-export async function PUT(
+// POST /api/diaries/[id]/versions/[version] - 回滚到指定版本
+export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string; version: string }> }
+  { params }: { params: { id: string; version: string } }
 ) {
-  const { id, version } = await params;
-  const versionNum = parseInt(version.replace("v", ""));
-  
   try {
-    // 模拟恢复版本
-    return NextResponse.json({
-      success: true,
-      message: `已恢复到版本 ${versionNum}`,
-      diaryId: id,
-      restoredVersion: versionNum,
-      restoredAt: new Date().toISOString(),
-    });
-  } catch (error) {
-    console.error("恢复版本失败:", error);
-    return NextResponse.json(
-      { error: "恢复版本失败" },
-      { status: 500 }
-    );
-  }
-}
+    const diaryId = params.id;
+    const versionNumber = parseInt(params.version, 10);
 
-// 删除特定版本
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string; version: string }> }
-) {
-  const { id, version } = await params;
-  
-  try {
+    if (isNaN(versionNumber)) {
+      return NextResponse.json(
+        { error: "Invalid version number" },
+        { status: 400 }
+      );
+    }
+
+    const body = await request.json().catch(() => ({}));
+    const rolledBy = body.rolledBy || "user";
+
+    const newVersion = rollbackToVersion(diaryId, versionNumber, rolledBy);
+
+    if (!newVersion) {
+      return NextResponse.json(
+        { error: "Failed to rollback - version not found" },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json({
       success: true,
-      message: `版本 ${version} 已删除`,
-      diaryId: id,
+      message: `已回滚到版本 ${versionNumber}`,
+      newVersion
     });
   } catch (error) {
-    console.error("删除版本失败:", error);
+    console.error("Rollback error:", error);
     return NextResponse.json(
-      { error: "删除版本失败" },
+      { error: "Failed to rollback" },
       { status: 500 }
     );
   }

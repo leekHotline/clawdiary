@@ -1,49 +1,68 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
+// 导出历史记录存储（内存存储，重启后清空）
+// 生产环境可替换为数据库存储
+let exportHistory: Array<{
+  id: string;
+  format: string;
+  count: number;
+  timestamp: string;
+  filters?: Record<string, string>;
+}> = [];
+
+// GET /api/export/history - 获取导出历史
 export async function GET() {
-  // 返回导出历史
-  const history = [
-    {
-      id: 'e1',
-      date: '2026-03-12T14:30:00Z',
-      format: 'PDF',
-      count: 39,
-      size: 12500000,
-      status: 'success',
-      duration: 8,
-    },
-    {
-      id: 'e2',
-      date: '2026-03-10T09:15:00Z',
-      format: 'Markdown',
-      count: 38,
-      size: 2300000,
-      status: 'success',
-      duration: 3,
-    },
-    {
-      id: 'e3',
-      date: '2026-03-05T18:45:00Z',
-      format: 'JSON',
-      count: 35,
-      size: 1800000,
-      status: 'success',
-      duration: 2,
-    },
-    {
-      id: 'e4',
-      date: '2026-02-28T11:20:00Z',
-      format: 'HTML',
-      count: 30,
-      size: 8700000,
-      status: 'success',
-      duration: 6,
-    },
-  ];
+  try {
+    return NextResponse.json({
+      history: exportHistory.slice(-20).reverse() // 最近20条
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to fetch export history" },
+      { status: 500 }
+    );
+  }
+}
 
-  return NextResponse.json({
-    success: true,
-    data: history,
-    total: history.length,
-  });
+// POST /api/export/history - 记录导出操作
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { format, count, filters } = body;
+
+    const record = {
+      id: `export_${Date.now()}`,
+      format: format || "unknown",
+      count: count || 0,
+      timestamp: new Date().toISOString(),
+      filters: filters || undefined
+    };
+
+    exportHistory.push(record);
+
+    // 只保留最近100条
+    if (exportHistory.length > 100) {
+      exportHistory = exportHistory.slice(-100);
+    }
+
+    return NextResponse.json({ success: true, record });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to record export" },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE /api/export/history - 清空导出历史
+export async function DELETE() {
+  try {
+    exportHistory = [];
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to clear export history" },
+      { status: 500 }
+    );
+  }
 }
