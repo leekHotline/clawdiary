@@ -4,10 +4,10 @@ import { getVersions, getVersionStats, getVersion } from "@/lib/versions";
 // GET /api/diaries/[id]/versions - 获取日记版本历史
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const diaryId = params.id;
+    const diaryId = (await params).id;
     const { searchParams } = new URL(request.url);
     const includeContent = searchParams.get("include_content") === "true";
 

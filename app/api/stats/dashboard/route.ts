@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
     // Calculate longest streak
     let longestStreak = 0;
     let tempStreak = 0;
-    const sortedDates = dates.map((d: string) => new Date(d)).sort((a: Date, b: Date) => a.getTime() - b.getTime());
+    const sortedDates = dates.filter((d): d is string => !!d).map((d: string) => new Date(d)).sort((a: Date, b: Date) => a.getTime() - b.getTime());
     
     for (let i = 0; i < sortedDates.length; i++) {
       if (i === 0) {
@@ -104,7 +104,7 @@ export async function GET(request: NextRequest) {
 
     // Mood distribution
     const moodCounts: Record<string, number> = {};
-    diaries.forEach((d: { mood?: string }) => {
+    diaries.forEach((d: Diary) => {
       if (d.mood) {
         moodCounts[d.mood] = (moodCounts[d.mood] || 0) + 1;
       }

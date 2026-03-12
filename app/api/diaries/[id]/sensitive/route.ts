@@ -6,9 +6,9 @@ const sensitiveDiaries: Set<string> = new Set();
 // GET - 检查日记是否包含敏感内容
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const diaryId = params.id;
+  const diaryId = (await params).id;
   
   return NextResponse.json({
     isSensitive: sensitiveDiaries.has(diaryId),
@@ -21,12 +21,12 @@ export async function GET(
 // POST - 标记/取消标记敏感内容
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
     const { action, reason } = body;
-    const diaryId = params.id;
+    const diaryId = (await params).id;
 
     if (action === 'mark') {
       sensitiveDiaries.add(diaryId);
@@ -61,7 +61,7 @@ export async function POST(
 // GET 统计
 export async function HEAD(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return NextResponse.json({
     totalSensitive: sensitiveDiaries.size

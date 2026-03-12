@@ -17,9 +17,9 @@ const sensitiveResults: Map<string, {
 // GET - 检查日记敏感内容
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const diaryId = params.id;
+  const diaryId = (await params).id;
   
   const cached = sensitiveResults.get(diaryId);
   if (cached) {
@@ -42,10 +42,10 @@ export async function GET(
 // POST - 扫描敏感内容
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const diaryId = params.id;
+    const diaryId = (await params).id;
     const body = await request.json();
     const { content } = body;
     

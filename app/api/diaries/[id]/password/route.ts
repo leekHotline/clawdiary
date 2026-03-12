@@ -23,9 +23,9 @@ function hashPassword(password: string): string {
 // GET - 获取日记保护状态
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const diaryId = params.id;
+  const diaryId = (await params).id;
   
   const protection = protectedDiaries[diaryId];
   
@@ -41,12 +41,12 @@ export async function GET(
 // POST - 设置密码保护
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
     const { password, hint, action } = body;
-    const diaryId = params.id;
+    const diaryId = (await params).id;
 
     if (action === 'verify') {
       // 验证密码
@@ -209,9 +209,9 @@ export async function POST(
 // DELETE - 强制移除保护（需要管理员权限）
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const diaryId = params.id;
+  const diaryId = (await params).id;
   
   if (protectedDiaries[diaryId]) {
     delete protectedDiaries[diaryId];
