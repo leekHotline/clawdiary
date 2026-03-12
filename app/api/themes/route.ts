@@ -1,171 +1,151 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { getDiaries } from "@/lib/diaries";
 
-// 主题/皮肤 API
-interface Theme {
-  id: string;
-  name: string;
-  description: string;
-  preview: string;
-  colors: {
-    primary: string;
-    secondary: string;
-    background: string;
-    text: string;
-    accent: string;
-  };
-  isDefault: boolean;
-  isPremium: boolean;
-  createdAt: string;
-}
-
-// 预设主题
-const themes: Theme[] = [
+// 预定义主题
+const PRESET_THEMES = [
   {
-    id: "default",
-    name: "默认橙色",
-    description: "温暖的龙虾橙色调",
-    preview: "🦞",
-    colors: {
-      primary: "#FF6B35",
-      secondary: "#F7C59F",
-      background: "#FFF8F0",
-      text: "#2D3436",
-      accent: "#FF8C42",
-    },
-    isDefault: true,
-    isPremium: false,
-    createdAt: "2026-03-09T00:00:00.000Z",
+    id: "travel",
+    name: "旅行日记",
+    emoji: "🌍",
+    color: "from-blue-500 to-cyan-500",
+    keywords: ["旅行", "旅游", "出差", "度假", "景点", "出行", "出游"],
   },
   {
-    id: "ocean",
-    name: "深海蓝",
-    description: "深邃的海洋风格",
-    preview: "🌊",
-    colors: {
-      primary: "#0077B6",
-      secondary: "#90E0EF",
-      background: "#CAF0F8",
-      text: "#03045E",
-      accent: "#00B4D8",
-    },
-    isDefault: false,
-    isPremium: false,
-    createdAt: "2026-03-09T00:00:00.000Z",
+    id: "food",
+    name: "美食记录",
+    emoji: "🍜",
+    color: "from-orange-500 to-red-500",
+    keywords: ["美食", "餐厅", "做饭", "烹饪", "吃货", "食谱", "味道"],
   },
   {
-    id: "forest",
-    name: "森林绿",
-    description: "清新的自然风格",
-    preview: "🌲",
-    colors: {
-      primary: "#2D6A4F",
-      secondary: "#95D5B2",
-      background: "#D8F3DC",
-      text: "#1B4332",
-      accent: "#40916C",
-    },
-    isDefault: false,
-    isPremium: false,
-    createdAt: "2026-03-09T00:00:00.000Z",
+    id: "work",
+    name: "工作日志",
+    emoji: "💼",
+    color: "from-slate-500 to-gray-700",
+    keywords: ["工作", "项目", "会议", "加班", "任务", "汇报", "团队"],
   },
   {
-    id: "sunset",
-    name: "日落紫",
-    description: "浪漫的黄昏色彩",
-    preview: "🌅",
-    colors: {
-      primary: "#7B2CBF",
-      secondary: "#E0AAFF",
-      background: "#F8F0FF",
-      text: "#3C096C",
-      accent: "#9D4EDD",
-    },
-    isDefault: false,
-    isPremium: true,
-    createdAt: "2026-03-10T00:00:00.000Z",
+    id: "study",
+    name: "学习笔记",
+    emoji: "📚",
+    color: "from-green-500 to-emerald-500",
+    keywords: ["学习", "课程", "读书", "笔记", "知识", "考试", "技能"],
   },
   {
-    id: "midnight",
-    name: "午夜黑",
-    description: "护眼的深色模式",
-    preview: "🌙",
-    colors: {
-      primary: "#BB86FC",
-      secondary: "#03DAC6",
-      background: "#121212",
-      text: "#E1E1E1",
-      accent: "#CF6679",
-    },
-    isDefault: false,
-    isPremium: false,
-    createdAt: "2026-03-10T00:00:00.000Z",
+    id: "fitness",
+    name: "健身打卡",
+    emoji: "💪",
+    color: "from-purple-500 to-pink-500",
+    keywords: ["健身", "运动", "锻炼", "跑步", "健身房", "瑜伽", "训练"],
   },
   {
-    id: "sakura",
-    name: "樱花粉",
-    description: "浪漫的日式风格",
-    preview: "🌸",
-    colors: {
-      primary: "#FF85A2",
-      secondary: "#FFC2D1",
-      background: "#FFF0F3",
-      text: "#5D2940",
-      accent: "#FF5C8D",
-    },
-    isDefault: false,
-    isPremium: true,
-    createdAt: "2026-03-11T00:00:00.000Z",
+    id: "mood",
+    name: "心情随笔",
+    emoji: "💭",
+    color: "from-pink-400 to-rose-500",
+    keywords: ["心情", "感悟", "思考", "情绪", "压力", "开心", "难过"],
+  },
+  {
+    id: "tech",
+    name: "技术探索",
+    emoji: "💻",
+    color: "from-indigo-500 to-purple-600",
+    keywords: ["代码", "编程", "开发", "技术", "AI", "项目", "框架"],
+  },
+  {
+    id: "creative",
+    name: "创意灵感",
+    emoji: "🎨",
+    color: "from-fuchsia-500 to-pink-500",
+    keywords: ["创意", "设计", "灵感", "艺术", "创作", "绘画", "音乐"],
+  },
+  {
+    id: "family",
+    name: "家庭时光",
+    emoji: "👨‍👩‍👧‍👦",
+    color: "from-amber-400 to-orange-500",
+    keywords: ["家人", "孩子", "父母", "陪伴", "家庭", "亲情", "温暖"],
+  },
+  {
+    id: "reading",
+    name: "读书心得",
+    emoji: "📖",
+    color: "from-teal-500 to-cyan-600",
+    keywords: ["读书", "阅读", "书评", "书籍", "文学", "作者", "故事"],
+  },
+  {
+    id: "movie",
+    name: "观影记录",
+    emoji: "🎬",
+    color: "from-violet-500 to-purple-600",
+    keywords: ["电影", "追剧", "电视剧", "观影", "影院", "导演", "演员"],
+  },
+  {
+    id: "game",
+    name: "游戏时光",
+    emoji: "🎮",
+    color: "from-red-500 to-orange-500",
+    keywords: ["游戏", "电竞", "玩家", "通关", "战绩", "组队"],
   },
 ];
 
-// 用户当前主题
-let userCurrentTheme = "default";
-
-// GET - 获取所有主题或当前主题
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const current = searchParams.get("current");
-
-  if (current === "true") {
-    const theme = themes.find((t) => t.id === userCurrentTheme);
-    return NextResponse.json({
-      success: true,
-      currentTheme: theme,
-    });
-  }
-
-  return NextResponse.json({
-    success: true,
-    themes,
-    currentThemeId: userCurrentTheme,
-    total: themes.length,
-    freeCount: themes.filter((t) => !t.isPremium).length,
-    premiumCount: themes.filter((t) => t.isPremium).length,
-  });
+function matchTheme(diary: { title: string; content: string; tags?: string[] }, keywords: string[]): boolean {
+  const text = `${diary.title} ${diary.content} ${(diary.tags || []).join(" ")}`.toLowerCase();
+  return keywords.some((keyword) => text.includes(keyword.toLowerCase()));
 }
 
-// POST - 设置当前主题
-export async function POST(request: NextRequest) {
+// 获取所有主题
+export async function GET(request: Request) {
   try {
-    const body = await request.json();
-    const { themeId } = body;
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    const withDiaries = searchParams.get("withDiaries") === "true";
 
-    const theme = themes.find((t) => t.id === themeId);
-    if (!theme) {
-      return NextResponse.json({ error: "Theme not found" }, { status: 404 });
+    // 单个主题详情
+    if (id) {
+      const theme = PRESET_THEMES.find((t) => t.id === id);
+      if (!theme) {
+        return NextResponse.json({ error: "Theme not found" }, { status: 404 });
+      }
+
+      const diaries = await getDiaries();
+      const matchedDiaries = diaries
+        .filter((d) => matchTheme(d, theme.keywords))
+        .map((d) => ({
+          id: d.id,
+          title: d.title,
+          date: d.date,
+          content: d.content.substring(0, 200),
+          image: d.image,
+          tags: d.tags,
+        }));
+
+      return NextResponse.json({
+        theme: {
+          ...theme,
+          count: matchedDiaries.length,
+        },
+        diaries: withDiaries ? matchedDiaries : undefined,
+      });
     }
 
-    userCurrentTheme = themeId;
+    // 所有主题统计
+    const diaries = await getDiaries();
+    const themesWithStats = PRESET_THEMES.map((theme) => {
+      const count = diaries.filter((d) => matchTheme(d, theme.keywords)).length;
+      return {
+        ...theme,
+        count,
+      };
+    });
 
     return NextResponse.json({
-      success: true,
-      message: "Theme updated successfully",
-      currentTheme: theme,
+      themes: themesWithStats,
+      total: PRESET_THEMES.length,
+      active: themesWithStats.filter((t) => t.count > 0).length,
     });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to set theme" },
-      { status: 500 }
-    );
+    console.error("Error fetching themes:", error);
+    return NextResponse.json({ error: "Failed to fetch themes" }, { status: 500 });
   }
 }
