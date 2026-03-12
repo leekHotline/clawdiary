@@ -32,12 +32,10 @@ export default function AffirmationsHistoryPage() {
   const [history, setHistory] = useState<AffirmationHistory[]>([])
   const [favorites, setFavorites] = useState<string[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [streakInfo, setStreakInfo] = useState({ streak: 0, totalDays: 0 })
+  const [categoryStats, setCategoryStats] = useState<Record<string, number>>({})
 
   useEffect(() => {
-    loadData()
-  }, [])
-
-  const loadData = () => {
     const savedAffirmations = localStorage.getItem('affirmations')
     if (savedAffirmations) {
       setAffirmations(JSON.parse(savedAffirmations))
@@ -45,14 +43,57 @@ export default function AffirmationsHistoryPage() {
 
     const savedHistory = localStorage.getItem('affirmation-history-detailed')
     if (savedHistory) {
-      setHistory(JSON.parse(savedHistory))
+      const historyData = JSON.parse(savedHistory)
+      setHistory(historyData)
+      
+      // Calculate streak info
+      const dates = historyData.map((h: AffirmationHistory) => new Date(h.date).toDateString())
+      const uniqueDates = [...new Set(dates)] as string[]
+      uniqueDates.sort((a, b) => 
+        new Date(b).getTime() - new Date(a).getTime()
+      )
+
+      let streak = 0
+      const today = new Date().toDateString()
+      const yesterday = new Date(Date.now() - 86400000).toDateString()
+
+      if (uniqueDates.includes(today) || uniqueDates.includes(yesterday)) {
+        streak = 1
+        const startFrom = uniqueDates.includes(today) ? today : yesterday
+
+        for (let i = 1; i < 365; i++) {
+          const checkDate = new Date(startFrom)
+          checkDate.setDate(checkDate.getDate() - i)
+          if (uniqueDates.includes(checkDate.toDateString())) {
+            streak++
+          } else {
+            break
+          }
+        }
+      }
+
+      setStreakInfo({ streak, totalDays: uniqueDates.length })
     }
 
     const savedFavorites = localStorage.getItem('affirmation-favorites')
     if (savedFavorites) {
-      setFavorites(JSON.parse(savedFavorites))
+      const favs = JSON.parse(savedFavorites)
+      setFavorites(favs)
+      
+      // Calculate category stats after loading affirmations
+      if (savedAffirmations) {
+        const affirmationsData = JSON.parse(savedAffirmations)
+        const stats: Record<string, number> = {}
+        favs.forEach((id: string) => {
+          const affirmation = affirmationsData.find((a: Affirmation) => a.id === id)
+          if (affirmation) {
+            stats[affirmation.category] = (stats[affirmation.category] || 0) + 1
+          }
+        })
+        setCategoryStats(stats)
+      }
     }
-  }
+  }, [])
 
   const getAffirmationById = (id: string) => {
     return affirmations.find(a => a.id === id)
@@ -70,48 +111,7 @@ export default function AffirmationsHistoryPage() {
     return favs
   }
 
-  const getCategoryStats = () => {
-    const stats: Record<string, number> = {}
-    favorites.forEach(id => {
-      const affirmation = affirmations.find(a => a.id === id)
-      if (affirmation) {
-        stats[affirmation.category] = (stats[affirmation.category] || 0) + 1
-      }
-    })
-    return stats
-  }
-
-  const categoryStats = getCategoryStats()
-
-  const getStreakInfo = () => {
-    const dates = history.map(h => new Date(h.date).toDateString())
-    const uniqueDates = [...new Set(dates)].sort((a, b) => 
-      new Date(b).getTime() - new Date(a).getTime()
-    )
-
-    let streak = 0
-    const today = new Date().toDateString()
-    const yesterday = new Date(Date.now() - 86400000).toDateString()
-
-    if (uniqueDates.includes(today) || uniqueDates.includes(yesterday)) {
-      streak = 1
-      const startFrom = uniqueDates.includes(today) ? today : yesterday
-
-      for (let i = 1; i < 365; i++) {
-        const checkDate = new Date(startFrom)
-        checkDate.setDate(checkDate.getDate() - i)
-        if (uniqueDates.includes(checkDate.toDateString())) {
-          streak++
-        } else {
-          break
-        }
-      }
-    }
-
-    return { streak, totalDays: uniqueDates.length }
-  }
-
-  const streakInfo = getStreakInfo()
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-100 via-purple-50 to-fuchsia-100 p-6">

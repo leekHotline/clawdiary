@@ -30,8 +30,10 @@ export default async function TagCloudPage() {
 
   const { tags, total, hot, categories } = data;
 
-  // 随机排列标签用于云展示
-  const shuffledTags = [...tags].sort(() => Math.random() - 0.5);
+  // 按名称排序标签（确定性排序，避免hydration问题）
+  const sortedTags = [...tags].sort((a: { name: string }, b: { name: string }) => 
+    a.name.localeCompare(b.name)
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-cyan-50 via-blue-50 to-indigo-50">
@@ -79,7 +81,7 @@ export default async function TagCloudPage() {
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-sm border border-white/50 mb-8">
           <h2 className="text-lg font-bold text-gray-800 mb-6 text-center">🌈 标签宇宙</h2>
           <div className="flex flex-wrap justify-center items-center gap-3 leading-relaxed">
-            {shuffledTags.map((tag: { name: string; count: number; size: number; color: string }) => (
+            {sortedTags.map((tag: { name: string; count: number; size: number; color: string }) => (
               <Link
                 key={tag.name}
                 href={`/tags/${tag.name}`}

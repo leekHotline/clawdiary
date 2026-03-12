@@ -19,10 +19,6 @@ export default function WritingGoalsDetailPage({ params }: { params: { id: strin
   const [notes, setNotes] = useState<{ date: string; note: string }[]>([])
 
   useEffect(() => {
-    loadData()
-  }, [params.id])
-
-  const loadData = () => {
     const saved = localStorage.getItem('writing-goals')
     if (saved) {
       const goals = JSON.parse(saved)
@@ -43,7 +39,7 @@ export default function WritingGoalsDetailPage({ params }: { params: { id: strin
     if (notesData) {
       setNotes(JSON.parse(notesData))
     }
-  }
+  }, [params.id])
 
   const getProgressPercentage = () => {
     if (!goal) return 0

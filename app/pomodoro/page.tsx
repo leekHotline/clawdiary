@@ -34,41 +34,6 @@ export default function PomodoroPage() {
   const [showSettings, setShowSettings] = useState(false)
   const [customTimes, setCustomTimes] = useState(TIMER_SETTINGS)
 
-  // Load today's sessions
-  useEffect(() => {
-    const saved = localStorage.getItem('pomodoro-sessions')
-    if (saved) {
-      const allSessions = JSON.parse(saved)
-      const today = new Date().toDateString()
-      const todayData = allSessions.filter((s: any) => 
-        new Date(s.timestamp).toDateString() === today
-      )
-      setTodaySessions(todayData)
-      setSessions(todayData.filter((s: any) => s.type === 'work').length)
-      const totalMinutes = todayData
-        .filter((s: any) => s.type === 'work')
-        .reduce((acc: number, s: any) => acc + s.duration, 0)
-      setTotalFocusTime(totalMinutes)
-    }
-  }, [])
-
-  // Timer logic
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null
-    
-    if (isRunning && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft(prev => prev - 1)
-      }, 1000)
-    } else if (timeLeft === 0) {
-      handleTimerComplete()
-    }
-    
-    return () => {
-      if (interval) clearInterval(interval)
-    }
-  }, [isRunning, timeLeft])
-
   const handleTimerComplete = useCallback(() => {
     setIsRunning(false)
     
@@ -119,6 +84,41 @@ export default function PomodoroPage() {
       })
     }
   }, [mode, sessions, selectedTask, customTimes])
+
+  // Load today's sessions
+  useEffect(() => {
+    const saved = localStorage.getItem('pomodoro-sessions')
+    if (saved) {
+      const allSessions = JSON.parse(saved)
+      const today = new Date().toDateString()
+      const todayData = allSessions.filter((s: { timestamp: string }) => 
+        new Date(s.timestamp).toDateString() === today
+      )
+      setTodaySessions(todayData)
+      setSessions(todayData.filter((s: { type: string }) => s.type === 'work').length)
+      const totalMinutes = todayData
+        .filter((s: { type: string }) => s.type === 'work')
+        .reduce((acc: number, s: { duration: number }) => acc + s.duration, 0)
+      setTotalFocusTime(totalMinutes)
+    }
+  }, [])
+
+  // Timer logic
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
+    
+    if (isRunning && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft(prev => prev - 1)
+      }, 1000)
+    } else if (timeLeft === 0) {
+      handleTimerComplete()
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [isRunning, timeLeft, handleTimerComplete])
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)

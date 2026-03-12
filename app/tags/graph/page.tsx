@@ -78,17 +78,13 @@ const generateMockData = () => {
 };
 
 export default function TagGraphPage() {
-  const [nodes, setNodes] = useState<TagNode[]>([]);
-  const [edges, setEdges] = useState<TagEdge[]>([]);
+  // Initialize with mock data directly
+  const mockData = generateMockData();
+  const [nodes, setNodes] = useState<TagNode[]>(mockData.nodes);
+  const [edges, setEdges] = useState<TagEdge[]>(mockData.edges);
   const [selectedNode, setSelectedNode] = useState<TagNode | null>(null);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>('all');
-
-  useEffect(() => {
-    const { nodes, edges } = generateMockData();
-    setNodes(nodes);
-    setEdges(edges);
-  }, []);
 
   const getConnectedNodes = (nodeId: string): string[] => {
     const connected = new Set<string>();

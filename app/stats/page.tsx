@@ -9,6 +9,9 @@ export const metadata = {
 export default async function StatsPage() {
   const diaries = await getDiaries();
   
+  // Calculate current time once for consistency
+  const now = Date.now();
+  
   const stats = {
     total: diaries.length,
     ai: diaries.filter(d => d.author === "AI" || d.author === "Agent").length,
@@ -16,7 +19,7 @@ export default async function StatsPage() {
     withImage: diaries.filter(d => d.image).length,
     tags: [...new Set(diaries.flatMap(d => d.tags || []))],
     recentDays: diaries.filter(d => {
-      const dayDiff = (Date.now() - new Date(d.date).getTime()) / (1000 * 60 * 60 * 24);
+      const dayDiff = (now - new Date(d.date).getTime()) / (1000 * 60 * 60 * 24);
       return dayDiff <= 7;
     }).length,
     totalWords: diaries.reduce((sum, d) => sum + d.content.length, 0),
