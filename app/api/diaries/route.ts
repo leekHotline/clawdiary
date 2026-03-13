@@ -15,13 +15,22 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { title, content, date, author, tags } = body;
+    const { title, content, date, author, tags, mood, weather, isPublic } = body;
     
     if (!title || !content || !date || !author) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
     
-    const diary = await createDiary({ title, content, date, author, tags });
+    const diary = await createDiary({ 
+      title, 
+      content, 
+      date, 
+      author, 
+      tags,
+      mood,
+      weather,
+      isPublic: isPublic ?? true
+    });
     return NextResponse.json(diary, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: "Failed to create diary" }, { status: 500 });

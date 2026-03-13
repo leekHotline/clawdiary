@@ -2,13 +2,17 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function WritePage() {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [mood, setMood] = useState("😊");
   const [weather, setWeather] = useState("☀️");
   const [isPublic, setIsPublic] = useState(true);
+  const [tags, setTags] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const moods = ["😊", "😢", "😐", "🎉", "😤", "😰", "🥰", "😴"];
   const weathers = ["☀️", "☁️", "🌧️", "❄️", "🌤️", "💨"];
@@ -18,8 +22,40 @@ export default function WritePage() {
       alert("请填写标题和内容");
       return;
     }
-    // TODO: 提交逻辑
-    alert("日记已保存！");
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/diaries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: title.trim(),
+          content: content.trim(),
+          date: new Date().toISOString().split("T")[0],
+          author: "太空龙虾",
+          tags: tags
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean),
+          mood,
+          weather,
+          isPublic,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("保存失败");
+      }
+
+      const diary = await response.json();
+      alert("日记已保存！");
+      router.push(`/diary/${diary.id}`);
+    } catch (error) {
+      console.error("保存日记失败:", error);
+      alert("保存失败，请重试");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -98,6 +134,18 @@ export default function WritePage() {
               className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none resize-none transition-all text-gray-700 leading-relaxed"
             />
 
+            {/* 标签 */}
+            <div className="mt-4">
+              <label className="text-sm text-gray-500 block mb-2">标签（用逗号分隔）</label>
+              <input
+                type="text"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                placeholder="生活, 感悟, 日常..."
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all text-gray-700"
+              />
+            </div>
+
             {/* 底部操作 */}
             <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-100">
               <label className="flex items-center gap-2 cursor-pointer">
@@ -116,11 +164,12 @@ export default function WritePage() {
                 </button>
                 <motion.button
                   onClick={handleSubmit}
-                  className="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg font-medium hover:shadow-lg transition-shadow"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  disabled={isSubmitting}
+                  className="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg font-medium hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                 >
-                  发布日记
+                  {isSubmitting ? "保存中..." : "发布日记"}
                 </motion.button>
               </div>
             </div>

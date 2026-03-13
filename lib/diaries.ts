@@ -13,6 +13,7 @@ export interface Diary {
   imagePrompt?: string;
   mood?: string;
   weather?: string;
+  isPublic?: boolean;
   createdAt: string;
   updatedAt: string;
 }
