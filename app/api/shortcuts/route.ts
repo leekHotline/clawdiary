@@ -14,7 +14,7 @@ interface Shortcut {
 }
 
 // 默认快捷方式
-let shortcuts: Shortcut[] = [
+const shortcuts: Shortcut[] = [
   // 快速操作
   {
     id: "1",

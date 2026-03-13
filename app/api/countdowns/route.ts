@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // Mock data for development
-let countdowns: Array<{
+const countdowns: Array<{
   id: string;
   title: string;
   description?: string;

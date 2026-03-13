@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // 灵感墙数据（与主路由共享，实际项目应使用数据库）
-let inspirationWall: any[] = [];
+const inspirationWall: any[] = [];
 
 // PUT - 置顶/取消置顶
 export async function PUT(request: NextRequest) {

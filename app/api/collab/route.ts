@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // 协作日记数据存储
-let collabDiaries: any[] = [
+const collabDiaries: any[] = [
   {
     id: "collab-1",
     title: "太空龙虾的一周年庆生计划",

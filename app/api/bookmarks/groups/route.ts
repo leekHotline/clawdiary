@@ -21,7 +21,7 @@ interface Bookmark {
 }
 
 // 模拟数据
-let bookmarkGroups: BookmarkGroup[] = [
+const bookmarkGroups: BookmarkGroup[] = [
   {
     id: "1",
     name: "重要日记",
@@ -51,7 +51,7 @@ let bookmarkGroups: BookmarkGroup[] = [
   },
 ];
 
-let bookmarks: Bookmark[] = [
+const bookmarks: Bookmark[] = [
   {
     id: "1",
     diaryId: "3",

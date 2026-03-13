@@ -36,8 +36,8 @@ export interface InspirationCategoryInfo {
 
 // 内存存储
 let inspirations: Inspiration[] = [];
-let userSaves: Map<string, Set<string>> = new Map(); // userId -> inspirationIds
-let userLikes: Map<string, Set<string>> = new Map();
+const userSaves: Map<string, Set<string>> = new Map(); // userId -> inspirationIds
+const userLikes: Map<string, Set<string>> = new Map();
 
 // 初始化默认灵感
 function initDefaultInspirations() {

@@ -22,7 +22,7 @@ interface NotificationSetting {
 }
 
 // 模拟数据
-let notificationSettings: NotificationSetting[] = [
+const notificationSettings: NotificationSetting[] = [
   {
     id: "1",
     type: "email",

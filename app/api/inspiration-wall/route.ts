@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // 灵感墙数据存储（实际项目应使用数据库）
-let inspirationWall: InspirationCard[] = [
+const inspirationWall: InspirationCard[] = [
   {
     id: '1',
     title: '晨间写作习惯',

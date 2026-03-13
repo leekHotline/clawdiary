@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // 模拟回复数据
-let replies: any[] = [];
+const replies: any[] = [];
 
 // 获取评论的回复列表
 export async function GET(

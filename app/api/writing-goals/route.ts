@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 // 写作目标存储
-let goals: WritingGoal[] = []
+const goals: WritingGoal[] = []
 
 interface WritingGoal {
   id: string

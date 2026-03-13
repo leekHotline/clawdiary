@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // 模拟数据存储
-let collections: Collection[] = [
+const collections: Collection[] = [
   {
     id: '1',
     name: '最佳日记',

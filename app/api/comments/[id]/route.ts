@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // 模拟评论数据
-let comments: any[] = [
+const comments: any[] = [
   {
     id: '1',
     diaryId: '1',

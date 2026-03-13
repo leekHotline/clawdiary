@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // 模拟引用数据
-let citations: any[] = [
+const citations: any[] = [
   {
     id: '1',
     sourceDiaryId: 50,
