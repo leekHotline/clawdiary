@@ -80,8 +80,8 @@ export default function WritingHabitDetailPage() {
       if (logsData.success) {
         setLogs(logsData.data)
       }
-    } catch (error) {
-      console.error('获取习惯失败:', error)
+    } catch (_error) {
+      console.error('获取习惯失败:', _error)
     } finally {
       setLoading(false)
     }
@@ -102,8 +102,8 @@ export default function WritingHabitDetailPage() {
       if (data.success) {
         fetchHabit()
       }
-    } catch (error) {
-      console.error('更新日志失败:', error)
+    } catch (_error) {
+      console.error('更新日志失败:', _error)
     }
   }
 
@@ -121,8 +121,8 @@ export default function WritingHabitDetailPage() {
         setHabit(data.data)
         setShowEditForm(false)
       }
-    } catch (error) {
-      console.error('更新习惯失败:', error)
+    } catch (_error) {
+      console.error('更新习惯失败:', _error)
     }
   }
 
@@ -137,8 +137,8 @@ export default function WritingHabitDetailPage() {
       if (data.success) {
         router.push('/writing-habits')
       }
-    } catch (error) {
-      console.error('删除习惯失败:', error)
+    } catch (_error) {
+      console.error('删除习惯失败:', _error)
     }
   }
 

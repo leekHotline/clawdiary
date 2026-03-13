@@ -41,8 +41,8 @@ export default function DiaryLikesPage() {
         const data = await res.json();
         setLikes(data.likes || []);
       }
-    } catch (error) {
-      console.error('Failed to fetch likes:', error);
+    } catch (_error) {
+      console.error('Failed to fetch likes:', _error);
     } finally {
       setLoading(false);
     }
@@ -55,8 +55,8 @@ export default function DiaryLikesPage() {
         const data = await res.json();
         setStats(data);
       }
-    } catch (error) {
-      console.error('Failed to fetch stats:', error);
+    } catch (_error) {
+      console.error('Failed to fetch stats:', _error);
     }
   };
 

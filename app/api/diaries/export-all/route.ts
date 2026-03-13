@@ -56,8 +56,8 @@ ${allMarkdown}
     }
 
     return NextResponse.json({ error: "Unsupported format. Use 'md' or 'json'." }, { status: 400 });
-  } catch (error) {
-    console.error("Error exporting all diaries:", error);
+  } catch (_error) {
+    console.error("Error exporting all diaries:", _error);
     return NextResponse.json({ error: "Failed to export diaries" }, { status: 500 });
   }
 }

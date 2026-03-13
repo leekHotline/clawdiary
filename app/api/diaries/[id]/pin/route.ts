@@ -58,8 +58,8 @@ export async function PUT(
         message: "已取消置顶",
       });
     }
-  } catch (error) {
-    console.error("置顶操作失败:", error);
+  } catch (_error) {
+    console.error("置顶操作失败:", _error);
     return NextResponse.json(
       { error: "操作失败" },
       { status: 500 }

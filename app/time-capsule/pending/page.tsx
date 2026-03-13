@@ -29,8 +29,8 @@ export default function PendingCapsulesPage() {
         const data = await response.json();
         setCapsules(data.capsules || []);
       }
-    } catch (error) {
-      console.error('Failed to fetch capsules:', error);
+    } catch (_error) {
+      console.error('Failed to fetch capsules:', _error);
     } finally {
       setLoading(false);
     }

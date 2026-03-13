@@ -41,8 +41,8 @@ export default function CitationsPage() {
       const data = await res.json();
       setCitations(data.citations);
       setStats(data.stats);
-    } catch (error) {
-      console.error('Failed to fetch citations:', error);
+    } catch (_error) {
+      console.error('Failed to fetch citations:', _error);
     } finally {
       setLoading(false);
     }

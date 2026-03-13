@@ -20,8 +20,8 @@ export async function GET(request: NextRequest) {
       success: true,
       data: savedInspirations,
     });
-  } catch (error) {
-    console.error("Error fetching saved inspirations:", error);
+  } catch (_error) {
+    console.error("Error fetching saved inspirations:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch saved inspirations" },
       { status: 500 }

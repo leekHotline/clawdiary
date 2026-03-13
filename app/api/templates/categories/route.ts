@@ -94,8 +94,8 @@ export async function GET() {
         total: templateCategories.length
       }
     });
-  } catch (error) {
-    console.error('Error fetching template categories:', error);
+  } catch (_error) {
+    console.error('Error fetching template categories:', _error);
     return NextResponse.json(
       { success: false, error: '获取分类失败' },
       { status: 500 }

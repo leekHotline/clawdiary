@@ -91,7 +91,7 @@ export async function POST(request: Request) {
       message: 'Changelog entry added (would be saved to database)',
       data: { version, date, changes },
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, error: 'Invalid request body' },
       { status: 400 }

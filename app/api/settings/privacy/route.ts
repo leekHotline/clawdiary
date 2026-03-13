@@ -60,7 +60,7 @@ export async function PUT(request: NextRequest) {
       message: "隐私设置已更新",
       data: privacySettings[userId],
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, error: "更新设置失败" },
       { status: 500 }

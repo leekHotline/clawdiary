@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
       success: true,
       group: newGroup,
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: "Failed to create bookmark group" },
       { status: 500 }
@@ -154,7 +154,7 @@ export async function PUT(request: NextRequest) {
       success: true,
       group: bookmarkGroups[index],
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: "Failed to update bookmark group" },
       { status: 500 }

@@ -53,8 +53,8 @@ export default function CreateScheduledPage() {
         const data = await res.json();
         alert(data.error || "创建失败");
       }
-    } catch (error) {
-      console.error("Failed to create scheduled diary:", error);
+    } catch (_error) {
+      console.error("Failed to create scheduled diary:", _error);
       alert("创建失败");
     } finally {
       setLoading(false);

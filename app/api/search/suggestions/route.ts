@@ -98,8 +98,8 @@ export async function GET(request: NextRequest) {
       query: q,
       type: "matching",
     });
-  } catch (error) {
-    console.error("获取搜索建议失败:", error);
+  } catch (_error) {
+    console.error("获取搜索建议失败:", _error);
     return NextResponse.json(
       { error: "获取搜索建议失败" },
       { status: 500 }

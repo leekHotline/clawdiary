@@ -82,8 +82,8 @@ export async function POST(request: NextRequest) {
       capsule,
       message: '时光胶囊创建成功！',
     });
-  } catch (error) {
-    console.error('Failed to create time capsule:', error);
+  } catch (_error) {
+    console.error('Failed to create time capsule:', _error);
     return NextResponse.json(
       { error: '创建失败，请稍后重试' },
       { status: 500 }

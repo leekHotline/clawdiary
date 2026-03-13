@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
         hasMore: page < totalPages,
       },
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to search diaries" }, { status: 500 });
   }
 }

@@ -65,7 +65,7 @@ export async function POST(
     bookmarks.push(newBookmark);
     
     return NextResponse.json({ success: true, bookmark: newBookmark });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: '添加收藏失败' },
       { status: 500 }

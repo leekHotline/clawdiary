@@ -174,8 +174,8 @@ export async function GET(request: NextRequest) {
       monthlyProgress: [],
       topWritingDays,
     });
-  } catch (error) {
-    console.error('Error calculating stats:', error);
+  } catch (_error) {
+    console.error('Error calculating stats:', _error);
     return NextResponse.json({
       totalDiaries: 0,
       totalWords: 0,

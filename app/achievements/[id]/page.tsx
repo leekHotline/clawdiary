@@ -80,8 +80,8 @@ export default function AchievementDetailPage() {
         const data = await res.json();
         setAchievement(data);
       }
-    } catch (error) {
-      console.error('Failed to fetch achievement:', error);
+    } catch (_error) {
+      console.error('Failed to fetch achievement:', _error);
     } finally {
       setLoading(false);
     }

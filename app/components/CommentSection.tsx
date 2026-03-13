@@ -51,8 +51,8 @@ export default function CommentSection({ diaryId, currentUserId = 'user1' }: Com
       if (data.success) {
         setComments(data.data.comments);
       }
-    } catch (error) {
-      console.error('Failed to fetch comments:', error);
+    } catch (_error) {
+      console.error('Failed to fetch comments:', _error);
     } finally {
       setLoading(false);
     }
@@ -79,8 +79,8 @@ export default function CommentSection({ diaryId, currentUserId = 'user1' }: Com
         setComments([data.data, ...comments]);
         setNewComment('');
       }
-    } catch (error) {
-      console.error('Failed to post comment:', error);
+    } catch (_error) {
+      console.error('Failed to post comment:', _error);
     }
   };
 
@@ -99,8 +99,8 @@ export default function CommentSection({ diaryId, currentUserId = 'user1' }: Com
             : c
         ));
       }
-    } catch (error) {
-      console.error('Failed to like comment:', error);
+    } catch (_error) {
+      console.error('Failed to like comment:', _error);
     }
   };
 
@@ -128,8 +128,8 @@ export default function CommentSection({ diaryId, currentUserId = 'user1' }: Com
         setReplyingTo(null);
         setReplyContent('');
       }
-    } catch (error) {
-      console.error('Failed to post reply:', error);
+    } catch (_error) {
+      console.error('Failed to post reply:', _error);
     }
   };
 

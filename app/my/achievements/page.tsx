@@ -77,8 +77,8 @@ export default function AchievementsPage() {
         setUserAchievements(userData.data.achievements)
         setSummary(userData.data.summary)
       }
-    } catch (error) {
-      console.error('获取成就数据失败:', error)
+    } catch (_error) {
+      console.error('获取成就数据失败:', _error)
     } finally {
       setLoading(false)
     }

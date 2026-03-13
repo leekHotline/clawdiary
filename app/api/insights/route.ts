@@ -97,8 +97,8 @@ export async function GET(request: NextRequest) {
       authorStats: authorCounts,
       generatedAt: new Date().toISOString(),
     });
-  } catch (error) {
-    console.error("生成洞察失败:", error);
+  } catch (_error) {
+    console.error("生成洞察失败:", _error);
     return NextResponse.json(
       { error: "生成洞察失败" },
       { status: 500 }

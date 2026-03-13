@@ -44,7 +44,7 @@ export async function GET(
     const { email, ...safeUser } = user;
     
     return NextResponse.json(safeUser);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to fetch user" }, { status: 500 });
   }
 }
@@ -72,7 +72,7 @@ export async function DELETE(
     
     fs.writeFileSync(usersFile, JSON.stringify(filtered, null, 2));
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to delete user" }, { status: 500 });
   }
 }

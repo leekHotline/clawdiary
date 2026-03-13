@@ -54,8 +54,8 @@ export default function TagsPage() {
         const data = await res.json();
         setTags(data.tags);
       }
-    } catch (error) {
-      console.error('获取标签云失败:', error);
+    } catch (_error) {
+      console.error('获取标签云失败:', _error);
     }
   };
 
@@ -66,8 +66,8 @@ export default function TagsPage() {
         const data = await res.json();
         setStats(data);
       }
-    } catch (error) {
-      console.error('获取标签统计失败:', error);
+    } catch (_error) {
+      console.error('获取标签统计失败:', _error);
     } finally {
       setLoading(false);
     }

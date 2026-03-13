@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       recommendations,
       quickActions: getQuickActions(context)
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Failed to generate recommendations' },
       { status: 400 }

@@ -203,7 +203,7 @@ export async function POST(request: NextRequest) {
       report: newReport,
       message: "举报已提交，我们会尽快处理"
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: "创建举报失败" },
       { status: 500 }

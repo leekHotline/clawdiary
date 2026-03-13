@@ -44,8 +44,8 @@ export default function AchievementsPage() {
       const res = await fetch("/api/achievements");
       const data = await res.json();
       setAchievements(data.achievements || []);
-    } catch (error) {
-      console.error("Failed to fetch achievements:", error);
+    } catch (_error) {
+      console.error("Failed to fetch achievements:", _error);
       // 使用模拟数据
       setAchievements(getMockAchievements());
     } finally {

@@ -10,8 +10,8 @@ export async function GET() {
       success: true,
       data: categories,
     });
-  } catch (error) {
-    console.error("Error fetching categories:", error);
+  } catch (_error) {
+    console.error("Error fetching categories:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch categories" },
       { status: 500 }

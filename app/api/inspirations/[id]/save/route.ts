@@ -25,8 +25,8 @@ export async function POST(
       data: result,
       message: result.saved ? "Saved!" : "Unsaved"
     });
-  } catch (error) {
-    console.error("Error saving inspiration:", error);
+  } catch (_error) {
+    console.error("Error saving inspiration:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to save inspiration" },
       { status: 500 }

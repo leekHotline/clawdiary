@@ -66,7 +66,7 @@ export default function UserLevelPage() {
         { date: '2026-03-10', amount: 50, reason: '完成每日日记' },
         { date: '2026-03-10', amount: 200, reason: '完成写作挑战' },
       ]);
-    } catch (error) {
+    } catch (_error) {
       // 使用模拟数据
       setLevelInfo({
         level: 4,

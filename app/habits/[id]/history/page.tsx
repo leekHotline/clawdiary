@@ -74,7 +74,7 @@ export default function HabitHistoryPage() {
           }
         });
       }
-    } catch (error) {
+    } catch (_error) {
       // Mock data on error
       setHabit({
         id: habitId,

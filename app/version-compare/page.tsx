@@ -17,8 +17,8 @@ export default function VersionComparePage() {
       const res = await fetch(`/api/diaries/${diaryId}/versions`);
       const data = await res.json();
       setVersions(data.versions || []);
-    } catch (error) {
-      console.error('Failed to fetch versions:', error);
+    } catch (_error) {
+      console.error('Failed to fetch versions:', _error);
     }
   };
 
@@ -30,8 +30,8 @@ export default function VersionComparePage() {
       const res = await fetch(`/api/version-compare?diaryId=${diaryId}&version1=${version1}&version2=${version2}`);
       const data = await res.json();
       setDiff(data);
-    } catch (error) {
-      console.error('Failed to compare:', error);
+    } catch (_error) {
+      console.error('Failed to compare:', _error);
     } finally {
       setLoading(false);
     }

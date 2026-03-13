@@ -59,8 +59,8 @@ export default function UserLevelPage() {
       const data = await res.json();
       setLevelData(data.level);
       setRewards(data.rewards || []);
-    } catch (error) {
-      console.error("Failed to fetch level data:", error);
+    } catch (_error) {
+      console.error("Failed to fetch level data:", _error);
       // 使用模拟数据
       setLevelData({
         level: 4,

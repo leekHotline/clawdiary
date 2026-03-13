@@ -16,7 +16,7 @@ export async function GET(
     }
     
     return NextResponse.json(diary);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to fetch scheduled diary" }, { status: 500 });
   }
 }
@@ -37,7 +37,7 @@ export async function PUT(
     }
     
     return NextResponse.json(updated);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to update scheduled diary" }, { status: 500 });
   }
 }
@@ -56,7 +56,7 @@ export async function DELETE(
     }
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to delete scheduled diary" }, { status: 500 });
   }
 }

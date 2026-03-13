@@ -24,8 +24,8 @@ export async function GET(
     }
 
     return NextResponse.json({ success: true, data: challenge });
-  } catch (error) {
-    console.error("Error fetching challenge:", error);
+  } catch (_error) {
+    console.error("Error fetching challenge:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch challenge" },
       { status: 500 }
@@ -52,8 +52,8 @@ export async function PUT(
     }
 
     return NextResponse.json({ success: true, data: updated });
-  } catch (error) {
-    console.error("Error updating challenge:", error);
+  } catch (_error) {
+    console.error("Error updating challenge:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to update challenge" },
       { status: 500 }
@@ -78,8 +78,8 @@ export async function DELETE(
     }
 
     return NextResponse.json({ success: true, message: "Challenge deleted" });
-  } catch (error) {
-    console.error("Error deleting challenge:", error);
+  } catch (_error) {
+    console.error("Error deleting challenge:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to delete challenge" },
       { status: 500 }

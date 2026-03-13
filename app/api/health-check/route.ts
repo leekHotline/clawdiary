@@ -148,8 +148,8 @@ export async function GET(request: NextRequest) {
         generatedAt: new Date().toISOString(),
       },
     });
-  } catch (error) {
-    console.error("Error generating health check:", error);
+  } catch (_error) {
+    console.error("Error generating health check:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to generate health check report" },
       { status: 500 }
@@ -176,8 +176,8 @@ export async function POST(request: NextRequest) {
       data: report,
       message: "健康检查报告已生成",
     });
-  } catch (error) {
-    console.error("Error creating health check report:", error);
+  } catch (_error) {
+    console.error("Error creating health check report:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to create health check report" },
       { status: 500 }

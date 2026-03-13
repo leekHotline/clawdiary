@@ -61,8 +61,8 @@ export async function POST(request: NextRequest) {
       },
       message: "备份文件解析成功，请确认恢复选项",
     });
-  } catch (error) {
-    console.error("恢复备份失败:", error);
+  } catch (_error) {
+    console.error("恢复备份失败:", _error);
     return NextResponse.json(
       { error: "恢复备份失败" },
       { status: 500 }
@@ -95,8 +95,8 @@ export async function PUT(request: NextRequest) {
       },
       message: "数据恢复完成",
     });
-  } catch (error) {
-    console.error("确认恢复失败:", error);
+  } catch (_error) {
+    console.error("确认恢复失败:", _error);
     return NextResponse.json(
       { error: "恢复失败" },
       { status: 500 }

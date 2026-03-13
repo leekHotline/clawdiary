@@ -44,8 +44,8 @@ export default function CreateTimeCapsulePage() {
       if (response.ok) {
         router.push('/time-capsule/pending');
       }
-    } catch (error) {
-      console.error('Failed to create time capsule:', error);
+    } catch (_error) {
+      console.error('Failed to create time capsule:', _error);
     } finally {
       setIsSubmitting(false);
     }

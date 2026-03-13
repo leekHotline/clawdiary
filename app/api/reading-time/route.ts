@@ -77,8 +77,8 @@ export async function GET(request: NextRequest) {
       dailyBreakdown: dailyBreakdown.slice(0, 7), // 最近7天
       generatedAt: new Date().toISOString(),
     });
-  } catch (error) {
-    console.error("计算阅读时间失败:", error);
+  } catch (_error) {
+    console.error("计算阅读时间失败:", _error);
     return NextResponse.json(
       { error: "计算阅读时间失败" },
       { status: 500 }

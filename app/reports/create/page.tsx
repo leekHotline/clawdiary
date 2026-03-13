@@ -64,7 +64,7 @@ export default function CreateReportPage() {
       } else {
         alert(data.error || "提交失败");
       }
-    } catch (error) {
+    } catch (_error) {
       alert("提交失败，请稍后重试");
     } finally {
       setLoading(false);

@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
       data: newCard,
       message: '灵感卡片创建成功'
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, error: '创建失败' },
       { status: 500 }
@@ -153,7 +153,7 @@ export async function PUT(request: NextRequest) {
       { success: false, error: '未知操作' },
       { status: 400 }
     );
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, error: '更新失败' },
       { status: 500 }

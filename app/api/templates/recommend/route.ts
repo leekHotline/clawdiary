@@ -45,8 +45,8 @@ export async function GET(request: Request) {
         message: getTimeBasedMessage(timeOfDay)
       }
     });
-  } catch (error) {
-    console.error('Error fetching recommendations:', error);
+  } catch (_error) {
+    console.error('Error fetching recommendations:', _error);
     return NextResponse.json(
       { success: false, error: '获取推荐失败' },
       { status: 500 }

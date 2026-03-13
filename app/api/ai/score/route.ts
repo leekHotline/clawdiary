@@ -50,8 +50,8 @@ export async function POST(request: NextRequest) {
         sentences,
       },
     });
-  } catch (error) {
-    console.error("Score error:", error);
+  } catch (_error) {
+    console.error("Score error:", _error);
     return NextResponse.json({ error: "Failed to score content" }, { status: 500 });
   }
 }

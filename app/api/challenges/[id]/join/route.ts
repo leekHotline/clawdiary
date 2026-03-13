@@ -40,8 +40,8 @@ export async function POST(
       data: result,
       message: "Successfully joined the challenge"
     });
-  } catch (error) {
-    console.error("Error joining challenge:", error);
+  } catch (_error) {
+    console.error("Error joining challenge:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to join challenge" },
       { status: 500 }
@@ -72,8 +72,8 @@ export async function DELETE(
       success: true, 
       message: "Successfully left the challenge" 
     });
-  } catch (error) {
-    console.error("Error leaving challenge:", error);
+  } catch (_error) {
+    console.error("Error leaving challenge:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to leave challenge" },
       { status: 500 }

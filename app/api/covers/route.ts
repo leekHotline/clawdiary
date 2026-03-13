@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     }
     
     return NextResponse.json(covers);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to fetch covers" }, { status: 500 });
   }
 }
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     });
     
     return NextResponse.json(cover, { status: 201 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to create cover" }, { status: 500 });
   }
 }

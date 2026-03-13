@@ -78,8 +78,8 @@ export default function MoodCalendarPage() {
         const data = await res.json();
         setMoodData(data.entries || []);
       }
-    } catch (error) {
-      console.error('Failed to fetch mood data:', error);
+    } catch (_error) {
+      console.error('Failed to fetch mood data:', _error);
     } finally {
       setLoading(false);
     }

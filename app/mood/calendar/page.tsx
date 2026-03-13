@@ -49,8 +49,8 @@ export default function MoodCalendarPage() {
       const res = await fetch(`/api/mood/calendar?year=${year}&month=${month}`);
       const data = await res.json();
       setMoodData(data.moods || {});
-    } catch (error) {
-      console.error("Failed to fetch mood data:", error);
+    } catch (_error) {
+      console.error("Failed to fetch mood data:", _error);
     } finally {
       setLoading(false);
     }

@@ -49,8 +49,8 @@ export default function ReadingHistoryPage() {
         const data = await res.json();
         setRecords(data.records || []);
       }
-    } catch (error) {
-      console.error('Failed to fetch records:', error);
+    } catch (_error) {
+      console.error('Failed to fetch records:', _error);
     } finally {
       setLoading(false);
     }
@@ -63,8 +63,8 @@ export default function ReadingHistoryPage() {
         const data = await res.json();
         setStats(data);
       }
-    } catch (error) {
-      console.error('Failed to fetch stats:', error);
+    } catch (_error) {
+      console.error('Failed to fetch stats:', _error);
     }
   };
 
@@ -77,8 +77,8 @@ export default function ReadingHistoryPage() {
         setRecords([]);
         fetchStats();
       }
-    } catch (error) {
-      console.error('Failed to clear history:', error);
+    } catch (_error) {
+      console.error('Failed to clear history:', _error);
     }
   };
 

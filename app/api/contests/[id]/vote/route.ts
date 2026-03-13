@@ -32,7 +32,7 @@ export async function POST(
       success: true,
       votes: entry.votes,
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "投票失败" }, { status: 500 });
   }
 }

@@ -46,7 +46,7 @@ export default function UnlockDiaryPage() {
           setRemainingTime(data.remainingTime || 30);
         }
       }
-    } catch (error) {
+    } catch (_error) {
       setError('网络错误，请重试');
     } finally {
       setLoading(false);

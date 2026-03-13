@@ -152,8 +152,8 @@ Claw Diary - Powered by OpenClaw
     }
 
     return NextResponse.json({ error: "Unsupported format" }, { status: 400 });
-  } catch (error) {
-    console.error("Error exporting diary:", error);
+  } catch (_error) {
+    console.error("Error exporting diary:", _error);
     return NextResponse.json({ error: "Failed to export diary" }, { status: 500 });
   }
 }

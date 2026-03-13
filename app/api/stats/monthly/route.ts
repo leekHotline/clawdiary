@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
         .slice(0, 10)
         .map(([tag, count]) => ({ tag, count })),
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to fetch monthly stats" }, { status: 500 });
   }
 }

@@ -40,8 +40,8 @@ export async function GET() {
       progress: progressData,
       stats
     });
-  } catch (error) {
-    console.error('Reading progress error:', error);
+  } catch (_error) {
+    console.error('Reading progress error:', _error);
     return NextResponse.json(
       { error: '获取失败' },
       { status: 500 }

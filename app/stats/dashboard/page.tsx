@@ -60,8 +60,8 @@ export default function StatsDashboardPage() {
         const data = await res.json();
         setStats(data);
       }
-    } catch (error) {
-      console.error('Failed to fetch stats:', error);
+    } catch (_error) {
+      console.error('Failed to fetch stats:', _error);
     } finally {
       setLoading(false);
     }

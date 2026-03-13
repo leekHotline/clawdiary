@@ -50,7 +50,7 @@ export async function POST(
       error: '未知操作' 
     }, { status: 400 });
 
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ 
       success: false, 
       error: '操作失败' 

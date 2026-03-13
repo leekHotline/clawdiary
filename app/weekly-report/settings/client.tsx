@@ -40,8 +40,8 @@ export default function WeeklyReportSettingsClient() {
         const data = await res.json();
         setSettings(data);
       }
-    } catch (error) {
-      console.error('Failed to fetch settings:', error);
+    } catch (_error) {
+      console.error('Failed to fetch settings:', _error);
     }
   };
 
@@ -57,8 +57,8 @@ export default function WeeklyReportSettingsClient() {
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
       }
-    } catch (error) {
-      console.error('Failed to save settings:', error);
+    } catch (_error) {
+      console.error('Failed to save settings:', _error);
     } finally {
       setSaving(false);
     }

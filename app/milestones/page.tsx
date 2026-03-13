@@ -123,8 +123,8 @@ export default function MilestonesPage() {
           setStats(data.stats);
         }
       }
-    } catch (error) {
-      console.error('Failed to fetch milestones:', error);
+    } catch (_error) {
+      console.error('Failed to fetch milestones:', _error);
     } finally {
       setLoading(false);
     }

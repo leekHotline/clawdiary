@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       habitId: id,
       timestamp: new Date().toISOString(),
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Failed to update habit' },
       { status: 500 }

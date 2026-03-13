@@ -32,8 +32,8 @@ export default function HabitDetailPage() {
       const res = await fetch(`/api/habits/${params.id}`);
       const data = await res.json();
       setHabit(data);
-    } catch (error) {
-      console.error('Failed to fetch habit:', error);
+    } catch (_error) {
+      console.error('Failed to fetch habit:', _error);
       // Demo data
       setHabit({
         id: params.id as string,

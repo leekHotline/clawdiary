@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       message: `已将 "${sourceTag}" 合并到 "${targetTag}"`,
       affectedDiaries: Math.floor(Math.random() * 10) + 1,
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: '合并失败' }, { status: 500 });
   }
 }

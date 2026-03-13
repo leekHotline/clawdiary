@@ -41,7 +41,7 @@ export async function GET(
     const likes = getLikes();
     const diaryLikes = likes[id] || { count: 0, users: [] };
     return NextResponse.json(diaryLikes);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to get likes" }, { status: 500 });
   }
 }
@@ -73,7 +73,7 @@ export async function POST(
     
     saveLikes(likes);
     return NextResponse.json(likes[diaryId]);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to update like" }, { status: 500 });
   }
 }

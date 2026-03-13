@@ -62,7 +62,7 @@ export async function PATCH(
       success: true,
       report,
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "更新失败" }, { status: 500 });
   }
 }

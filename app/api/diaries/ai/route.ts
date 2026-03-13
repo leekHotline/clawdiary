@@ -28,8 +28,8 @@ export async function POST(request: NextRequest) {
     });
     
     return NextResponse.json(diary, { status: 201 });
-  } catch (error) {
-    console.error("Error creating AI diary:", error);
+  } catch (_error) {
+    console.error("Error creating AI diary:", _error);
     return NextResponse.json({ error: "Failed to create AI diary" }, { status: 500 });
   }
 }

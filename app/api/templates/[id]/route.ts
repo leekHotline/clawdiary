@@ -22,8 +22,8 @@ export async function GET(
       success: true,
       data: template
     });
-  } catch (error) {
-    console.error('Error fetching template:', error);
+  } catch (_error) {
+    console.error('Error fetching template:', _error);
     return NextResponse.json(
       { success: false, error: '获取模板失败' },
       { status: 500 }

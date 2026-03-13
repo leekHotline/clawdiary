@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
       data: newLog,
       message: '习惯记录成功'
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({
       success: false,
       error: '记录失败'

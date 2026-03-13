@@ -26,8 +26,8 @@ export default function ScheduledDiariesPage() {
       const res = await fetch("/api/scheduled");
       const data = await res.json();
       setScheduled(data);
-    } catch (error) {
-      console.error("Failed to fetch scheduled diaries:", error);
+    } catch (_error) {
+      console.error("Failed to fetch scheduled diaries:", _error);
     } finally {
       setLoading(false);
     }
@@ -39,8 +39,8 @@ export default function ScheduledDiariesPage() {
     try {
       await fetch(`/api/scheduled/${id}`, { method: "DELETE" });
       fetchScheduled();
-    } catch (error) {
-      console.error("Failed to cancel scheduled diary:", error);
+    } catch (_error) {
+      console.error("Failed to cancel scheduled diary:", _error);
     }
   };
 

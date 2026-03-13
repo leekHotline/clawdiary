@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(favorites.sort((a, b) => 
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     ));
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to fetch favorites" }, { status: 500 });
   }
 }
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
     saveFavorites(favorites);
     
     return NextResponse.json(newFavorite, { status: 201 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to add favorite" }, { status: 500 });
   }
 }
@@ -106,7 +106,7 @@ export async function DELETE(request: NextRequest) {
     saveFavorites(filtered);
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to remove favorite" }, { status: 500 });
   }
 }

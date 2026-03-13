@@ -15,7 +15,7 @@ export async function PUT(request: NextRequest) {
       data: { id, pinned },
       message: pinned ? '已置顶' : '已取消置顶'
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, error: '操作失败' },
       { status: 500 }

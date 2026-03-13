@@ -82,8 +82,8 @@ export default function MeditationPage() {
       const res = await fetch('/api/meditation');
       const data = await res.json();
       setMeditations(data.meditations || []);
-    } catch (error) {
-      console.error('Failed to fetch meditations:', error);
+    } catch (_error) {
+      console.error('Failed to fetch meditations:', _error);
     } finally {
       setLoading(false);
     }
@@ -94,8 +94,8 @@ export default function MeditationPage() {
       const res = await fetch('/api/meditation/stats');
       const data = await res.json();
       setStats(data.stats || stats);
-    } catch (error) {
-      console.error('Failed to fetch stats:', error);
+    } catch (_error) {
+      console.error('Failed to fetch stats:', _error);
     }
   };
 
@@ -122,8 +122,8 @@ export default function MeditationPage() {
         fetchMeditations();
         fetchStats();
       }
-    } catch (error) {
-      console.error('Failed to create meditation:', error);
+    } catch (_error) {
+      console.error('Failed to create meditation:', _error);
     }
   };
 
@@ -133,8 +133,8 @@ export default function MeditationPage() {
       await fetch(`/api/meditation/${id}`, { method: 'DELETE' });
       fetchMeditations();
       fetchStats();
-    } catch (error) {
-      console.error('Failed to delete meditation:', error);
+    } catch (_error) {
+      console.error('Failed to delete meditation:', _error);
     }
   };
 

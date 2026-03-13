@@ -52,8 +52,8 @@ export default function DiaryCommentsPage() {
         const data = await res.json();
         setComments(data.comments || []);
       }
-    } catch (error) {
-      console.error('Failed to fetch comments:', error);
+    } catch (_error) {
+      console.error('Failed to fetch comments:', _error);
     } finally {
       setLoading(false);
     }
@@ -66,8 +66,8 @@ export default function DiaryCommentsPage() {
         const data = await res.json();
         setStats(data);
       }
-    } catch (error) {
-      console.error('Failed to fetch stats:', error);
+    } catch (_error) {
+      console.error('Failed to fetch stats:', _error);
     }
   };
 
@@ -83,8 +83,8 @@ export default function DiaryCommentsPage() {
             : c
         ));
       }
-    } catch (error) {
-      console.error('Failed to like comment:', error);
+    } catch (_error) {
+      console.error('Failed to like comment:', _error);
     }
   };
 
@@ -102,8 +102,8 @@ export default function DiaryCommentsPage() {
         setReplyContent({ ...replyContent, [commentId]: '' });
         fetchComments();
       }
-    } catch (error) {
-      console.error('Failed to reply:', error);
+    } catch (_error) {
+      console.error('Failed to reply:', _error);
     }
   };
 

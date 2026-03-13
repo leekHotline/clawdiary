@@ -35,8 +35,8 @@ export default function HabitsCalendarPage() {
       const recordsData = await recordsRes.json();
       setHabits(habitsData.habits || []);
       setRecords(recordsData.records || []);
-    } catch (error) {
-      console.error('Failed to fetch data:', error);
+    } catch (_error) {
+      console.error('Failed to fetch data:', _error);
       // Demo data
       setHabits([
         { id: '1', name: '冥想', icon: '🧘', color: '#8b5cf6' },

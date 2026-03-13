@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
       data: newEvent,
       message: '活动创建成功',
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, error: '创建活动失败' },
       { status: 500 }

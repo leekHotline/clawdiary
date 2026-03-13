@@ -32,8 +32,8 @@ export async function GET(
       stats,
       versions: versionsData
     });
-  } catch (error) {
-    console.error("Get versions error:", error);
+  } catch (_error) {
+    console.error("Get versions error:", _error);
     return NextResponse.json(
       { error: "Failed to get version history" },
       { status: 500 }

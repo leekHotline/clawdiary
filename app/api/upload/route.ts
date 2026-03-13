@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
         uploadedAt: new Date().toISOString(),
       },
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, error: "上传失败" },
       { status: 500 }

@@ -37,8 +37,8 @@ export default function SleepPage() {
       const res = await fetch('/api/sleep/log');
       const data = await res.json();
       setRecords(data.records || []);
-    } catch (error) {
-      console.error('Failed to fetch sleep records:', error);
+    } catch (_error) {
+      console.error('Failed to fetch sleep records:', _error);
       // Demo data
       setRecords([
         {
@@ -137,8 +137,8 @@ export default function SleepPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(record),
       });
-    } catch (error) {
-      console.error('Failed to save sleep record:', error);
+    } catch (_error) {
+      console.error('Failed to save sleep record:', _error);
     }
   };
 

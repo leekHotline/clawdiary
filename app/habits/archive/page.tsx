@@ -27,8 +27,8 @@ export default function HabitsArchivePage() {
       const res = await fetch('/api/habits/archive');
       const data = await res.json();
       setHabits(data.habits || []);
-    } catch (error) {
-      console.error('Failed to fetch archived habits:', error);
+    } catch (_error) {
+      console.error('Failed to fetch archived habits:', _error);
       // Demo data
       setHabits([
         {
@@ -75,8 +75,8 @@ export default function HabitsArchivePage() {
         body: JSON.stringify({ id, action: 'restore' }),
       });
       setHabits(habits.filter(h => h.id !== id));
-    } catch (error) {
-      console.error('Failed to restore habit:', error);
+    } catch (_error) {
+      console.error('Failed to restore habit:', _error);
     }
   };
 
@@ -90,8 +90,8 @@ export default function HabitsArchivePage() {
         body: JSON.stringify({ id }),
       });
       setHabits(habits.filter(h => h.id !== id));
-    } catch (error) {
-      console.error('Failed to delete habit:', error);
+    } catch (_error) {
+      console.error('Failed to delete habit:', _error);
     }
   };
 

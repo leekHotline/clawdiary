@@ -86,7 +86,7 @@ export async function POST(
         ? `🎉 恭喜达到 ${reachedMilestones.join('%、')}% 里程碑！` 
         : '进度更新成功'
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({
       success: false,
       error: '更新进度失败'

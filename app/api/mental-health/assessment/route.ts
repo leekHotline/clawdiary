@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
     }
     
     return NextResponse.json(assessment)
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Assessment failed' },
       { status: 400 }

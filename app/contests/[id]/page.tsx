@@ -62,8 +62,8 @@ export default function ContestDetailPage() {
       setDaysLeft(data.daysLeft);
       setUserJoined(data.userJoined);
       setUserEntry(data.userEntry);
-    } catch (error) {
-      console.error("Failed to fetch contest:", error);
+    } catch (_error) {
+      console.error("Failed to fetch contest:", _error);
     } finally {
       setLoading(false);
     }
@@ -85,8 +85,8 @@ export default function ContestDetailPage() {
       if (data.success) {
         fetchContest();
       }
-    } catch (error) {
-      console.error("Failed to vote:", error);
+    } catch (_error) {
+      console.error("Failed to vote:", _error);
     }
   };
 

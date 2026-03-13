@@ -49,8 +49,8 @@ export default function CreateInspirationPage() {
         const data = await response.json();
         router.push(`/inspirations/${data.data.id}`);
       }
-    } catch (error) {
-      console.error("Failed to create inspiration:", error);
+    } catch (_error) {
+      console.error("Failed to create inspiration:", _error);
     } finally {
       setLoading(false);
     }

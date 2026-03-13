@@ -37,8 +37,8 @@ export default function HabitsPage() {
       const res = await fetch('/api/habits/list');
       const data = await res.json();
       setHabits(data.habits || []);
-    } catch (error) {
-      console.error('Failed to fetch habits:', error);
+    } catch (_error) {
+      console.error('Failed to fetch habits:', _error);
       // Demo data
       setHabits([
         {
@@ -119,8 +119,8 @@ export default function HabitsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, action: 'toggle' }),
       });
-    } catch (error) {
-      console.error('Failed to update habit:', error);
+    } catch (_error) {
+      console.error('Failed to update habit:', _error);
     }
   };
 
@@ -147,8 +147,8 @@ export default function HabitsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(habit),
       });
-    } catch (error) {
-      console.error('Failed to create habit:', error);
+    } catch (_error) {
+      console.error('Failed to create habit:', _error);
     }
   };
 

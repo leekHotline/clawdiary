@@ -107,8 +107,8 @@ export default function WritingGoalsHistoryPage() {
       if (goalsData.success) {
         setGoals(goalsData.data)
       }
-    } catch (error) {
-      console.error('获取数据失败:', error)
+    } catch (_error) {
+      console.error('获取数据失败:', _error)
     } finally {
       setLoading(false)
     }

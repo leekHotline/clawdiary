@@ -70,8 +70,8 @@ export default function FocusPage() {
         setTodaySessions(data.sessions || []);
         setTodayStats(data.stats || { totalMinutes: 0, totalWords: 0, sessions: 0 });
       }
-    } catch (error) {
-      console.error('Failed to fetch focus sessions:', error);
+    } catch (_error) {
+      console.error('Failed to fetch focus sessions:', _error);
     }
   };
 
@@ -126,8 +126,8 @@ export default function FocusPage() {
       });
       
       fetchTodaySessions();
-    } catch (error) {
-      console.error('Failed to save focus session:', error);
+    } catch (_error) {
+      console.error('Failed to save focus session:', _error);
     }
 
     resetSession();
@@ -169,8 +169,8 @@ export default function FocusPage() {
           title: `专注写作 - ${new Date().toLocaleDateString()}`,
         }),
       });
-    } catch (error) {
-      console.error('Failed to save draft:', error);
+    } catch (_error) {
+      console.error('Failed to save draft:', _error);
     }
   };
 
@@ -193,8 +193,8 @@ export default function FocusPage() {
         const diary = await res.json();
         router.push(`/diary/${diary.id}`);
       }
-    } catch (error) {
-      console.error('Failed to save diary:', error);
+    } catch (_error) {
+      console.error('Failed to save diary:', _error);
     }
   };
 

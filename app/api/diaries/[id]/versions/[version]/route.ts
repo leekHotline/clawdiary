@@ -27,8 +27,8 @@ export async function GET(
     }
 
     return NextResponse.json(version);
-  } catch (error) {
-    console.error("Get version error:", error);
+  } catch (_error) {
+    console.error("Get version error:", _error);
     return NextResponse.json(
       { error: "Failed to get version" },
       { status: 500 }
@@ -69,8 +69,8 @@ export async function POST(
       message: `已回滚到版本 ${versionNumber}`,
       newVersion
     });
-  } catch (error) {
-    console.error("Rollback error:", error);
+  } catch (_error) {
+    console.error("Rollback error:", _error);
     return NextResponse.json(
       { error: "Failed to rollback" },
       { status: 500 }

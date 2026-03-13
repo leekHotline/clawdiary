@@ -45,8 +45,8 @@ export async function POST(
       // 使用 Web Speech API 或第三方 TTS 服务
       ttsUrl: null, // 可以配置外部 TTS API
     });
-  } catch (error) {
-    console.error("TTS error:", error);
+  } catch (_error) {
+    console.error("TTS error:", _error);
     return NextResponse.json({ error: "Failed to generate TTS" }, { status: 500 });
   }
 }

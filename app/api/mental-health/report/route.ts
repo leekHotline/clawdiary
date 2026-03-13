@@ -89,8 +89,8 @@ export async function GET(request: NextRequest) {
     };
 
     return NextResponse.json(report);
-  } catch (error) {
-    console.error('Mental health report error:', error);
+  } catch (_error) {
+    console.error('Mental health report error:', _error);
     return NextResponse.json({ error: '生成报告失败' }, { status: 500 });
   }
 }

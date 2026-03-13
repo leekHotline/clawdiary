@@ -31,8 +31,8 @@ export default function DraftsPage() {
       const res = await fetch("/api/drafts");
       const data = await res.json();
       setDrafts(data.drafts || []);
-    } catch (error) {
-      console.error("Failed to fetch drafts:", error);
+    } catch (_error) {
+      console.error("Failed to fetch drafts:", _error);
     } finally {
       setLoading(false);
     }
@@ -44,8 +44,8 @@ export default function DraftsPage() {
     try {
       await fetch(`/api/drafts/${id}`, { method: "DELETE" });
       setDrafts(drafts.filter((d) => d.id !== id));
-    } catch (error) {
-      console.error("Failed to delete draft:", error);
+    } catch (_error) {
+      console.error("Failed to delete draft:", _error);
     }
   };
 
@@ -72,8 +72,8 @@ export default function DraftsPage() {
         setDrafts(drafts.filter((d) => d.id !== draft.id));
         alert("发布成功！");
       }
-    } catch (error) {
-      console.error("Failed to publish draft:", error);
+    } catch (_error) {
+      console.error("Failed to publish draft:", _error);
     }
   };
 
@@ -87,8 +87,8 @@ export default function DraftsPage() {
       );
       setDrafts(drafts.filter((d) => !selectedDrafts.includes(d.id)));
       setSelectedDrafts([]);
-    } catch (error) {
-      console.error("Failed to delete drafts:", error);
+    } catch (_error) {
+      console.error("Failed to delete drafts:", _error);
     }
   };
 

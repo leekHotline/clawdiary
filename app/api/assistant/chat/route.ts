@@ -57,8 +57,8 @@ export async function POST(request: NextRequest) {
       response: contextualResponse,
       timestamp: new Date().toISOString(),
     });
-  } catch (error) {
-    console.error("AI Chat error:", error);
+  } catch (_error) {
+    console.error("AI Chat error:", _error);
     return NextResponse.json(
       { error: "Failed to process chat message" },
       { status: 500 }

@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
       entry,
       streak 
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Failed to create entry' },
       { status: 400 }
@@ -118,7 +118,7 @@ export async function PUT(request: NextRequest) {
       success: true, 
       entry: entries[index] 
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Failed to update entry' },
       { status: 400 }

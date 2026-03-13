@@ -62,8 +62,8 @@ export default function WeeklyReportClient() {
       const res = await fetch('/api/weekly-report');
       const data = await res.json();
       setReport(data);
-    } catch (error) {
-      console.error('Failed to fetch report:', error);
+    } catch (_error) {
+      console.error('Failed to fetch report:', _error);
     } finally {
       setLoading(false);
     }

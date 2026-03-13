@@ -37,8 +37,8 @@ export default function TimeCapsuleDetailPage() {
         const data = await response.json();
         setCapsule(data);
       }
-    } catch (error) {
-      console.error('Failed to fetch capsule:', error);
+    } catch (_error) {
+      console.error('Failed to fetch capsule:', _error);
     } finally {
       setLoading(false);
     }
@@ -57,8 +57,8 @@ export default function TimeCapsuleDetailPage() {
         const error = await response.json();
         alert(error.error || '解锁失败');
       }
-    } catch (error) {
-      console.error('Failed to open capsule:', error);
+    } catch (_error) {
+      console.error('Failed to open capsule:', _error);
     } finally {
       setOpening(false);
     }

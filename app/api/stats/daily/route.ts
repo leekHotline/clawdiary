@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
         wordCount: d.content.length,
       })),
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to fetch daily stats" }, { status: 500 });
   }
 }

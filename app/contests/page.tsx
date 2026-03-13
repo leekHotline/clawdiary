@@ -55,8 +55,8 @@ export default function ContestsPage() {
       const data = await res.json();
       setContests(data.contests || []);
       setStats(data.stats);
-    } catch (error) {
-      console.error("Failed to fetch contests:", error);
+    } catch (_error) {
+      console.error("Failed to fetch contests:", _error);
     } finally {
       setLoading(false);
     }

@@ -28,8 +28,8 @@ export default function ReadingProgressPage() {
       const data = await res.json();
       setProgress(data.progress || []);
       setStats(data.stats || null);
-    } catch (error) {
-      console.error('Failed to fetch progress:', error);
+    } catch (_error) {
+      console.error('Failed to fetch progress:', _error);
     } finally {
       setLoading(false);
     }
@@ -42,8 +42,8 @@ export default function ReadingProgressPage() {
         : '/api/reading-progress/clear';
       await fetch(url, { method: 'DELETE' });
       fetchProgress();
-    } catch (error) {
-      console.error('Failed to clear progress:', error);
+    } catch (_error) {
+      console.error('Failed to clear progress:', _error);
     }
   };
 

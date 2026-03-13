@@ -50,8 +50,8 @@ export default function WritePage() {
       const diary = await response.json();
       alert("日记已保存！");
       router.push(`/diary/${diary.id}`);
-    } catch (error) {
-      console.error("保存日记失败:", error);
+    } catch (_error) {
+      console.error("保存日记失败:", _error);
       alert("保存失败，请重试");
     } finally {
       setIsSubmitting(false);

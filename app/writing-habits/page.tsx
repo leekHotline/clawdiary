@@ -92,8 +92,8 @@ export default function WritingHabitsPage() {
       if (statsData.success) {
         setStats(statsData.data)
       }
-    } catch (error) {
-      console.error('获取数据失败:', error)
+    } catch (_error) {
+      console.error('获取数据失败:', _error)
     } finally {
       setLoading(false)
     }
@@ -123,8 +123,8 @@ export default function WritingHabitsPage() {
         })
         fetchData()
       }
-    } catch (error) {
-      console.error('创建习惯失败:', error)
+    } catch (_error) {
+      console.error('创建习惯失败:', _error)
     }
   }
 
@@ -145,8 +145,8 @@ export default function WritingHabitsPage() {
       if (data.success) {
         fetchData()
       }
-    } catch (error) {
-      console.error('记录习惯失败:', error)
+    } catch (_error) {
+      console.error('记录习惯失败:', _error)
     }
   }
 

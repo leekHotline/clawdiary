@@ -144,8 +144,8 @@ export async function GET(request: Request) {
       total: PRESET_THEMES.length,
       active: themesWithStats.filter((t) => t.count > 0).length,
     });
-  } catch (error) {
-    console.error("Error fetching themes:", error);
+  } catch (_error) {
+    console.error("Error fetching themes:", _error);
     return NextResponse.json({ error: "Failed to fetch themes" }, { status: 500 });
   }
 }

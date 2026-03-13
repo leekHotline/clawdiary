@@ -33,8 +33,8 @@ export default function CitationsStatsPage() {
       const res = await fetch('/api/citations/stats');
       const data = await res.json();
       setStats(data);
-    } catch (error) {
-      console.error('Failed to fetch stats:', error);
+    } catch (_error) {
+      console.error('Failed to fetch stats:', _error);
     } finally {
       setLoading(false);
     }

@@ -54,8 +54,8 @@ export default function InspirationWallPage() {
         setStats(data.stats);
         setAvailableTags(data.tags || []);
       }
-    } catch (error) {
-      console.error('获取灵感墙失败:', error);
+    } catch (_error) {
+      console.error('获取灵感墙失败:', _error);
     } finally {
       setLoading(false);
     }
@@ -89,8 +89,8 @@ export default function InspirationWallPage() {
         setColor(COLORS[0]);
         setTags('');
       }
-    } catch (error) {
-      console.error('创建失败:', error);
+    } catch (_error) {
+      console.error('创建失败:', _error);
     }
   };
 
@@ -105,8 +105,8 @@ export default function InspirationWallPage() {
       if (data.success) {
         setCards(prev => prev.filter(c => c.id !== id));
       }
-    } catch (error) {
-      console.error('删除失败:', error);
+    } catch (_error) {
+      console.error('删除失败:', _error);
     }
   };
 
@@ -123,8 +123,8 @@ export default function InspirationWallPage() {
           c.id === id ? { ...c, pinned: !currentPinned } : c
         ));
       }
-    } catch (error) {
-      console.error('置顶失败:', error);
+    } catch (_error) {
+      console.error('置顶失败:', _error);
     }
   };
 

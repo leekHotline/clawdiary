@@ -65,8 +65,8 @@ export default function CreateChallengePage() {
         const data = await response.json();
         router.push(`/challenges/${data.data.id}`);
       }
-    } catch (error) {
-      console.error("Failed to create challenge:", error);
+    } catch (_error) {
+      console.error("Failed to create challenge:", _error);
     } finally {
       setLoading(false);
     }

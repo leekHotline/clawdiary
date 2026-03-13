@@ -31,8 +31,8 @@ export default function WeeklyReportHistoryClient() {
         setReports(prev => [...prev, ...(data.reports || [])]);
       }
       setHasMore((data.reports || []).length === 10);
-    } catch (error) {
-      console.error('Failed to fetch history:', error);
+    } catch (_error) {
+      console.error('Failed to fetch history:', _error);
     } finally {
       setLoading(false);
     }

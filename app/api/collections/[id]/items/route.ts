@@ -49,7 +49,7 @@ export async function POST(
       message: '已添加到收藏夹',
       diaryIds: collection.diaryIds,
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: '添加失败' }, { status: 500 });
   }
 }
@@ -87,7 +87,7 @@ export async function DELETE(
       message: '已从收藏夹移除',
       diaryIds: collection.diaryIds,
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: '移除失败' }, { status: 500 });
   }
 }

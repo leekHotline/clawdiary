@@ -65,7 +65,7 @@ export default function HabitStreakPage() {
         // Mock data
         setStreakData(generateMockData());
       }
-    } catch (error) {
+    } catch (_error) {
       setStreakData(generateMockData());
     } finally {
       setLoading(false);

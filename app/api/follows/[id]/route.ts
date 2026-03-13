@@ -44,8 +44,8 @@ export async function GET(
         followingCount
       }
     })
-  } catch (error) {
-    console.error('检查关注状态失败:', error)
+  } catch (_error) {
+    console.error('检查关注状态失败:', _error)
     return NextResponse.json(
       { success: false, error: '检查关注状态失败' },
       { status: 500 }

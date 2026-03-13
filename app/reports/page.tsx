@@ -67,8 +67,8 @@ export default function ReportsPage() {
       const data = await res.json();
       setReports(data.reports || []);
       setStats(data.stats);
-    } catch (error) {
-      console.error("Failed to fetch reports:", error);
+    } catch (_error) {
+      console.error("Failed to fetch reports:", _error);
     } finally {
       setLoading(false);
     }

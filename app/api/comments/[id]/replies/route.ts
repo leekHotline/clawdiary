@@ -85,7 +85,7 @@ export async function POST(
       success: true,
       data: newReply
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({
       success: false,
       error: '创建回复失败'

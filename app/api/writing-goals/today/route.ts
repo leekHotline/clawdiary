@@ -95,8 +95,8 @@ export async function GET(request: NextRequest) {
         time: Math.round(todayWords / 20),
       }
     });
-  } catch (error) {
-    console.error('Error fetching daily goals:', error);
+  } catch (_error) {
+    console.error('Error fetching daily goals:', _error);
     return NextResponse.json({
       goals: [
         { id: 'words', type: 'words', target: 500, current: 0, unit: '字', icon: '✍️', color: 'purple' },

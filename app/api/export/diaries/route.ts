@@ -67,8 +67,8 @@ export async function GET(request: NextRequest) {
         'Content-Length': Buffer.byteLength(content).toString(),
       },
     });
-  } catch (error) {
-    console.error('Export error:', error);
+  } catch (_error) {
+    console.error('Export error:', _error);
     return NextResponse.json({ error: '导出失败' }, { status: 500 });
   }
 }

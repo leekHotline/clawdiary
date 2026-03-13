@@ -246,7 +246,7 @@ export async function POST(request: NextRequest) {
       success: true,
       contest: newContest,
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "创建失败" }, { status: 500 });
   }
 }

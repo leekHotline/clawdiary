@@ -40,8 +40,8 @@ export default function RandomPage() {
           setIsSpinning(false);
         }, 500); // 添加一点延迟让动画更明显
       }
-    } catch (error) {
-      console.error("获取随机日记失败:", error);
+    } catch (_error) {
+      console.error("获取随机日记失败:", _error);
       setLoading(false);
       setIsSpinning(false);
     }

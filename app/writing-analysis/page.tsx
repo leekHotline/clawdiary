@@ -48,8 +48,8 @@ export default function WritingAnalysisPage() {
       const res = await fetch("/api/writing-analysis/report");
       const data = await res.json();
       setReport(data);
-    } catch (error) {
-      console.error("Failed to fetch report:", error);
+    } catch (_error) {
+      console.error("Failed to fetch report:", _error);
     } finally {
       setLoading(false);
     }
@@ -63,8 +63,8 @@ export default function WritingAnalysisPage() {
         body: JSON.stringify({ period: "all-time" }),
       });
       fetchReport();
-    } catch (error) {
-      console.error("Failed to analyze style:", error);
+    } catch (_error) {
+      console.error("Failed to analyze style:", _error);
     }
   };
 

@@ -61,8 +61,8 @@ export default function DiaryComparePage() {
           setVersion2(data.versions[0].id);
         }
       }
-    } catch (error) {
-      console.error('Failed to fetch diary versions:', error);
+    } catch (_error) {
+      console.error('Failed to fetch diary versions:', _error);
     } finally {
       setLoading(false);
     }

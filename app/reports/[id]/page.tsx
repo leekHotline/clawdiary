@@ -57,8 +57,8 @@ export default function ReportDetailPage() {
       setReport(data.report);
       setRelatedReports(data.relatedReports || []);
       setResolution(data.report?.resolution || "");
-    } catch (error) {
-      console.error("Failed to fetch report:", error);
+    } catch (_error) {
+      console.error("Failed to fetch report:", _error);
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ export default function ReportDetailPage() {
       if (data.success) {
         setReport(data.report);
       }
-    } catch (error) {
+    } catch (_error) {
       alert("更新失败");
     } finally {
       setUpdating(false);

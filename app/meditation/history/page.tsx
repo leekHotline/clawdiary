@@ -67,8 +67,8 @@ export default function MeditationHistoryPage() {
       const res = await fetch(`/api/meditation/history?${params.toString()}`);
       const data = await res.json();
       setMeditations(data.meditations || []);
-    } catch (error) {
-      console.error('Failed to fetch history:', error);
+    } catch (_error) {
+      console.error('Failed to fetch history:', _error);
     } finally {
       setLoading(false);
     }
@@ -79,8 +79,8 @@ export default function MeditationHistoryPage() {
     try {
       await fetch(`/api/meditation/${id}`, { method: 'DELETE' });
       fetchHistory();
-    } catch (error) {
-      console.error('Failed to delete meditation:', error);
+    } catch (_error) {
+      console.error('Failed to delete meditation:', _error);
     }
   };
 

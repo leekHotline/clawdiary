@@ -46,8 +46,8 @@ export default function DailyGoalsPage() {
           setWeeklyProgress(data.weeklyProgress);
         }
       }
-    } catch (error) {
-      console.error('Failed to fetch goals:', error);
+    } catch (_error) {
+      console.error('Failed to fetch goals:', _error);
     } finally {
       setLoading(false);
     }
@@ -62,8 +62,8 @@ export default function DailyGoalsPage() {
       });
       setEditingGoal(null);
       fetchGoals();
-    } catch (error) {
-      console.error('Failed to update goal:', error);
+    } catch (_error) {
+      console.error('Failed to update goal:', _error);
     }
   };
 

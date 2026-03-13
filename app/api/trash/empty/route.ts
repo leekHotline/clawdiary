@@ -5,8 +5,8 @@ export async function POST() {
   try {
     const count = await emptyTrash();
     return NextResponse.json({ success: true, count });
-  } catch (error) {
-    console.error("Error emptying trash:", error);
+  } catch (_error) {
+    console.error("Error emptying trash:", _error);
     return NextResponse.json({ error: "Failed to empty trash" }, { status: 500 });
   }
 }

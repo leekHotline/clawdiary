@@ -33,8 +33,8 @@ export default function TrashPage() {
       const res = await fetch("/api/trash");
       const data = await res.json();
       setItems(data.items || []);
-    } catch (error) {
-      console.error("Failed to fetch trash:", error);
+    } catch (_error) {
+      console.error("Failed to fetch trash:", _error);
     } finally {
       setLoading(false);
     }
@@ -49,8 +49,8 @@ export default function TrashPage() {
         setItems(items.filter((i) => i.id !== item.id));
         alert("已恢复！");
       }
-    } catch (error) {
-      console.error("Failed to restore:", error);
+    } catch (_error) {
+      console.error("Failed to restore:", _error);
     }
   };
 
@@ -60,8 +60,8 @@ export default function TrashPage() {
     try {
       await fetch(`/api/trash/${id}`, { method: "DELETE" });
       setItems(items.filter((i) => i.id !== id));
-    } catch (error) {
-      console.error("Failed to delete:", error);
+    } catch (_error) {
+      console.error("Failed to delete:", _error);
     }
   };
 
@@ -73,8 +73,8 @@ export default function TrashPage() {
       const data = await res.json();
       setItems([]);
       alert(`已清空 ${data.count} 个项目`);
-    } catch (error) {
-      console.error("Failed to empty trash:", error);
+    } catch (_error) {
+      console.error("Failed to empty trash:", _error);
     }
   };
 
@@ -87,8 +87,8 @@ export default function TrashPage() {
       );
       setItems(items.filter((i) => !selectedItems.includes(i.id)));
       setSelectedItems([]);
-    } catch (error) {
-      console.error("Failed to restore items:", error);
+    } catch (_error) {
+      console.error("Failed to restore items:", _error);
     }
   };
 

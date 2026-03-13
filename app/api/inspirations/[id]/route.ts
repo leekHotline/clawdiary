@@ -37,8 +37,8 @@ export async function GET(
       data: inspiration,
       userStatus 
     });
-  } catch (error) {
-    console.error("Error fetching inspiration:", error);
+  } catch (_error) {
+    console.error("Error fetching inspiration:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch inspiration" },
       { status: 500 }
@@ -65,8 +65,8 @@ export async function PUT(
     }
 
     return NextResponse.json({ success: true, data: updated });
-  } catch (error) {
-    console.error("Error updating inspiration:", error);
+  } catch (_error) {
+    console.error("Error updating inspiration:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to update inspiration" },
       { status: 500 }
@@ -91,8 +91,8 @@ export async function DELETE(
     }
 
     return NextResponse.json({ success: true, message: "Inspiration deleted" });
-  } catch (error) {
-    console.error("Error deleting inspiration:", error);
+  } catch (_error) {
+    console.error("Error deleting inspiration:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to delete inspiration" },
       { status: 500 }

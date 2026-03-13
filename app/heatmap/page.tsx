@@ -44,8 +44,8 @@ export default function HeatmapPage() {
         setData(result.data || []);
         setStats(result.stats || null);
       }
-    } catch (error) {
-      console.error('Failed to fetch heatmap:', error);
+    } catch (_error) {
+      console.error('Failed to fetch heatmap:', _error);
     } finally {
       setLoading(false);
     }

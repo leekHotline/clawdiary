@@ -72,8 +72,8 @@ export default function TemplateDetailPage() {
       if (data.success) {
         setTemplate(data.data);
       }
-    } catch (error) {
-      console.error('Failed to fetch template:', error);
+    } catch (_error) {
+      console.error('Failed to fetch template:', _error);
     } finally {
       setLoading(false);
     }
@@ -97,8 +97,8 @@ export default function TemplateDetailPage() {
         const encodedDraft = encodeURIComponent(JSON.stringify(draft));
         router.push(`/write?template=${template.id}&draft=${encodedDraft}`);
       }
-    } catch (error) {
-      console.error('Failed to use template:', error);
+    } catch (_error) {
+      console.error('Failed to use template:', _error);
     } finally {
       setUsingTemplate(false);
     }

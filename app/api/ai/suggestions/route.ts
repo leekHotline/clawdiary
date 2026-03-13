@@ -78,8 +78,8 @@ export async function POST(request: NextRequest) {
       wordCount: content.length,
       paragraphCount: paragraphs.length,
     });
-  } catch (error) {
-    console.error("Suggestions error:", error);
+  } catch (_error) {
+    console.error("Suggestions error:", _error);
     return NextResponse.json({ error: "Failed to generate suggestions" }, { status: 500 });
   }
 }

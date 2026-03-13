@@ -70,7 +70,7 @@ export default function SleepAnalysisPage() {
       } else {
         setAnalysis(generateMockAnalysis());
       }
-    } catch (error) {
+    } catch (_error) {
       setAnalysis(generateMockAnalysis());
     } finally {
       setLoading(false);

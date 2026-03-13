@@ -28,8 +28,8 @@ export default function CreatePage() {
       if (data.image) {
         setGeneratedImage(data.image);
       }
-    } catch (error) {
-      console.error("Image generation failed:", error);
+    } catch (_error) {
+      console.error("Image generation failed:", _error);
     } finally {
       setGeneratingImage(false);
     }
@@ -59,7 +59,7 @@ export default function CreatePage() {
       } else {
         alert("发布失败，请重试");
       }
-    } catch (error) {
+    } catch (_error) {
       alert("发布失败，请重试");
     } finally {
       setLoading(false);

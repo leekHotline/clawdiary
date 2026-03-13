@@ -39,8 +39,8 @@ export default function PasswordProtectionPage() {
       if (data.isProtected) {
         setAction('change');
       }
-    } catch (error) {
-      console.error('获取保护状态失败:', error);
+    } catch (_error) {
+      console.error('获取保护状态失败:', _error);
     } finally {
       setLoading(false);
     }
@@ -80,7 +80,7 @@ export default function PasswordProtectionPage() {
       } else {
         setMessage({ type: 'error', text: data.error || '设置失败' });
       }
-    } catch (error) {
+    } catch (_error) {
       setMessage({ type: 'error', text: '网络错误，请重试' });
     } finally {
       setSaving(false);
@@ -117,7 +117,7 @@ export default function PasswordProtectionPage() {
       } else {
         setMessage({ type: 'error', text: data.error || '修改失败' });
       }
-    } catch (error) {
+    } catch (_error) {
       setMessage({ type: 'error', text: '网络错误，请重试' });
     } finally {
       setSaving(false);
@@ -152,7 +152,7 @@ export default function PasswordProtectionPage() {
       } else {
         setMessage({ type: 'error', text: data.error || '移除失败' });
       }
-    } catch (error) {
+    } catch (_error) {
       setMessage({ type: 'error', text: '网络错误，请重试' });
     } finally {
       setSaving(false);

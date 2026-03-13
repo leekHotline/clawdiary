@@ -13,7 +13,7 @@ export async function GET(
       return NextResponse.json({ error: "Diary not found" }, { status: 404 });
     }
     return NextResponse.json(diary);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to fetch diary" }, { status: 500 });
   }
 }
@@ -31,7 +31,7 @@ export async function PUT(
       return NextResponse.json({ error: "Diary not found" }, { status: 404 });
     }
     return NextResponse.json(diary);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to update diary" }, { status: 500 });
   }
 }
@@ -48,7 +48,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Diary not found" }, { status: 404 });
     }
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to delete diary" }, { status: 500 });
   }
 }

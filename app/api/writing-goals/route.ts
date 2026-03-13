@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
       data: newGoal,
       message: '写作目标创建成功'
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({
       success: false,
       error: '创建失败'

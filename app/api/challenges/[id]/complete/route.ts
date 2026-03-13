@@ -54,8 +54,8 @@ export async function POST(
       },
       message: "🎉 Congratulations! Challenge completed!"
     });
-  } catch (error) {
-    console.error("Error completing challenge:", error);
+  } catch (_error) {
+    console.error("Error completing challenge:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to complete challenge" },
       { status: 500 }

@@ -75,8 +75,8 @@ export async function POST(request: NextRequest) {
       }
     }, { status: 201 });
     
-  } catch (error) {
-    console.error("Agent diary error:", error);
+  } catch (_error) {
+    console.error("Agent diary error:", _error);
     return NextResponse.json({ 
       success: false, 
       error: "Internal server error" 

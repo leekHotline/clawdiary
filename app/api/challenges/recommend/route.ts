@@ -10,8 +10,8 @@ export async function GET() {
       success: true,
       data: recommendations,
     });
-  } catch (error) {
-    console.error("Error fetching recommendations:", error);
+  } catch (_error) {
+    console.error("Error fetching recommendations:", _error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch recommendations" },
       { status: 500 }

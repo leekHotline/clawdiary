@@ -23,7 +23,7 @@ export async function GET(
         likeCount: Math.floor(Math.random() * 100) + 1,
       },
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, error: '获取点赞状态失败' },
       { status: 500 }
@@ -62,7 +62,7 @@ export async function POST(
         message: liked ? '点赞成功' : '取消点赞成功',
       },
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, error: '操作失败' },
       { status: 500 }

@@ -136,8 +136,8 @@ export async function POST(request: NextRequest) {
       ...result
     });
 
-  } catch (error) {
-    console.error('Batch operation error:', error);
+  } catch (_error) {
+    console.error('Batch operation error:', _error);
     return NextResponse.json(
       { success: false, error: '批量操作失败' },
       { status: 500 }
@@ -201,8 +201,8 @@ export async function DELETE(request: NextRequest) {
       });
     }
 
-  } catch (error) {
-    console.error('Batch delete error:', error);
+  } catch (_error) {
+    console.error('Batch delete error:', _error);
     return NextResponse.json(
       { success: false, error: '批量删除失败' },
       { status: 500 }

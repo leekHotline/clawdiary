@@ -112,8 +112,8 @@ export default function WritingGoalsPage() {
       if (data.success) {
         setGoals(data.data)
       }
-    } catch (error) {
-      console.error('获取目标失败:', error)
+    } catch (_error) {
+      console.error('获取目标失败:', _error)
     } finally {
       setLoading(false)
     }
@@ -126,8 +126,8 @@ export default function WritingGoalsPage() {
       if (data.success) {
         setStats(data.data)
       }
-    } catch (error) {
-      console.error('获取统计失败:', error)
+    } catch (_error) {
+      console.error('获取统计失败:', _error)
     }
   }
 
@@ -154,8 +154,8 @@ export default function WritingGoalsPage() {
         })
         fetchStats()
       }
-    } catch (error) {
-      console.error('创建目标失败:', error)
+    } catch (_error) {
+      console.error('创建目标失败:', _error)
     }
   }
 
@@ -175,8 +175,8 @@ export default function WritingGoalsPage() {
           alert(data.message)
         }
       }
-    } catch (error) {
-      console.error('更新进度失败:', error)
+    } catch (_error) {
+      console.error('更新进度失败:', _error)
     }
   }
 
@@ -192,8 +192,8 @@ export default function WritingGoalsPage() {
         setGoals(goals.map(g => g.id === goalId ? data.data : g))
         fetchStats()
       }
-    } catch (error) {
-      console.error('更新状态失败:', error)
+    } catch (_error) {
+      console.error('更新状态失败:', _error)
     }
   }
 
@@ -209,8 +209,8 @@ export default function WritingGoalsPage() {
         setGoals(goals.filter(g => g.id !== goalId))
         fetchStats()
       }
-    } catch (error) {
-      console.error('删除目标失败:', error)
+    } catch (_error) {
+      console.error('删除目标失败:', _error)
     }
   }
 

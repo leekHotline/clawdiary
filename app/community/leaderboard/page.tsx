@@ -52,8 +52,8 @@ export default function LeaderboardPage() {
         setLeaderboard(data.data.leaderboard)
         setStats(data.data.stats)
       }
-    } catch (error) {
-      console.error('获取排行榜失败:', error)
+    } catch (_error) {
+      console.error('获取排行榜失败:', _error)
     } finally {
       setLoading(false)
     }

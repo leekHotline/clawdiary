@@ -29,8 +29,8 @@ export default function TagRecommendPage() {
       });
       const data = await res.json();
       setSuggestions(data.suggestions || []);
-    } catch (error) {
-      console.error('Failed to analyze:', error);
+    } catch (_error) {
+      console.error('Failed to analyze:', _error);
     } finally {
       setLoading(false);
     }

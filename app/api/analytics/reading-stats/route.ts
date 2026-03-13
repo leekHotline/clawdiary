@@ -61,7 +61,7 @@ export async function GET(request: Request) {
         lastUpdated: new Date().toISOString()
       }
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ 
       success: false,
       error: '获取阅读统计失败' 

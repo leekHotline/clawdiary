@@ -51,8 +51,8 @@ export default function CollectionsPage() {
         const data = await res.json();
         setCollections(data.collections || []);
       }
-    } catch (error) {
-      console.error('获取收藏夹失败:', error);
+    } catch (_error) {
+      console.error('获取收藏夹失败:', _error);
     } finally {
       setLoading(false);
     }
@@ -74,8 +74,8 @@ export default function CollectionsPage() {
         setShowCreate(false);
         setNewCollection({ name: '', description: '', color: 'bg-blue-500', icon: '📚' });
       }
-    } catch (error) {
-      console.error('创建收藏夹失败:', error);
+    } catch (_error) {
+      console.error('创建收藏夹失败:', _error);
     }
   };
 
@@ -87,8 +87,8 @@ export default function CollectionsPage() {
       if (res.ok) {
         setCollections(collections.filter(c => c.id !== id));
       }
-    } catch (error) {
-      console.error('删除收藏夹失败:', error);
+    } catch (_error) {
+      console.error('删除收藏夹失败:', _error);
     }
   };
 

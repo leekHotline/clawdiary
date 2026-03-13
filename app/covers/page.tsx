@@ -25,8 +25,8 @@ export default function CoversPage() {
       const res = await fetch("/api/covers?templates=true");
       const data = await res.json();
       setTemplates(data);
-    } catch (error) {
-      console.error("Failed to fetch templates:", error);
+    } catch (_error) {
+      console.error("Failed to fetch templates:", _error);
     } finally {
       setLoading(false);
     }

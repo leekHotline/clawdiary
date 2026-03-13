@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       checkIn,
       insights: generateInsights(checkIn)
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Check-in failed' },
       { status: 400 }

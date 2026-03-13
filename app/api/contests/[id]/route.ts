@@ -81,7 +81,7 @@ export async function POST(
       success: true,
       entry,
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "提交失败" }, { status: 500 });
   }
 }

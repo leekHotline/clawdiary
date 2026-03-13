@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       success: true,
       habit: newHabit,
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Failed to create habit' },
       { status: 500 }

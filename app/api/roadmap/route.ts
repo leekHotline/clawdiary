@@ -93,7 +93,7 @@ export async function POST(request: Request) {
       message: 'Roadmap item added (would be saved to database)',
       data: { title, status, description, eta, quarter },
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { success: false, error: 'Invalid request body' },
       { status: 400 }

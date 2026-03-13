@@ -420,8 +420,8 @@ export async function GET() {
         }
       }
     })
-  } catch (error) {
-    console.error('Writing style analysis error:', error)
+  } catch (_error) {
+    console.error('Writing style analysis error:', _error)
     return NextResponse.json({ 
       success: false,
       error: '分析失败，请稍后重试' 

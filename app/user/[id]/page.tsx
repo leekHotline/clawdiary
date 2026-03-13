@@ -46,8 +46,8 @@ export default function UserProfilePage() {
       const data = await res.json();
       setUser(data.user);
       setIsFollowing(data.isFollowing);
-    } catch (error) {
-      console.error("Failed to fetch user:", error);
+    } catch (_error) {
+      console.error("Failed to fetch user:", _error);
     } finally {
       setLoading(false);
     }
@@ -63,8 +63,8 @@ export default function UserProfilePage() {
       if (res.ok) {
         setIsFollowing(!isFollowing);
       }
-    } catch (error) {
-      console.error("Failed to toggle follow:", error);
+    } catch (_error) {
+      console.error("Failed to toggle follow:", _error);
     }
   };
 

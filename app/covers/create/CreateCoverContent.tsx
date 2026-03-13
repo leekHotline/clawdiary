@@ -52,8 +52,8 @@ export default function CreateCoverContent() {
       const res = await fetch("/api/covers?templates=true");
       const data = await res.json();
       setTemplates(data);
-    } catch (error) {
-      console.error("Failed to fetch templates:", error);
+    } catch (_error) {
+      console.error("Failed to fetch templates:", _error);
     }
   };
 
@@ -83,8 +83,8 @@ export default function CreateCoverContent() {
       } else {
         alert(data.error || "生成失败");
       }
-    } catch (error) {
-      console.error("Failed to generate cover:", error);
+    } catch (_error) {
+      console.error("Failed to generate cover:", _error);
       alert("生成失败");
     } finally {
       setGenerating(false);
@@ -120,8 +120,8 @@ export default function CreateCoverContent() {
         const data = await res.json();
         alert(data.error || "保存失败");
       }
-    } catch (error) {
-      console.error("Failed to save cover:", error);
+    } catch (_error) {
+      console.error("Failed to save cover:", _error);
       alert("保存失败");
     } finally {
       setLoading(false);

@@ -65,8 +65,8 @@ export default function CountdownsPage() {
         const data = await res.json();
         setCountdowns(data.countdowns || []);
       }
-    } catch (error) {
-      console.error('Failed to fetch countdowns:', error);
+    } catch (_error) {
+      console.error('Failed to fetch countdowns:', _error);
     } finally {
       setLoading(false);
     }
@@ -79,8 +79,8 @@ export default function CountdownsPage() {
         const data = await res.json();
         setStats(data);
       }
-    } catch (error) {
-      console.error('Failed to fetch stats:', error);
+    } catch (_error) {
+      console.error('Failed to fetch stats:', _error);
     }
   };
 
@@ -93,8 +93,8 @@ export default function CountdownsPage() {
         setCountdowns(countdowns.filter(c => c.id !== id));
         fetchStats();
       }
-    } catch (error) {
-      console.error('Failed to delete countdown:', error);
+    } catch (_error) {
+      console.error('Failed to delete countdown:', _error);
     }
   };
 

@@ -99,8 +99,8 @@ export default function ExportCenterPage() {
         filename
       }, ...prev].slice(0, 10));
 
-    } catch (error) {
-      console.error('Export failed:', error);
+    } catch (_error) {
+      console.error('Export failed:', _error);
       alert('导出失败，请重试');
     } finally {
       setExporting(false);
@@ -126,8 +126,8 @@ export default function ExportCenterPage() {
         content: content.slice(0, 2000) + (content.length > 2000 ? '\n\n... (预览截断)' : ''),
         fullLength: content.length
       });
-    } catch (error) {
-      console.error('Preview failed:', error);
+    } catch (_error) {
+      console.error('Preview failed:', _error);
     }
   };
 

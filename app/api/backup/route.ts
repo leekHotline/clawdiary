@@ -32,8 +32,8 @@ export async function GET(request: NextRequest) {
     };
     
     return NextResponse.json(backupData);
-  } catch (error) {
-    console.error("创建备份失败:", error);
+  } catch (_error) {
+    console.error("创建备份失败:", _error);
     return NextResponse.json(
       { error: "创建备份失败" },
       { status: 500 }
@@ -58,8 +58,8 @@ export async function POST(request: NextRequest) {
       estimatedTime: "2-5 分钟",
       notifyEmail,
     });
-  } catch (error) {
-    console.error("创建备份任务失败:", error);
+  } catch (_error) {
+    console.error("创建备份任务失败:", _error);
     return NextResponse.json(
       { error: "创建备份任务失败" },
       { status: 500 }

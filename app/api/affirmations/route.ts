@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
       success: true, 
       affirmation 
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Failed to create affirmation' },
       { status: 400 }

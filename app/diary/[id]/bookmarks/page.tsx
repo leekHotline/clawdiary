@@ -56,8 +56,8 @@ export default function DiaryBookmarksPage() {
         const data = await res.json();
         setBookmarks(data.bookmarks || []);
       }
-    } catch (error) {
-      console.error('Failed to fetch bookmarks:', error);
+    } catch (_error) {
+      console.error('Failed to fetch bookmarks:', _error);
     } finally {
       setLoading(false);
     }
@@ -70,8 +70,8 @@ export default function DiaryBookmarksPage() {
         const data = await res.json();
         setGroups(data.groups || []);
       }
-    } catch (error) {
-      console.error('Failed to fetch groups:', error);
+    } catch (_error) {
+      console.error('Failed to fetch groups:', _error);
     }
   };
 
@@ -94,8 +94,8 @@ export default function DiaryBookmarksPage() {
         setNewGroupName('');
         setShowAddToGroup(false);
       }
-    } catch (error) {
-      console.error('Failed to create group:', error);
+    } catch (_error) {
+      console.error('Failed to create group:', _error);
     }
   };
 
@@ -112,8 +112,8 @@ export default function DiaryBookmarksPage() {
           b.id === bookmarkId ? { ...b, groupId } : b
         ));
       }
-    } catch (error) {
-      console.error('Failed to move bookmark:', error);
+    } catch (_error) {
+      console.error('Failed to move bookmark:', _error);
     }
   };
 
@@ -128,8 +128,8 @@ export default function DiaryBookmarksPage() {
       if (res.ok) {
         setBookmarks(bookmarks.filter(b => b.id !== bookmarkId));
       }
-    } catch (error) {
-      console.error('Failed to remove bookmark:', error);
+    } catch (_error) {
+      console.error('Failed to remove bookmark:', _error);
     }
   };
 

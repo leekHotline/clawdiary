@@ -72,8 +72,8 @@ export default function CitationsGraphPage() {
       });
       
       setPositions(newPositions);
-    } catch (error) {
-      console.error('Failed to fetch graph:', error);
+    } catch (_error) {
+      console.error('Failed to fetch graph:', _error);
     } finally {
       setLoading(false);
     }

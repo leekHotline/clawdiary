@@ -34,7 +34,7 @@ export async function GET() {
       ],
       status: "online",
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to get assistant status" }, { status: 500 });
   }
 }

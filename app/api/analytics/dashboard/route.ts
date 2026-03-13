@@ -162,8 +162,8 @@ export async function GET() {
         lastUpdated: new Date().toISOString()
       }
     })
-  } catch (error) {
-    console.error('Analytics error:', error)
+  } catch (_error) {
+    console.error('Analytics error:', _error)
     return NextResponse.json({ 
       success: false,
       error: '获取分析数据失败' 

@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       success: true,
       session
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { error: 'Failed to create session' },
       { status: 400 }

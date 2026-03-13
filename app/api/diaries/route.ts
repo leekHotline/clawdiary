@@ -6,7 +6,7 @@ export async function GET() {
   try {
     const diaries = await getDiaries();
     return NextResponse.json(diaries);
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to fetch diaries" }, { status: 500 });
   }
 }
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
       isPublic: isPublic ?? true
     });
     return NextResponse.json(diary, { status: 201 });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({ error: "Failed to create diary" }, { status: 500 });
   }
 }

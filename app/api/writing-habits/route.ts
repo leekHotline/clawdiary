@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
       data: newHabit,
       message: '写作习惯创建成功'
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({
       success: false,
       error: '创建失败'
@@ -167,7 +167,7 @@ export async function PUT(request: NextRequest) {
       data: habits[habitIndex],
       message: isActive ? '习惯已激活' : '习惯已归档'
     })
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json({
       success: false,
       error: '更新失败'

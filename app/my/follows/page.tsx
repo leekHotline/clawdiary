@@ -50,8 +50,8 @@ function FollowsContent() {
         setHasMore(data.data.pagination.hasMore)
         setPage(pageNum)
       }
-    } catch (error) {
-      console.error('获取关注列表失败:', error)
+    } catch (_error) {
+      console.error('获取关注列表失败:', _error)
     } finally {
       setLoading(false)
     }
@@ -79,8 +79,8 @@ function FollowsContent() {
           user: { ...item.user, isFollowing: !isFollowing }
         }))
       )
-    } catch (error) {
-      console.error('操作失败:', error)
+    } catch (_error) {
+      console.error('操作失败:', _error)
     }
   }
 

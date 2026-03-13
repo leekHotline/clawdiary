@@ -57,8 +57,8 @@ export async function GET(request: NextRequest) {
       monthlyData,
       stats,
     });
-  } catch (error) {
-    console.error("获取热力图数据失败:", error);
+  } catch (_error) {
+    console.error("获取热力图数据失败:", _error);
     return NextResponse.json(
       { error: "获取热力图数据失败" },
       { status: 500 }

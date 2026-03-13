@@ -64,8 +64,8 @@ export default function CreateCountdownPage() {
         const error = await res.json();
         alert(error.error || '创建失败');
       }
-    } catch (error) {
-      console.error('Failed to create countdown:', error);
+    } catch (_error) {
+      console.error('Failed to create countdown:', _error);
       alert('创建失败，请重试');
     } finally {
       setLoading(false);
