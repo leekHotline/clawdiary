@@ -372,7 +372,7 @@ export default async function ComparePage({
             <div className="text-6xl mb-4">🔍</div>
             <h2 className="text-xl font-bold text-gray-800 mb-2">选择两篇日记进行对比</h2>
             <p className="text-gray-500">
-              在上方选择器中选择两篇日记，点击"开始对比"查看差异
+              在上方选择器中选择两篇日记，点击&ldquo;开始对比&rdquo;查看差异
             </p>
           </div>
         )}

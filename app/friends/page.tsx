@@ -156,7 +156,7 @@ export default function FriendsPage() {
                       </div>
                       <p className="text-sm text-gray-500">{request.bio}</p>
                       <p className="text-sm text-gray-700 mt-2 bg-gray-50 rounded-lg p-2">
-                        "{request.message}"
+                        &ldquo;{request.message}&rdquo;
                       </p>
                       <div className="text-xs text-gray-400 mt-2">
                         {request.mutualFriends} 位共同好友

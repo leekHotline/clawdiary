@@ -166,7 +166,7 @@ export default function CitationsPage() {
 
                   {citation.context && (
                     <p className="mt-2 text-sm text-gray-600 italic">
-                      "{citation.context}"
+                      &ldquo;{citation.context}&rdquo;
                     </p>
                   )}
                 </div>

@@ -39,19 +39,14 @@ export default function GratitudePage() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
   useEffect(() => {
-    loadData()
-    setCurrentPrompt(PROMPTS[Math.floor(Math.random() * PROMPTS.length)])
-  }, [])
-
-  const loadData = () => {
     const saved = localStorage.getItem('gratitude-entries')
     if (saved) {
       const allEntries = JSON.parse(saved)
       setEntries(allEntries)
-      
+
       // Check for today's entry
       const today = new Date().toDateString()
-      const existing = allEntries.find((e: GratitudeEntry) => 
+      const existing = allEntries.find((e: GratitudeEntry) =>
         new Date(e.date).toDateString() === today
       )
       if (existing) {
@@ -60,29 +55,54 @@ export default function GratitudePage() {
         setMood(existing.mood)
         setReflection(existing.reflection)
       }
-      
+
       // Calculate streak
-      calculateStreak(allEntries)
+      const todayDate = new Date()
+      let currentStreak = 0
+      const checkDate = new Date(todayDate)
+
+      // Check if today has an entry
+      const todayStr = todayDate.toDateString()
+      const hasToday = allEntries.some((e: GratitudeEntry) => new Date(e.date).toDateString() === todayStr)
+
+      if (!hasToday) {
+        checkDate.setDate(checkDate.getDate() - 1)
+      }
+
+      while (true) {
+        const dateStr = checkDate.toDateString()
+        const hasEntry = allEntries.some((e: GratitudeEntry) => new Date(e.date).toDateString() === dateStr)
+
+        if (hasEntry) {
+          currentStreak++
+          checkDate.setDate(checkDate.getDate() - 1)
+        } else {
+          break
+        }
+      }
+
+      setStreak(currentStreak)
     }
-  }
+    setCurrentPrompt(PROMPTS[Math.floor(Math.random() * PROMPTS.length)])
+  }, [])
 
   const calculateStreak = (allEntries: GratitudeEntry[]) => {
     const today = new Date()
     let currentStreak = 0
     const checkDate = new Date(today)
-    
+
     // Check if today has an entry
     const todayStr = today.toDateString()
     const hasToday = allEntries.some(e => new Date(e.date).toDateString() === todayStr)
-    
+
     if (!hasToday) {
       checkDate.setDate(checkDate.getDate() - 1)
     }
-    
+
     while (true) {
       const dateStr = checkDate.toDateString()
       const hasEntry = allEntries.some(e => new Date(e.date).toDateString() === dateStr)
-      
+
       if (hasEntry) {
         currentStreak++
         checkDate.setDate(checkDate.getDate() - 1)
@@ -90,7 +110,7 @@ export default function GratitudePage() {
         break
       }
     }
-    
+
     setStreak(currentStreak)
   }
 

@@ -148,14 +148,9 @@ const rarityLabels = {
 const categories = ["全部", "创作", "坚持", "社交", "挑战", "习惯", "内容", "灵感", "里程碑"];
 
 export default function BadgesPage() {
-  const [badges, setBadges] = useState<Badge[]>([]);
+  const [badges, setBadges] = useState<Badge[]>(mockBadges);
   const [selectedCategory, setSelectedCategory] = useState("全部");
   const [selectedRarity, setSelectedRarity] = useState<string | null>(null);
-
-  useEffect(() => {
-    // In real app, fetch from API
-    setBadges(mockBadges);
-  }, []);
 
   const filteredBadges = badges.filter((badge) => {
     const categoryMatch =

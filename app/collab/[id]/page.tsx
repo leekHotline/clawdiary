@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 
 // 邀请链接组件
@@ -172,7 +172,9 @@ export default function CollabDetailPage({ params }: { params: Promise<{ id: str
     setNewSectionContent("");
   };
 
-  const remainingDays = Math.max(0, Math.ceil((new Date(collabData.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
+  const remainingDays = useMemo(() => {
+    return Math.max(0, Math.ceil((new Date(collabData.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
+  }, [collabData.deadline]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 via-pink-50 to-orange-50">

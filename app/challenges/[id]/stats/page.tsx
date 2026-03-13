@@ -16,10 +16,18 @@ interface Challenge {
   category: string
 }
 
+interface ActivityItem {
+  id: string
+  type: string
+  timestamp: string
+  action?: string
+  amount?: number
+}
+
 export default function ChallengeStatsPage({ params }: { params: { id: string } }) {
   const [challenge, setChallenge] = useState<Challenge | null>(null)
   const [dailyProgress, setDailyProgress] = useState<number[]>([])
-  const [recentActivity, setRecentActivity] = useState<any[]>([])
+  const [recentActivity, setRecentActivity] = useState<ActivityItem[]>([])
 
   useEffect(() => {
     // Load challenge data
