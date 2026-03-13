@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get("limit") || "20");
   const offset = parseInt(searchParams.get("offset") || "0");
 
-  let sorted = [...mockAuthorSubs];
+  const sorted = [...mockAuthorSubs];
   switch (sort) {
     case "active":
       sorted.sort((a, b) => 

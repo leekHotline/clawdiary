@@ -82,7 +82,7 @@ function calculateStreaks(data: HeatmapEntry[]): { longest: number; current: num
   // Calculate current streak from today backwards
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  let checkDate = new Date(today);
+  const checkDate = new Date(today);
   currentStreak = 0;
 
   while (true) {

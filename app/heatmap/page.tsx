@@ -61,7 +61,7 @@ export default function HeatmapPage() {
     
     // Adjust to start from Sunday
     let currentWeek: (HeatmapData | null)[] = new Array(7).fill(null);
-    let dayOfWeek = startDate.getDay();
+    const dayOfWeek = startDate.getDay();
     
     // Fill initial empty days
     for (let i = 0; i < dayOfWeek; i++) {

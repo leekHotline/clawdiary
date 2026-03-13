@@ -102,7 +102,7 @@ function calculateCurrentStreak(data: { date: string }[]): number {
     .reverse();
   
   let streak = 0;
-  let currentDate = new Date(today);
+  const currentDate = new Date(today);
   
   for (const date of sortedDates) {
     const dateStr = currentDate.toISOString().split("T")[0];

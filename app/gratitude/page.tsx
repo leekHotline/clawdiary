@@ -69,7 +69,7 @@ export default function GratitudePage() {
   const calculateStreak = (allEntries: GratitudeEntry[]) => {
     const today = new Date()
     let currentStreak = 0
-    let checkDate = new Date(today)
+    const checkDate = new Date(today)
     
     // Check if today has an entry
     const todayStr = today.toDateString()

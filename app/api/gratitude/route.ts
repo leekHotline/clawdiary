@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     
     let streak = 0
-    let checkDate = new Date()
+    const checkDate = new Date()
     checkDate.setHours(0, 0, 0, 0)
     
     for (let i = 0; i < 365; i++) {

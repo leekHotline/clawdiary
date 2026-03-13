@@ -55,7 +55,7 @@ export interface LeaderboardEntry {
 
 // 内存存储（实际应用应使用数据库）
 let challenges: Challenge[] = [];
-let challengeProgress: Map<string, Map<string, { current: number; history: { date: Date; increment: number; diaryId?: string }[] }>> = new Map();
+const challengeProgress: Map<string, Map<string, { current: number; history: { date: Date; increment: number; diaryId?: string }[] }>> = new Map();
 
 // 初始化默认挑战
 function initDefaultChallenges() {

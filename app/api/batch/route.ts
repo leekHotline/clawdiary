@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let result: any = {
+    const result: Record<string, unknown> = {
       operation,
       affected: diaryIds.length,
       timestamp: new Date().toISOString()

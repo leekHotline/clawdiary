@@ -50,7 +50,7 @@ export default function RandomPage() {
   useEffect(() => {
     // Initial fetch - call the async function
     void fetchRandom();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   const getAuthorIcon = (author: string) => {

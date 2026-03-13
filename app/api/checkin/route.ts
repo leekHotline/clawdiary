@@ -183,7 +183,7 @@ export async function POST(request: Request) {
   const yesterdayStr = yesterday.toISOString().split('T')[0]
   
   const isContinuous = latestRecord?.date === yesterdayStr
-  let continuousDays = isContinuous ? (latestRecord?.continuousDays || 0) + 1 : 1
+  const continuousDays = isContinuous ? (latestRecord?.continuousDays || 0) + 1 : 1
   
   let points = CHECKIN_CONFIG.basePoints
   let bonusName: string | null = null

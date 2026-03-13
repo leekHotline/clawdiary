@@ -102,7 +102,7 @@ export default function HabitStreakPage() {
 
   const generateRecentActivity = () => {
     const activity = [];
-    let streak = 7;
+    const streak = 7;
     for (let i = 0; i < 14; i++) {
       const date = new Date();
       date.setDate(date.getDate() - i);

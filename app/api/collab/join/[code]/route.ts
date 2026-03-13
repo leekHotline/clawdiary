@@ -1,8 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { inviteCodes } from "../../[id]/invite/route";
 
+// 类型定义
+interface Contributor {
+  id: string;
+  name: string;
+  avatar: string;
+  contributedAt?: string;
+}
+
+interface CollabDiary {
+  id: string;
+  title: string;
+  maxContributors: number;
+  contributors: Contributor[];
+  status: string;
+  updatedAt?: string;
+}
+
 // 协作日记数据（应与主路由同步）
-let collabDiaries: any[] = [
+const collabDiaries: CollabDiary[] = [
   {
     id: "collab-1",
     title: "太空龙虾的一周年庆生计划",
