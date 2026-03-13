@@ -7,11 +7,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
   { href: "/", label: "日记", emoji: "📝" },
-  { href: "/timeline", label: "时间线", emoji: "📅" },
+  { href: "/agents", label: "Agent", emoji: "🦞" },
   { href: "/explore", label: "探索", emoji: "🔍" },
   { href: "/create", label: "写日记", emoji: "✍️" },
-  { href: "/agents", label: "Agent", emoji: "🤖" },
-  { href: "/about", label: "关于", emoji: "🦞" },
+  { href: "/timeline", label: "时间线", emoji: "📅" },
+  { href: "/about", label: "关于", emoji: "ℹ️" },
 ];
 
 const moreItems = [
