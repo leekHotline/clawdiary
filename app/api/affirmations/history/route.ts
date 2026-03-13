@@ -1,7 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+interface HistoryEntry {
+  id: string
+  userId: string
+  affirmationId: string
+  affirmationText: string
+  category: string
+  reflection: string
+  date: string
+  mood: string | null
+}
+
 // Affirmation history storage
-let history: any[] = []
+let history: HistoryEntry[] = []
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl

@@ -123,11 +123,55 @@ export default function AffirmationsPage() {
   const [streak, setStreak] = useState(0)
   const [favorites, setFavorites] = useState<string[]>([])
 
+  // Calculate streak - defined before loadData
+  const calculateStreak = () => {
+    const savedHistory = localStorage.getItem('affirmation-history')
+    if (savedHistory) {
+      const history = JSON.parse(savedHistory)
+      let currentStreak = 0
+      const today = new Date()
+
+      for (let i = 0; i < 365; i++) {
+        const checkDate = new Date(today)
+        checkDate.setDate(checkDate.getDate() - i)
+        const dateStr = checkDate.toDateString()
+
+        if (history.includes(dateStr)) {
+          currentStreak++
+        } else if (i > 0) {
+          break
+        }
+      }
+      setStreak(currentStreak)
+    }
+  }
+
+  // Pick random affirmation - defined before loadData
+  const pickRandomAffirmation = (allAffirmations: Affirmation[], category: string | null = selectedCategory) => {
+    const filtered = category
+      ? allAffirmations.filter(a => a.category === category)
+      : allAffirmations
+
+    if (filtered.length > 0) {
+      const random = filtered[Math.floor(Math.random() * filtered.length)]
+      setDailyAffirmation(random)
+
+      const daily: DailyAffirmation = {
+        date: new Date().toISOString(),
+        affirmationId: random.id,
+        timesRead: 1,
+        reflection: ''
+      }
+      localStorage.setItem('daily-affirmation', JSON.stringify(daily))
+      setDailyRecord(daily)
+    }
+  }
+
   const loadData = () => {
     // Load affirmations
     const savedAffirmations = localStorage.getItem('affirmations')
     let allAffirmations: Affirmation[] = []
-    
+
     if (savedAffirmations) {
       allAffirmations = JSON.parse(savedAffirmations)
     } else {
@@ -150,7 +194,7 @@ export default function AffirmationsPage() {
     // Load daily affirmation
     const savedDaily = localStorage.getItem('daily-affirmation')
     const today = new Date().toDateString()
-    
+
     if (savedDaily) {
       const daily = JSON.parse(savedDaily)
       if (new Date(daily.date).toDateString() === today) {
@@ -180,49 +224,8 @@ export default function AffirmationsPage() {
 
   useEffect(() => {
     loadData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const pickRandomAffirmation = (allAffirmations: Affirmation[]) => {
-    const filtered = selectedCategory 
-      ? allAffirmations.filter(a => a.category === selectedCategory)
-      : allAffirmations
-    
-    if (filtered.length > 0) {
-      const random = filtered[Math.floor(Math.random() * filtered.length)]
-      setDailyAffirmation(random)
-      
-      const daily: DailyAffirmation = {
-        date: new Date().toISOString(),
-        affirmationId: random.id,
-        timesRead: 1,
-        reflection: ''
-      }
-      localStorage.setItem('daily-affirmation', JSON.stringify(daily))
-      setDailyRecord(daily)
-    }
-  }
-
-  const calculateStreak = () => {
-    const savedHistory = localStorage.getItem('affirmation-history')
-    if (savedHistory) {
-      const history = JSON.parse(savedHistory)
-      let currentStreak = 0
-      const today = new Date()
-      
-      for (let i = 0; i < 365; i++) {
-        const checkDate = new Date(today)
-        checkDate.setDate(checkDate.getDate() - i)
-        const dateStr = checkDate.toDateString()
-        
-        if (history.includes(dateStr)) {
-          currentStreak++
-        } else if (i > 0) {
-          break
-        }
-      }
-      setStreak(currentStreak)
-    }
-  }
 
   const saveReflection = () => {
     if (!dailyRecord || !dailyAffirmation) return
@@ -330,7 +333,7 @@ export default function AffirmationsPage() {
               今日肯定语 · {CATEGORIES.find(c => c.id === dailyAffirmation.category)?.name}
             </div>
             <p className="text-2xl md:text-3xl font-bold leading-relaxed mb-6">
-              "{dailyAffirmation.text}"
+              &ldquo;{dailyAffirmation.text}&rdquo;
             </p>
             <div className="flex gap-3 justify-center">
               <button

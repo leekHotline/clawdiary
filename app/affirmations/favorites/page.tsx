@@ -37,62 +37,55 @@ export default function AffirmationsHistoryPage() {
 
   useEffect(() => {
     const savedAffirmations = localStorage.getItem('affirmations')
-    if (savedAffirmations) {
-      setAffirmations(JSON.parse(savedAffirmations))
-    }
+    const parsedAffirmations = savedAffirmations ? JSON.parse(savedAffirmations) : []
 
     const savedHistory = localStorage.getItem('affirmation-history-detailed')
-    if (savedHistory) {
-      const historyData = JSON.parse(savedHistory)
-      setHistory(historyData)
-      
-      // Calculate streak info
-      const dates = historyData.map((h: AffirmationHistory) => new Date(h.date).toDateString())
-      const uniqueDates = [...new Set(dates)] as string[]
-      uniqueDates.sort((a, b) => 
-        new Date(b).getTime() - new Date(a).getTime()
-      )
-
-      let streak = 0
-      const today = new Date().toDateString()
-      const yesterday = new Date(Date.now() - 86400000).toDateString()
-
-      if (uniqueDates.includes(today) || uniqueDates.includes(yesterday)) {
-        streak = 1
-        const startFrom = uniqueDates.includes(today) ? today : yesterday
-
-        for (let i = 1; i < 365; i++) {
-          const checkDate = new Date(startFrom)
-          checkDate.setDate(checkDate.getDate() - i)
-          if (uniqueDates.includes(checkDate.toDateString())) {
-            streak++
-          } else {
-            break
-          }
-        }
-      }
-
-      setStreakInfo({ streak, totalDays: uniqueDates.length })
-    }
+    const historyData = savedHistory ? JSON.parse(savedHistory) : []
 
     const savedFavorites = localStorage.getItem('affirmation-favorites')
-    if (savedFavorites) {
-      const favs = JSON.parse(savedFavorites)
-      setFavorites(favs)
-      
-      // Calculate category stats after loading affirmations
-      if (savedAffirmations) {
-        const affirmationsData = JSON.parse(savedAffirmations)
-        const stats: Record<string, number> = {}
-        favs.forEach((id: string) => {
-          const affirmation = affirmationsData.find((a: Affirmation) => a.id === id)
-          if (affirmation) {
-            stats[affirmation.category] = (stats[affirmation.category] || 0) + 1
-          }
-        })
-        setCategoryStats(stats)
+    const favs = savedFavorites ? JSON.parse(savedFavorites) : []
+
+    // Calculate streak info
+    const dates = historyData.map((h: AffirmationHistory) => new Date(h.date).toDateString())
+    const uniqueDates = [...new Set(dates)] as string[]
+    uniqueDates.sort((a, b) =>
+      new Date(b).getTime() - new Date(a).getTime()
+    )
+
+    let streak = 0
+    const today = new Date().toDateString()
+    const yesterday = new Date(Date.now() - 86400000).toDateString()
+
+    if (uniqueDates.includes(today) || uniqueDates.includes(yesterday)) {
+      streak = 1
+      const startFrom = uniqueDates.includes(today) ? today : yesterday
+
+      for (let i = 1; i < 365; i++) {
+        const checkDate = new Date(startFrom)
+        checkDate.setDate(checkDate.getDate() - i)
+        if (uniqueDates.includes(checkDate.toDateString())) {
+          streak++
+        } else {
+          break
+        }
       }
     }
+
+    // Calculate category stats
+    const stats: Record<string, number> = {}
+    favs.forEach((id: string) => {
+      const affirmation = parsedAffirmations.find((a: Affirmation) => a.id === id)
+      if (affirmation) {
+        stats[affirmation.category] = (stats[affirmation.category] || 0) + 1
+      }
+    })
+
+    // Batch update all state at once
+    setAffirmations(parsedAffirmations)
+    setHistory(historyData)
+    setFavorites(favs)
+    setStreakInfo({ streak, totalDays: uniqueDates.length })
+    setCategoryStats(stats)
   }, [])
 
   const getAffirmationById = (id: string) => {

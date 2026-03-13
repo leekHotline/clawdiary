@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 
 interface AnalyticsData {
@@ -65,6 +65,11 @@ export default function AnalyticsDashboard() {
   const [moodTrends, setMoodTrends] = useState<MoodTrendData | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'overview' | 'mood' | 'tags' | 'activity'>('overview')
+
+  // Pre-generate heatmap intensities to avoid calling Math.random during render
+  const heatmapIntensities = useMemo(() => 
+    Array.from({ length: 35 }, () => Math.random()), []
+  )
 
   useEffect(() => {
     Promise.all([
@@ -374,8 +379,7 @@ export default function AnalyticsDashboard() {
               <h3 className="font-semibold text-gray-800 mb-4">🔥 活动热力图</h3>
               <p className="text-gray-500 text-sm mb-4">过去30天的写作活动</p>
               <div className="grid grid-cols-7 gap-1">
-                {Array.from({ length: 35 }).map((_, i) => {
-                  const intensity = Math.random()
+                {heatmapIntensities.map((intensity, i) => {
                   return (
                     <div 
                       key={i}

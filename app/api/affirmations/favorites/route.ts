@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 // Favorites storage (in production, use a database)
-let favorites: Record<string, string[]> = {}
+const favorites: Record<string, string[]> = {}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
