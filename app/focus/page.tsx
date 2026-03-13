@@ -57,12 +57,56 @@ export default function FocusPage() {
   const [showSettings, setShowSettings] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState(25);
 
-  // Fetch today's focus sessions
-  useEffect(() => {
-    fetchTodaySessions();
-  }, []);
+  // Define resetSession first since it's used by other functions
+  const resetSession = useCallback(() => {
+    setIsActive(false);
+    setIsPaused(false);
+    setTimeLeft(selectedDuration * 60);
+    setTotalTime(selectedDuration * 60);
+    setSessionStartTime(null);
+    setContent('');
+  }, [selectedDuration]);
 
-  const fetchTodaySessions = async () => {
+  // Define endSession next
+  const endSession = useCallback(async () => {
+    if (!sessionStartTime) return;
+
+    const duration = Math.floor((totalTime - timeLeft) / 60);
+    const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
+
+    try {
+      await fetch('/api/focus', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          startTime: sessionStartTime.toISOString(),
+          endTime: new Date().toISOString(),
+          duration,
+          wordsWritten: wordCount,
+          notes: content,
+        }),
+      });
+    } catch (_error) {
+      console.error('Failed to save focus session:', _error);
+    }
+
+    resetSession();
+  }, [sessionStartTime, totalTime, timeLeft, content, resetSession]);
+
+  // Define handleSessionComplete next
+  const handleSessionComplete = useCallback(() => {
+    endSession();
+    
+    if (settings.notificationsEnabled) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('专注时间结束！', {
+          body: `你完成了 ${selectedDuration} 分钟的专注写作`,
+        });
+      }
+    }
+  }, [endSession, settings.notificationsEnabled, selectedDuration]);
+
+  const fetchTodaySessions = useCallback(async () => {
     try {
       const res = await fetch('/api/focus/today');
       if (res.ok) {
@@ -73,7 +117,12 @@ export default function FocusPage() {
     } catch (_error) {
       console.error('Failed to fetch focus sessions:', _error);
     }
-  };
+  }, []);
+
+  // Fetch today's focus sessions
+  useEffect(() => {
+    fetchTodaySessions();
+  }, [fetchTodaySessions]);
 
   // Timer effect
   useEffect(() => {
@@ -92,7 +141,7 @@ export default function FocusPage() {
     }
     
     return () => clearInterval(interval);
-  }, [isActive, isPaused, timeLeft]);
+  }, [isActive, isPaused, timeLeft, handleSessionComplete]);
 
   const startSession = () => {
     setIsActive(true);
@@ -104,57 +153,6 @@ export default function FocusPage() {
 
   const pauseSession = () => {
     setIsPaused(!isPaused);
-  };
-
-  const endSession = async () => {
-    if (!sessionStartTime) return;
-
-    const duration = Math.floor((totalTime - timeLeft) / 60);
-    const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
-
-    try {
-      await fetch('/api/focus', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          startTime: sessionStartTime.toISOString(),
-          endTime: new Date().toISOString(),
-          duration,
-          wordsWritten: wordCount,
-          notes: content,
-        }),
-      });
-      
-      fetchTodaySessions();
-    } catch (_error) {
-      console.error('Failed to save focus session:', _error);
-    }
-
-    resetSession();
-  };
-
-  const handleSessionComplete = () => {
-    // Auto-save session
-    endSession();
-    
-    // Play notification sound
-    if (settings.notificationsEnabled) {
-      // Could integrate with Web Notifications API
-      if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('专注时间结束！', {
-          body: `你完成了 ${selectedDuration} 分钟的专注写作`,
-        });
-      }
-    }
-  };
-
-  const resetSession = () => {
-    setIsActive(false);
-    setIsPaused(false);
-    setTimeLeft(selectedDuration * 60);
-    setTotalTime(selectedDuration * 60);
-    setSessionStartTime(null);
-    setContent('');
   };
 
   const saveAsDraft = async () => {

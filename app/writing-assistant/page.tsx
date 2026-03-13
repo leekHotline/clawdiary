@@ -138,7 +138,7 @@ export default function WritingAssistantPage() {
                     <div className="font-semibold text-gray-800">{tip.title}</div>
                     <div className="text-sm text-gray-600 mt-1">{tip.description}</div>
                     <div className="mt-2 p-3 bg-gray-50 rounded-lg text-sm text-gray-700 italic">
-                      "{tip.example}"
+                      &ldquo;{tip.example}&rdquo;
                     </div>
                   </div>
                 </div>

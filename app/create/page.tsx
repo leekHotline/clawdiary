@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function CreatePage() {
   const router = useRouter();
@@ -69,13 +70,13 @@ export default function CreatePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <main className="max-w-3xl mx-auto px-4 py-12">
-        <a
+        <Link
           href="/"
           className="inline-flex items-center text-indigo-600 hover:text-indigo-700 mb-8 group"
         >
           <span className="transform group-hover:-translate-x-1 transition-transform">←</span>
           <span className="ml-2">返回首页</span>
-        </a>
+        </Link>
 
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-lg p-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">

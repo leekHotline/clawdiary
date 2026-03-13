@@ -36,21 +36,20 @@ export default function ChallengeStatsPage({ params }: { params: { id: string } 
       const challenges = JSON.parse(saved)
       const found = challenges.find((c: Challenge) => c.id === params.id)
       if (found) {
-        setChallenge(found)
-        
         // Load progress
         const progressKey = `challenge-progress-${params.id}`
         const progressData = localStorage.getItem(progressKey)
-        if (progressData) {
-          setDailyProgress(JSON.parse(progressData))
-        }
+        const progress = progressData ? JSON.parse(progressData) : []
         
         // Load activity
         const activityKey = `challenge-activity-${params.id}`
         const activityData = localStorage.getItem(activityKey)
-        if (activityData) {
-          setRecentActivity(JSON.parse(activityData))
-        }
+        const activity = activityData ? JSON.parse(activityData) : []
+        
+        // Update all state at once
+        setChallenge(found)
+        setDailyProgress(progress)
+        setRecentActivity(activity)
       }
     }
   }, [params.id])

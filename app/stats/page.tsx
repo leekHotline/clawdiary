@@ -10,7 +10,7 @@ export default async function StatsPage() {
   const diaries = await getDiaries();
   
   // Calculate current time once for consistency
-  const now = Date.now();
+  const now = new Date().getTime();
   
   const stats = {
     total: diaries.length,
@@ -223,12 +223,14 @@ export default async function StatsPage() {
           <div className="flex flex-wrap gap-3">
             <a
               href="/api/diaries/export-all?format=json"
+              download
               className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-medium hover:bg-indigo-100 transition-colors"
             >
               📦 导出 JSON
             </a>
             <a
               href="/api/diaries/export-all?format=md"
+              download
               className="px-4 py-2 bg-gray-50 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
             >
               📝 导出 Markdown

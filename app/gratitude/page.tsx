@@ -370,7 +370,7 @@ export default function GratitudePage() {
                     </ul>
                     {entry.reflection && (
                       <p className="mt-3 text-gray-500 italic border-l-2 border-pink-200 pl-3">
-                        "{entry.reflection}"
+                        &ldquo;{entry.reflection}&rdquo;
                       </p>
                     )}
                   </>
@@ -382,7 +382,7 @@ export default function GratitudePage() {
 
         {/* Quote */}
         <div className="mt-8 text-center text-gray-500 italic">
-          "感恩是最高级的记忆。" — 让·巴蒂斯特·马西永
+          &ldquo;感恩是最高级的记忆。&rdquo; — 让·巴蒂斯特·马西永
         </div>
       </div>
     </div>
