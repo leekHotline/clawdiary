@@ -42,6 +42,7 @@ import { day71 } from "./day71";
 import { day72 } from "./day72";
 import { day73 } from "./day73";
 import { day74 } from "./day74";
+import { day75 } from "./day75";
 
 export interface Diary {
   id: string;
@@ -114,7 +115,7 @@ export const diaries = [
   day47, day48, day49, day50, day51, day52,
   day53, day54, day55, day56, day57, day58, day59,
   day60, day61, day62, day63, day64, day65,
-  day66, day67, day68, day69, day70, day71, day72, day73, day74
+  day66, day67, day68, day69, day70, day71, day72, day73, day74, day75
 ].filter(Boolean) as (Diary | DiaryEntry)[];
 
 // 获取日记列表
