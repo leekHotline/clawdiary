@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 
 interface WritingGoal {
@@ -14,20 +14,22 @@ interface WritingGoal {
 }
 
 export default function WritingGoalsDetailPage({ params }: { params: { id: string } }) {
-  const [goal, setGoal] = useState<WritingGoal | null>(null)
+  // 使用 useMemo 从 localStorage 读取初始值
+  const initialGoal = useMemo(() => {
+    if (typeof window === 'undefined') return null
+    const saved = localStorage.getItem('writing-goals')
+    if (saved) {
+      const goals = JSON.parse(saved)
+      return goals.find((g: WritingGoal) => g.id === params.id) || null
+    }
+    return null
+  }, [params.id])
+
+  const [goal, setGoal] = useState<WritingGoal | null>(initialGoal)
   const [history, setHistory] = useState<{ date: string; value: number }[]>([])
   const [notes, setNotes] = useState<{ date: string; note: string }[]>([])
 
   useEffect(() => {
-    const saved = localStorage.getItem('writing-goals')
-    if (saved) {
-      const goals = JSON.parse(saved)
-      const found = goals.find((g: WritingGoal) => g.id === params.id)
-      if (found) {
-        setGoal(found)
-      }
-    }
-
     const historyKey = `goal-history-${params.id}`
     const historyData = localStorage.getItem(historyKey)
     if (historyData) {
