@@ -1,6 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDiaries } from "@/lib/diaries";
 
+// 类型定义
+interface Diary {
+  id: string;
+  title: string;
+  date: string;
+  slug?: string;
+  likes?: number;
+}
+
+interface Notification {
+  id: string;
+  type: string;
+  title: string;
+  content: string;
+  read: boolean;
+  createdAt: string;
+  link?: string;
+}
+
 // 模拟通知数据存储（实际应用中应该使用数据库）
 // 这里基于日记数据生成智能通知
 export async function GET(request: NextRequest) {
@@ -27,8 +46,8 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ notifications: filtered, unread });
 }
 
-function generateNotifications(diaries: any[]) {
-  const notifications: any[] = [];
+function generateNotifications(diaries: Diary[]): Notification[] {
+  const notifications: Notification[] = [];
   const now = new Date();
   const today = now.toISOString().split("T")[0];
   
@@ -145,7 +164,7 @@ function generateNotifications(diaries: any[]) {
   return notifications;
 }
 
-function calculateStreak(diaries: any[]): number {
+function calculateStreak(diaries: Diary[]): number {
   const dates = new Set(diaries.map(d => d.date));
   let streak = 0;
   const today = new Date();
