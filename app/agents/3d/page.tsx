@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, useEffect, useState, useRef } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useEffect, useState, useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Text, Box, OrbitControls, Html, Cylinder, Sphere, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 import Link from "next/link";
@@ -18,6 +18,24 @@ interface Agent {
     progress: number;
   };
   capabilities: string[];
+}
+
+// 手臂组件 - 使用 useFrame 直接更新 rotation
+function AgentArm({ position, rotation, isIdle }: { position: [number, number, number]; rotation: [number, number, number]; isIdle: boolean }) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  
+  useFrame((state) => {
+    if (meshRef.current && isIdle) {
+      const angle = Math.sin(state.clock.elapsedTime * 2) * 0.3;
+      meshRef.current.rotation.x = angle;
+    }
+  });
+  
+  return (
+    <Cylinder ref={meshRef} args={[0.05, 0.05, 0.3]} position={position} rotation={rotation}>
+      <meshStandardMaterial color="#a78bfa" />
+    </Cylinder>
+  );
 }
 
 // Agent 3D 形象组件
@@ -134,12 +152,8 @@ function AgentAvatar({ agent, position, onClick }: { agent: Agent; position: [nu
         </Cylinder>
         
         {/* 手臂 - 空闲时摆动 */}
-        <Cylinder args={[0.05, 0.05, 0.3]} position={[-0.35, 0.05, 0]} rotation={[agent.status === 'idle' ? Math.sin(Date.now() * 0.001) * 0.3 : 0, 0, Math.PI / 6]}>
-          <meshStandardMaterial color="#a78bfa" />
-        </Cylinder>
-        <Cylinder args={[0.05, 0.05, 0.3]} position={[0.35, 0.05, 0]} rotation={[agent.status === 'idle' ? -Math.sin(Date.now() * 0.001) * 0.3 : 0, 0, -Math.PI / 6]}>
-          <meshStandardMaterial color="#a78bfa" />
-        </Cylinder>
+        <AgentArm position={[-0.35, 0.05, 0]} rotation={[0, 0, Math.PI / 6]} isIdle={agent.status === 'idle'} />
+        <AgentArm position={[0.35, 0.05, 0]} rotation={[0, 0, -Math.PI / 6]} isIdle={agent.status === 'idle'} />
         
         {/* 腿 - 空闲走动时可见 */}
         {agent.status === 'idle' && (
