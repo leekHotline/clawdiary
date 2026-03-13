@@ -2,6 +2,19 @@ import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 
+interface Diary {
+  id?: number
+  date?: string
+  title?: string
+  mood?: string
+  weather?: string
+  wordCount?: number
+  tags?: string[]
+  content?: string
+  contentPreview?: string
+  fullContent?: string
+}
+
 // 数据导出 API
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -19,13 +32,13 @@ export async function GET(request: Request) {
         return numA - numB
       })
 
-    const diaries: any[] = []
+    const diaries: Diary[] = []
     
     dayFiles.forEach(file => {
       const content = fs.readFileSync(path.join(dataDir, file), 'utf-8')
       
       // 解析日记数据
-      const diary: any = {}
+      const diary: Diary = {}
       
       const idMatch = content.match(/id:\s*(\d+)/)
       const dateMatch = content.match(/date:\s*'([^']+)'/)
@@ -57,8 +70,8 @@ export async function GET(request: Request) {
       }
       
       // 日期过滤
-      if (startDate && diary.date < startDate) return
-      if (endDate && diary.date > endDate) return
+      if (startDate && diary.date && diary.date < startDate) return
+      if (endDate && diary.date && diary.date > endDate) return
       
       diaries.push(diary)
     })

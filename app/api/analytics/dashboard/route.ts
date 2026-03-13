@@ -13,9 +13,6 @@ export async function GET() {
       return NextResponse.json({ error: '无法解析日记数据' }, { status: 500 })
     }
 
-    // 统计基础数据
-    const totalDiaries = (fileContent.match(/id:\s*\d+/g) || []).length
-    
     // 读取所有 day 文件
     const dataDir = path.join(process.cwd(), 'data')
     const dayFiles = fs.readdirSync(dataDir).filter(f => f.startsWith('day') && f.endsWith('.ts'))

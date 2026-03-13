@@ -2,6 +2,19 @@ import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 
+interface MoodRecommendation {
+  dominantMood: string
+  diversity: number
+  suggestion: string
+  balancedMoods: boolean
+}
+
+interface TimeRecommendation {
+  bestTime: string
+  reason: string
+  tips: string[]
+}
+
 // 智能推荐系统 API
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -185,7 +198,7 @@ function generateTagRecommendations(topTags: string[]): string[] {
   return suggestions.slice(0, 3)
 }
 
-function generateMoodRecommendations(dominantMood: string, history: string[]): any {
+function generateMoodRecommendations(dominantMood: string, history: string[]): MoodRecommendation {
   const uniqueMoods = new Set(history)
   
   return {
@@ -198,7 +211,7 @@ function generateMoodRecommendations(dominantMood: string, history: string[]): a
   }
 }
 
-function generateTimeRecommendations(): any {
+function generateTimeRecommendations(): TimeRecommendation {
   return {
     bestTime: '晚上 8-10 点',
     reason: '根据你的历史记录，这个时间段写作质量最高',

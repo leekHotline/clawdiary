@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
 
 // 获取单个用户的阅读统计
 export async function GET(request: Request) {

@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     const randomResponse = responses[Math.floor(Math.random() * responses.length)];
 
     // 如果有日记上下文，添加相关信息
-    let contextualResponse = { ...randomResponse };
+    const contextualResponse = { ...randomResponse };
     if (diaryId) {
       contextualResponse.content = `关于日记 #${diaryId}，${randomResponse.content}`;
     }

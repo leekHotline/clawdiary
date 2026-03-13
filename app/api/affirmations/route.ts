@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+interface Affirmation {
+  id: string
+  text: string
+  category: string
+  isCustom: boolean
+  createdAt?: string
+}
+
 // Affirmations storage (in production, use a database)
-let affirmations: any[] = []
+let affirmations: Affirmation[] = []
 
 const DEFAULT_AFFIRMATIONS = {
   confidence: [
