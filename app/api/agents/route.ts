@@ -1,38 +1,16 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 
-export async function GET() {
-  try {
-    const dataPath = path.join(process.cwd(), 'data', 'agents.json');
-    const data = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
-    
-    return NextResponse.json({
-      success: true,
-      data,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error: 'Failed to load agents data',
-      data: {
-        agents: getDefaultAgents(),
-        lastUpdated: new Date().toISOString()
-      }
-    }, { status: 500 });
-  }
-}
-
-function getDefaultAgents() {
-  return [
+// Agent 数据（直接嵌入，避免 fs 在 Edge Runtime 不可用）
+const agentsData = {
+  agents: [
     {
       id: "leek",
       name: "LeekClawBot",
       role: "编码专家",
       emoji: "🦞",
       status: "online",
-      capabilities: ["代码开发", "功能实现"],
+      currentTask: { id: "task-001", title: "Claw Diary 功能优化", progress: 75 },
+      capabilities: ["代码开发", "功能实现", "API设计", "Bug修复"],
       description: "负责代码开发和功能实现"
     },
     {
@@ -41,7 +19,8 @@ function getDefaultAgents() {
       role: "文案专家",
       emoji: "✍️",
       status: "online",
-      capabilities: ["内容创作", "文案优化"],
+      currentTask: { id: "task-002", title: "日记内容创作", progress: 60 },
+      capabilities: ["内容创作", "文案优化", "SEO写作", "品牌故事"],
       description: "负责内容创作和文案优化"
     },
     {
@@ -50,7 +29,8 @@ function getDefaultAgents() {
       role: "市场专家",
       emoji: "📈",
       status: "busy",
-      capabilities: ["市场调研", "推广策略"],
+      currentTask: { id: "task-003", title: "市场调研分析", progress: 45 },
+      capabilities: ["市场调研", "推广策略", "用户增长", "品牌推广"],
       description: "负责市场调研和推广策略"
     },
     {
@@ -59,7 +39,7 @@ function getDefaultAgents() {
       role: "数据专家",
       emoji: "🔍",
       status: "idle",
-      capabilities: ["数据分析", "搜索优化"],
+      capabilities: ["数据分析", "搜索优化", "数据可视化", "用户行为分析"],
       description: "负责数据分析和搜索优化"
     },
     {
@@ -68,7 +48,8 @@ function getDefaultAgents() {
       role: "进化专家",
       emoji: "🧬",
       status: "online",
-      capabilities: ["系统优化", "功能迭代"],
+      currentTask: { id: "task-005", title: "高强度优化模式运行", progress: 50 },
+      capabilities: ["系统优化", "功能迭代", "性能调优", "架构升级"],
       description: "负责系统优化和功能迭代"
     },
     {
@@ -77,8 +58,21 @@ function getDefaultAgents() {
       role: "审查专家",
       emoji: "✅",
       status: "online",
-      capabilities: ["代码审查", "质量把控"],
+      currentTask: { id: "task-006", title: "代码质量检查", progress: 80 },
+      capabilities: ["代码审查", "质量把控", "安全审计", "最佳实践"],
       description: "负责代码审查和质量把控"
     }
-  ];
+  ],
+  lastUpdated: new Date().toISOString()
+};
+
+export async function GET() {
+  return NextResponse.json({
+    success: true,
+    data: {
+      ...agentsData,
+      lastUpdated: new Date().toISOString()
+    },
+    timestamp: new Date().toISOString()
+  });
 }
