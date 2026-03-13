@@ -8,7 +8,7 @@ const activityLogs: Record<string, Array<{
   userName: string;
   userAvatar: string;
   description: string;
-  metadata?: Record<string, any>;
+  metadata?: { sectionId?: string; wordCount?: number; totalWords?: number; totalSections?: number };
   createdAt: string;
 }>> = {
   "collab-1": [

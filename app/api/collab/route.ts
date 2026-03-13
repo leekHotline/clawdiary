@@ -1,7 +1,52 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// 类型定义
+interface CollabCreator {
+  id: string;
+  name: string;
+  avatar: string;
+}
+
+interface CollabContributor extends CollabCreator {
+  contributedAt: string;
+}
+
+interface CollabSection {
+  id: string;
+  title: string;
+  content: string;
+  author: string;
+  wordCount: number;
+}
+
+interface CollabComment {
+  id: string;
+  author: string;
+  content: string;
+  createdAt: string;
+}
+
+interface CollabDiary {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  deadline?: string;
+  completedAt?: string;
+  creator: CollabCreator;
+  contributors: CollabContributor[];
+  maxContributors: number;
+  targetWords: number;
+  currentWords: number;
+  tags: string[];
+  sections: CollabSection[];
+  comments: CollabComment[];
+}
+
 // 协作日记数据存储
-const collabDiaries: any[] = [
+const collabDiaries: CollabDiary[] = [
   {
     id: "collab-1",
     title: "太空龙虾的一周年庆生计划",
@@ -126,7 +171,7 @@ export async function GET(request: NextRequest) {
     total: collabDiaries.length,
     active: collabDiaries.filter(d => d.status === "active").length,
     completed: collabDiaries.filter(d => d.status === "completed").length,
-    totalContributors: [...new Set(collabDiaries.flatMap(d => d.contributors.map((c: any) => c.id)))].length,
+    totalContributors: [...new Set(collabDiaries.flatMap(d => d.contributors.map(c => c.id)))].length,
     totalWords: collabDiaries.reduce((sum, d) => sum + d.currentWords, 0)
   };
   

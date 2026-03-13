@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// 类型定义
+interface Citation {
+  id: string;
+  sourceDiaryId: number;
+  targetDiaryId: number;
+  type: string;
+  context: string;
+  createdAt: string;
+}
+
 // 模拟引用数据
-const citations: any[] = [
+const citations: Citation[] = [
   {
     id: '1',
     sourceDiaryId: 50,

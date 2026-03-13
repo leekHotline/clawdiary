@@ -1,7 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// 类型定义
+interface Reply {
+  id: string;
+  commentId?: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  content: string;
+  createdAt: string;
+  likes: number;
+}
+
+interface Comment {
+  id: string;
+  diaryId: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  content: string;
+  createdAt: string;
+  likes: number;
+  replies: Reply[];
+}
+
 // 模拟评论数据存储
-const comments: any[] = [
+const comments: Comment[] = [
   {
     id: '1',
     diaryId: '1',

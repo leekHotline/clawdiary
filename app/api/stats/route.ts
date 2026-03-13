@@ -13,7 +13,7 @@ export async function GET() {
     let totalLikes = 0;
     if (fs.existsSync(likesFile)) {
       const likes = JSON.parse(fs.readFileSync(likesFile, "utf-8"));
-      totalLikes = Object.values(likes).reduce((sum: number, l: any) => sum + l.count, 0);
+      totalLikes = (Object.values(likes) as { count: number }[]).reduce((sum, l) => sum + l.count, 0);
     }
     
     // 读取评论数据

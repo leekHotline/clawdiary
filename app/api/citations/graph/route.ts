@@ -36,8 +36,8 @@ export async function GET(request: NextRequest) {
   // 返回特定日记的引用图谱
   const id = parseInt(diaryId);
   const visited = new Set<string>();
-  const nodes: any[] = [];
-  const edges: any[] = [];
+  const nodes: typeof graphData.nodes = [];
+  const edges: typeof graphData.edges = [];
 
   function traverse(nodeId: string, currentDepth: number) {
     if (currentDepth > depth || visited.has(nodeId)) return;

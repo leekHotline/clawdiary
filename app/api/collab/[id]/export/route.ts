@@ -1,7 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// 协作数据类型定义
+interface CollabContributor {
+  id: string;
+  name: string;
+  avatar: string;
+}
+
+interface CollabSection {
+  id: string;
+  title: string;
+  content: string;
+  author: string;
+  wordCount: number;
+}
+
+interface Collab {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  createdAt: string;
+  deadline?: string;
+  completedAt?: string;
+  contributors: CollabContributor[];
+  sections: CollabSection[];
+  tags: string[];
+}
+
 // 协作数据（应与主路由同步）
-const collabData: Record<string, any> = {
+const collabData: Record<string, Collab> = {
   "collab-1": {
     id: "collab-1",
     title: "太空龙虾的一周年庆生计划",

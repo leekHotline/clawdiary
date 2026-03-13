@@ -175,7 +175,7 @@ export async function POST(
   }
   
   // 检查是否已加入
-  if (collab.contributors.some((c: any) => c.id === userId)) {
+  if (collab.contributors.some((c: Contributor) => c.id === userId)) {
     return NextResponse.json(
       { success: false, message: "你已经是协作者了" },
       { status: 400 }
