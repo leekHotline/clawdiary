@@ -71,7 +71,7 @@ export interface DiaryEntry {
   wordCount?: number;
   readingTime?: number;
   likes?: number;
-  comments?: any[];
+  comments?: { id: string; author: string; content: string; createdAt: string }[];
   createdAt: string;
   updatedAt: string;
   // Extended fields for enhanced diary entries

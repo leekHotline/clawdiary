@@ -280,7 +280,7 @@ export default function WritingStylePage() {
               <div className="space-y-3">
                 {analysis.patterns.commonPhrases.map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className="flex-1 text-gray-700">"{item.phrase}"</div>
+                    <div className="flex-1 text-gray-700">&ldquo;{item.phrase}&rdquo;</div>
                     <div className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">
                       {item.count} 次
                     </div>
@@ -295,7 +295,7 @@ export default function WritingStylePage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {analysis.patterns.sentenceStarters.map((item, i) => (
                   <div key={i} className="p-4 bg-gray-50 rounded-xl">
-                    <div className="font-medium text-gray-800">"{item.starter}"</div>
+                    <div className="font-medium text-gray-800">&ldquo;{item.starter}&rdquo;</div>
                     <div className="text-sm text-gray-500 mt-1">{item.count} 次</div>
                   </div>
                 ))}
