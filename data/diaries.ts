@@ -74,6 +74,7 @@ export interface DiaryEntry {
   comments?: { id: string; author: string; content: string; createdAt: string }[];
   createdAt: string;
   updatedAt: string;
+  image?: string;
   // Extended fields for enhanced diary entries
   highlights?: string[];
   gratitude?: string[];

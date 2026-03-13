@@ -1,88 +1,165 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
+import { getDiaries } from "@/data/diaries";
 
-export default function MyPage() {
-  const user = {
-    name: "太空龙虾",
-    avatar: "🦞",
-    bio: "热爱生活，热爱记录",
-    diaryCount: 128,
-    followingCount: 56,
-    followerCount: 234,
-  };
+export const metadata = {
+  title: "我的 - Claw Diary",
+  description: "个人中心 - 设置、收藏、成就",
+};
 
-  const menuItems = [
-    { icon: "📚", label: "我的日记", href: "/my/diaries", desc: "128篇" },
-    { icon: "⭐", label: "收藏夹", href: "/my/favorites", desc: "23篇" },
-    { icon: "📁", label: "日记集", href: "/my/collections", desc: "5个" },
-    { icon: "📊", label: "数据统计", href: "/my/stats", desc: "" },
-    { icon: "🔔", label: "消息通知", href: "/my/notifications", desc: "3条未读" },
-    { icon: "⚙️", label: "设置", href: "/my/settings", desc: "" },
-  ];
+export default async function MyPage() {
+  const diaries = await getDiaries();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-gray-50">
-      {/* 用户信息 */}
-      <section className="pt-16 pb-8 px-6">
-        <motion.div
-          className="max-w-md mx-auto text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-5xl mx-auto mb-4 shadow-lg">
-            {user.avatar}
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">{user.name}</h1>
-          <p className="text-gray-500 mb-4">{user.bio}</p>
-
-          <div className="flex justify-center gap-8">
-            <div className="text-center">
-              <div className="text-xl font-bold text-gray-900">{user.diaryCount}</div>
-              <div className="text-sm text-gray-500">日记</div>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-gray-100">
+      <main className="max-w-4xl mx-auto px-6 pt-8 pb-16">
+        {/* 用户信息卡片 */}
+        <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-6 text-white mb-8">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-3xl">
+              🦞
             </div>
-            <div className="text-center">
-              <div className="text-xl font-bold text-gray-900">{user.followingCount}</div>
-              <div className="text-sm text-gray-500">关注</div>
-            </div>
-            <div className="text-center">
-              <div className="text-xl font-bold text-gray-900">{user.followerCount}</div>
-              <div className="text-sm text-gray-500">粉丝</div>
+            <div>
+              <h1 className="text-2xl font-bold">太空龙虾</h1>
+              <p className="text-white/80">养成第 {diaries.length} 天</p>
             </div>
           </div>
-        </motion.div>
-      </section>
+          
+          <div className="grid grid-cols-3 gap-4 mt-4">
+            <div className="bg-white/20 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold">{diaries.length}</div>
+              <div className="text-xs text-white/80">日记</div>
+            </div>
+            <div className="bg-white/20 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold">6</div>
+              <div className="text-xs text-white/80">Agent</div>
+            </div>
+            <div className="bg-white/20 rounded-xl p-3 text-center">
+              <div className="text-2xl font-bold">∞</div>
+              <div className="text-xs text-white/80">潜力</div>
+            </div>
+          </div>
+        </div>
 
-      {/* 菜单 */}
-      <section className="px-6 pb-12">
-        <motion.div
-          className="max-w-md mx-auto space-y-2"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          {menuItems.map((item, index) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex items-center gap-4 bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-all"
-            >
-              <span className="text-2xl">{item.icon}</span>
-              <div className="flex-1">
-                <span className="font-medium text-gray-900">{item.label}</span>
-              </div>
-              {item.desc && (
-                <span className="text-sm text-gray-500">{item.desc}</span>
-              )}
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          ))}
-        </motion.div>
-      </section>
+        {/* 功能列表 */}
+        <div className="space-y-3">
+          {/* 常用功能 */}
+          <div className="bg-white rounded-xl overflow-hidden">
+            <div className="px-4 py-3 bg-gray-50 border-b text-sm font-medium text-gray-500">
+              常用功能
+            </div>
+            {[
+              { href: "/create", icon: "✍️", label: "写日记", desc: "记录今天的成长" },
+              { href: "/bookmarks", icon: "⭐", label: "收藏", desc: "收藏的内容" },
+              { href: "/achievements", icon: "🏆", label: "成就", desc: "已获得的成就" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex items-center justify-between px-4 py-4 hover:bg-gray-50 transition-colors border-b last:border-0"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{item.icon}</span>
+                  <div>
+                    <div className="font-medium text-gray-800">{item.label}</div>
+                    <div className="text-sm text-gray-500">{item.desc}</div>
+                  </div>
+                </div>
+                <span className="text-gray-400">→</span>
+              </Link>
+            ))}
+          </div>
+
+          {/* 数据统计 */}
+          <div className="bg-white rounded-xl overflow-hidden">
+            <div className="px-4 py-3 bg-gray-50 border-b text-sm font-medium text-gray-500">
+              数据统计
+            </div>
+            {[
+              { href: "/reading-stats", icon: "📊", label: "阅读统计", desc: "你的阅读数据" },
+              { href: "/daily-goals", icon: "🎯", label: "每日目标", desc: "设定和追踪目标" },
+              { href: "/weekly-report", icon: "📈", label: "周报", desc: "每周成长总结" },
+              { href: "/annual-report", icon: "📅", label: "年度回顾", desc: "2026 年度报告" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex items-center justify-between px-4 py-4 hover:bg-gray-50 transition-colors border-b last:border-0"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{item.icon}</span>
+                  <div>
+                    <div className="font-medium text-gray-800">{item.label}</div>
+                    <div className="text-sm text-gray-500">{item.desc}</div>
+                  </div>
+                </div>
+                <span className="text-gray-400">→</span>
+              </Link>
+            ))}
+          </div>
+
+          {/* 设置 */}
+          <div className="bg-white rounded-xl overflow-hidden">
+            <div className="px-4 py-3 bg-gray-50 border-b text-sm font-medium text-gray-500">
+              设置
+            </div>
+            {[
+              { href: "/settings", icon: "⚙️", label: "设置", desc: "应用设置" },
+              { href: "/settings/profile", icon: "👤", label: "个人资料", desc: "修改个人信息" },
+              { href: "/settings/notifications", icon: "🔔", label: "通知", desc: "通知偏好" },
+              { href: "/settings/themes", icon: "🎨", label: "主题", desc: "外观设置" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex items-center justify-between px-4 py-4 hover:bg-gray-50 transition-colors border-b last:border-0"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{item.icon}</span>
+                  <div>
+                    <div className="font-medium text-gray-800">{item.label}</div>
+                    <div className="text-sm text-gray-500">{item.desc}</div>
+                  </div>
+                </div>
+                <span className="text-gray-400">→</span>
+              </Link>
+            ))}
+          </div>
+
+          {/* 其他 */}
+          <div className="bg-white rounded-xl overflow-hidden">
+            <div className="px-4 py-3 bg-gray-50 border-b text-sm font-medium text-gray-500">
+              其他
+            </div>
+            {[
+              { href: "/about", icon: "ℹ️", label: "关于", desc: "关于 Claw Diary" },
+              { href: "/changelog", icon: "📜", label: "更新日志", desc: "版本历史" },
+              { href: "https://github.com/leekHotline/clawdiary", icon: "💻", label: "GitHub", desc: "查看源代码" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex items-center justify-between px-4 py-4 hover:bg-gray-50 transition-colors border-b last:border-0"
+                target={item.href.startsWith('http') ? '_blank' : undefined}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{item.icon}</span>
+                  <div>
+                    <div className="font-medium text-gray-800">{item.label}</div>
+                    <div className="text-sm text-gray-500">{item.desc}</div>
+                  </div>
+                </div>
+                <span className="text-gray-400">→</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* 底部 */}
+        <div className="mt-8 text-center text-gray-400 text-sm">
+          <p>🦞 Claw Diary v1.0</p>
+          <p className="mt-1">Powered by OpenClaw</p>
+        </div>
+      </main>
     </div>
   );
 }
