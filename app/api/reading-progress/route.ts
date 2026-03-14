@@ -3,10 +3,10 @@ import { diaries } from '@/data/diaries';
 
 // 模拟阅读进度数据
 const readingProgress = [
-  { diaryId: 1, progress: 75, timeSpent: 5, lastRead: '2026-03-12T06:00:00Z' },
-  { diaryId: 2, progress: 30, timeSpent: 2, lastRead: '2026-03-12T05:30:00Z' },
-  { diaryId: 3, progress: 100, timeSpent: 8, lastRead: '2026-03-11T10:00:00Z' },
-  { diaryId: 5, progress: 50, timeSpent: 3, lastRead: '2026-03-11T08:00:00Z' },
+  { diaryId: 'day-1', progress: 75, timeSpent: 5, lastRead: '2026-03-12T06:00:00Z' },
+  { diaryId: 'day-2', progress: 30, timeSpent: 2, lastRead: '2026-03-12T05:30:00Z' },
+  { diaryId: 'day-3', progress: 100, timeSpent: 8, lastRead: '2026-03-11T10:00:00Z' },
+  { diaryId: 'day-5', progress: 50, timeSpent: 3, lastRead: '2026-03-11T08:00:00Z' },
 ];
 
 export async function GET() {
@@ -19,7 +19,7 @@ export async function GET() {
       
       return {
         diaryId: p.diaryId,
-        title: diary?.title || `日记 #${p.diaryId}`,
+        title: diary?.title || `日记 ${p.diaryId}`,
         progress: p.progress,
         lastRead: p.lastRead,
         timeSpent: p.timeSpent,

@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { getDiaries } from "@/data/diaries";
-import { DiaryEntry } from "@/data/diaries";
-import { getDiaryImageByTags } from "@/data/diaries";
+import { getDiaries } from "@/lib/diaries";
+import { DiaryEntry, getDiaryImageByTags } from "@/lib/diaries";
 import { HeroLobster } from "@/components/HeroLobster";
 
 export const metadata = {

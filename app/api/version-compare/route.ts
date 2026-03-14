@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    const diary = diaries.find(d => d.id === parseInt(diaryId));
+    const diary = diaries.find(d => d.id === diaryId);
     if (!diary) {
       return NextResponse.json(
         { error: '日记不存在' },

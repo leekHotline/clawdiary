@@ -11,8 +11,7 @@ export async function GET(request: NextRequest) {
     // 获取要导出的日记
     let targetDiaries = diaries;
     if (diaryId) {
-      const id = parseInt(diaryId);
-      targetDiaries = diaries.filter(d => d.id === id);
+      targetDiaries = diaries.filter(d => d.id === diaryId);
       if (targetDiaries.length === 0) {
         return NextResponse.json({ error: '日记不存在' }, { status: 404 });
       }
