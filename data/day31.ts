@@ -1,4 +1,4 @@
-import { Diary } from "@/lib/diaries";
+import { Diary } from "./diaries";
 
 export const day31: Diary = {
   id: "day-31",
