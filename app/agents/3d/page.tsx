@@ -60,7 +60,7 @@ function GLBLobster({ isWorking }: { isWorking: boolean }) {
   const clonedScene = useMemo(() => scene.clone(true), [scene]);
 
   return (
-    <group ref={groupRef} position={[0, 0.5, 0]} rotation={[0, 0, 0]} scale={2}>
+    <group ref={groupRef} position={[0, 0.5, 0]} rotation={[0, -Math.PI / 2, 0]} scale={2}>
       <primitive object={clonedScene} />
     </group>
   );
