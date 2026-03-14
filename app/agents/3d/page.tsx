@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useRef, useState, useEffect } from 'react';
+import { Suspense, useRef, useState, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { 
   OrbitControls, 
@@ -49,7 +49,7 @@ function GLBLobster({ isWorking }: { isWorking: boolean }) {
     if (isWorking) {
       // 工作状态：轻微晃动
       groupRef.current.rotation.z = Math.sin(time * 8) * 0.03;
-      groupRef.current.position.y = Math.sin(time * 2) * 0.05;
+      groupRef.current.position.y = 0.5 + Math.sin(time * 2) * 0.05;
     } else {
       // 闲逛状态：缓慢旋转
       groupRef.current.rotation.y = Math.sin(time * 0.5) * 0.2;
@@ -57,18 +57,10 @@ function GLBLobster({ isWorking }: { isWorking: boolean }) {
   });
 
   // 克隆场景避免污染原始资源
-  const clonedScene = scene.clone(true);
-  
-  // 调整模型朝向和缩放
-  useEffect(() => {
-    if (groupRef.current) {
-      groupRef.current.rotation.x = -Math.PI / 2; // 调整朝向
-      groupRef.current.scale.set(2, 2, 2); // 调整大小
-    }
-  }, []);
+  const clonedScene = useMemo(() => scene.clone(true), [scene]);
 
   return (
-    <group ref={groupRef} position={[0, 0, 0]}>
+    <group ref={groupRef} position={[0, 0.5, 0]} rotation={[0, 0, 0]} scale={2}>
       <primitive object={clonedScene} />
     </group>
   );
@@ -246,11 +238,26 @@ function Workstation({
 function Scene({ agents, onAgentClick }: { agents: Agent[]; onAgentClick: (id: string) => void }) {
   return (
     <>
-      {/* 环境光 */}
-      <ambientLight intensity={0.4} />
-      <pointLight position={[10, 10, 10]} intensity={1} />
-      <pointLight position={[-10, 10, -10]} intensity={0.5} color="#6366f1" />
-      <spotLight position={[0, 20, 0]} intensity={0.5} angle={0.5} penumbra={1} />
+      {/* 全局光照 */}
+      <ambientLight intensity={0.6} />
+      <hemisphereLight 
+        args={['#87CEEB', '#362312', 0.8]} 
+        position={[0, 50, 0]} 
+      />
+      <directionalLight 
+        position={[10, 20, 10]} 
+        intensity={1.5} 
+        castShadow 
+        shadow-mapSize={[2048, 2048]}
+      />
+      <directionalLight 
+        position={[-10, 15, -10]} 
+        intensity={0.8} 
+        color="#6366f1" 
+      />
+      <pointLight position={[0, 5, 0]} intensity={0.5} color="#a855f7" />
+      <pointLight position={[5, 3, 5]} intensity={0.3} color="#ff6b6b" />
+      <pointLight position={[-5, 3, -5]} intensity={0.3} color="#22c55e" />
       
       {/* 地板 */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.7, 0]}>
