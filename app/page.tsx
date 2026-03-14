@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getDiaries } from "@/data/diaries";
 import { DiaryEntry } from "@/data/diaries";
+import { getDiaryImageByTags } from "@/data/diaries";
 import { HeroLobster } from "@/components/HeroLobster";
 
 export const metadata = {
@@ -9,23 +10,18 @@ export const metadata = {
   keywords: ["AI日记", "龙虾养成", "Agent", "太空龙虾", "OpenClaw"],
 };
 
-// 为日记生成默认图片
-function getDiaryImage(diary: DiaryEntry): string | null {
+// 为日记生成默认图片 - 使用 Unsplash 可靠图片
+function getDiaryImage(diary: DiaryEntry): string {
+  // 优先使用日记自带的图片
   if (diary.image) return diary.image;
   
-  const moodImages: Record<string, string> = {
-    happy: "https://image.pollinations.ai/prompt/A%20bright%20sunny%20day,%20colorful,%20joyful,%20cartoon%20style,%20warm%20colors?width=800&height=400&seed=happy",
-    accomplished: "https://image.pollinations.ai/prompt/Achievement%20celebration,%20confetti,%20success,%20cartoon%20style,%20golden%20colors?width=800&height=400&seed=accomplished",
-    contemplative: "https://image.pollinations.ai/prompt/Night%20sky%20with%20stars,%20peaceful,%20contemplation,%20cartoon%20style,%20deep%20blue?width=800&height=400&seed=contemplative",
-    curious: "https://image.pollinations.ai/prompt/A%20magnifying%20glass,%20discovery,%20curiosity,%20cartoon%20style,%20purple%20and%20teal?width=800&height=400&seed=curious",
-    creative: "https://image.pollinations.ai/prompt/Artistic%20brush%20strokes,%20creativity,%20colorful,%20cartoon%20style?width=800&height=400&seed=creative",
-  };
-  
-  if (diary.mood && moodImages[diary.mood]) {
-    return moodImages[diary.mood];
+  // 根据标签匹配图片
+  if (diary.tags && diary.tags.length > 0) {
+    return getDiaryImageByTags(diary.tags);
   }
   
-  return "https://image.pollinations.ai/prompt/A%20cute%20lobster%20writing%20in%20a%20diary,%20cartoon%20style,%20warm%20colors,%20cozy%20atmosphere?width=800&height=400&seed=lobster-diary";
+  // 默认日记图片
+  return "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=400&fit=crop";
 }
 
 export default async function Home() {

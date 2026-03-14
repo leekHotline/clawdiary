@@ -1,3 +1,40 @@
+// 统一图片源 - 使用 Unsplash 免费图片
+export const DIARY_IMAGES = {
+  // 龙虾主题
+  lobster: "https://images.unsplash.com/photo-1559734840-f9509ee5677b?w=800&h=400&fit=crop",
+  // 技术主题
+  tech: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop",
+  // 协作主题
+  collab: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=400&fit=crop",
+  // 庆祝主题
+  celebrate: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800&h=400&fit=crop",
+  // 学习主题
+  learn: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&h=400&fit=crop",
+  // 默认
+  default: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=400&fit=crop",
+};
+
+// 根据标签自动匹配图片
+export function getDiaryImageByTags(tags: string[]): string {
+  const tagImageMap: Record<string, string> = {
+    "协作": DIARY_IMAGES.collab,
+    "新功能": DIARY_IMAGES.celebrate,
+    "里程碑": DIARY_IMAGES.celebrate,
+    "技术": DIARY_IMAGES.tech,
+    "AI": DIARY_IMAGES.tech,
+    "学习": DIARY_IMAGES.learn,
+    "成长": DIARY_IMAGES.learn,
+    "调试": DIARY_IMAGES.tech,
+    "构建": DIARY_IMAGES.tech,
+    "审查": DIARY_IMAGES.learn,
+  };
+  
+  for (const tag of tags) {
+    if (tagImageMap[tag]) return tagImageMap[tag];
+  }
+  return DIARY_IMAGES.default;
+}
+
 import { day31 } from "./day31";
 import { day32 } from "./day32";
 import { day33 } from "./day33";

@@ -1,28 +1,34 @@
 // 强制动态渲染
 export const dynamic = 'force-dynamic';
 
-import { getDiary, getDiaries, DiaryEntry } from "@/data/diaries";
+import { getDiary, getDiaries, DiaryEntry, getDiaryImageByTags } from "@/data/diaries";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import CommentSection from "@/app/components/CommentSection";
 
-// 为日记生成默认图片
-function getDiaryImage(diary: DiaryEntry): string | null {
+// 为日记生成默认图片 - 使用 Unsplash 可靠图片
+function getDiaryImage(diary: DiaryEntry): string {
+  // 优先使用日记自带的图片
   if (diary.image) return diary.image;
   
+  // 根据标签匹配图片
+  if (diary.tags && diary.tags.length > 0) {
+    return getDiaryImageByTags(diary.tags);
+  }
+  
+  // 根据 mood 匹配
   const moodImages: Record<string, string> = {
-    happy: "https://image.pollinations.ai/prompt/A%20bright%20sunny%20day,%20colorful,%20joyful,%20cartoon%20style,%20warm%20colors?width=1200&height=630&seed=happy",
-    accomplished: "https://image.pollinations.ai/prompt/Achievement%20celebration,%20confetti,%20success,%20cartoon%20style,%20golden%20colors?width=1200&height=630&seed=accomplished",
-    contemplative: "https://image.pollinations.ai/prompt/Night%20sky%20with%20stars,%20peaceful,%20contemplation,%20cartoon%20style,%20deep%20blue?width=1200&height=630&seed=contemplative",
-    curious: "https://image.pollinations.ai/prompt/A%20magnifying%20glass,%20discovery,%20curiosity,%20cartoon%20style,%20purple%20and%20teal?width=1200&height=630&seed=curious",
-    creative: "https://image.pollinations.ai/prompt/Artistic%20brush%20strokes,%20creativity,%20colorful,%20cartoon%20style?width=1200&height=630&seed=creative",
+    happy: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=800&h=400&fit=crop",
+    accomplished: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800&h=400&fit=crop",
+    focused: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=400&fit=crop",
+    creative: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&h=400&fit=crop",
   };
   
   if (diary.mood && moodImages[diary.mood]) {
     return moodImages[diary.mood];
   }
   
-  return "https://image.pollinations.ai/prompt/A%20cute%20lobster%20writing%20in%20a%20diary,%20cartoon%20style,%20warm%20colors,%20cozy%20atmosphere?width=1200&height=630&seed=lobster-diary";
+  // 默认日记图片
+  return "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=400&fit=crop";
 }
 
 export async function generateStaticParams() {
