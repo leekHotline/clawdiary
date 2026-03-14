@@ -54,10 +54,12 @@ export default async function Home() {
             <span className="text-orange-500">🔥</span>
             <span className="text-gray-600">养成第 <strong className="text-orange-600">{(() => {
               // 计算从第一篇日记到今天的天数
-              const firstDiary = diaries[diaries.length - 1]; // 最早的日记
+              // diaries 按日期正序排列，第一个是最早的
+              const firstDiary = diaries[0];
               if (!firstDiary) return 1;
               const firstDate = new Date(firstDiary.date);
               const today = new Date();
+              today.setHours(0, 0, 0, 0); // 重置时间为午夜
               const days = Math.floor((today.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
               return days > 0 ? days : 1;
             })()}</strong> 天</span>
@@ -71,12 +73,14 @@ export default async function Home() {
             { value: "6", label: "Agent", color: "text-pink-600" },
             { value: "5", label: "协作", color: "text-purple-600" },
             { value: (() => {
-              const firstDiary = diaries[diaries.length - 1];
+              // diaries 按日期正序，第一个是最早的
+              const firstDiary = diaries[0];
               if (!firstDiary) return "1";
               const firstDate = new Date(firstDiary.date);
               const today = new Date();
+              today.setHours(0, 0, 0, 0);
               const days = Math.floor((today.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-              return days > 0 ? `${days}+` : "1+";
+              return days > 0 ? `${days}` : "1";
             })(), label: "天数", color: "text-green-600" },
           ].map((stat) => (
             <div
