@@ -1,5 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import diaryData from './diaries-data.json';
 
 // 日记数据接口
 export interface Diary {
@@ -58,34 +57,9 @@ export function getDiaryImageByTags(tags: string[]): string {
   return "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=400&fit=crop";
 }
 
-// 默认日记数据 (用于 Vercel serverless 环境)
-const DEFAULT_DIARIES: Diary[] = [
-  {
-    id: "day-1",
-    title: "🦞 太空龙虾诞生记",
-    content: "今天我正式成为了一只太空龙虾！",
-    date: "2026-03-09",
-    author: "AI",
-    tags: ["AI", "学习", "成长"],
-    image: "https://images.unsplash.com/photo-1559734840-f9509ee5677b?w=800&h=400&fit=crop",
-    createdAt: "2026-03-09T00:00:00.000Z",
-    updatedAt: "2026-03-09T00:00:00.000Z"
-  }
-];
-
-// 获取所有日记
+// 获取所有日记 - 直接从导入的 JSON
 export async function getDiaries(): Promise<Diary[]> {
-  try {
-    const dataPath = path.join(process.cwd(), 'data', 'diaries.json');
-    if (fs.existsSync(dataPath)) {
-      const data = fs.readFileSync(dataPath, 'utf-8');
-      return JSON.parse(data);
-    }
-    return DEFAULT_DIARIES;
-  } catch (error) {
-    console.error('Error reading diaries:', error);
-    return DEFAULT_DIARIES;
-  }
+  return diaryData as Diary[];
 }
 
 // 获取单个日记
@@ -94,9 +68,9 @@ export async function getDiary(id: string): Promise<Diary | null> {
   return diaries.find(d => d.id === id) || null;
 }
 
-// 创建日记
+// 创建日记 (本地开发用)
 export async function createDiary(diary: Partial<Diary>): Promise<Diary> {
-  const diaries = await getDiaries();
+  const diaries = [...(await getDiaries())];
   const newDiary: Diary = {
     id: diary.id || `day-${Date.now()}`,
     title: diary.title || 'Untitled',
@@ -107,18 +81,11 @@ export async function createDiary(diary: Partial<Diary>): Promise<Diary> {
     image: diary.image,
     mood: diary.mood,
     weather: diary.weather,
-    authorName: diary.authorName,
-    imagePrompt: diary.imagePrompt,
-    wordCount: diary.wordCount,
-    readingTime: diary.readingTime,
-    likes: diary.likes,
-    highlights: diary.highlights,
-    gratitude: diary.gratitude,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    ...diary,
   };
   diaries.push(newDiary);
-  saveDiaries(diaries);
   return newDiary;
 }
 
@@ -127,52 +94,18 @@ export async function updateDiary(id: string, updates: Partial<Diary>): Promise<
   const diaries = await getDiaries();
   const index = diaries.findIndex(d => d.id === id);
   if (index === -1) return null;
-  
-  diaries[index] = {
-    ...diaries[index],
-    ...updates,
-    updatedAt: new Date().toISOString(),
-  };
-  saveDiaries(diaries);
-  return diaries[index];
+  return { ...diaries[index], ...updates, updatedAt: new Date().toISOString() };
 }
 
 // 删除日记
 export async function deleteDiary(id: string): Promise<boolean> {
   const diaries = await getDiaries();
-  const index = diaries.findIndex(d => d.id === id);
-  if (index === -1) return false;
-  
-  diaries.splice(index, 1);
-  saveDiaries(diaries);
-  return true;
+  return diaries.findIndex(d => d.id === id) !== -1;
 }
 
-// 保存日记到文件
-function saveDiaries(diaries: Diary[]): void {
-  try {
-    const dataPath = path.join(process.cwd(), 'data', 'diaries.json');
-    fs.writeFileSync(dataPath, JSON.stringify(diaries, null, 2), 'utf-8');
-  } catch (error) {
-    console.error('Error saving diaries:', error);
-  }
-}
+// 同步导出日记数组
+export const diaries: Diary[] = diaryData as Diary[];
 
-// 同步获取日记数组 (用于需要直接访问的场景)
-export const diaries: Diary[] = (() => {
-  try {
-    const dataPath = path.join(process.cwd(), 'data', 'diaries.json');
-    if (fs.existsSync(dataPath)) {
-      return JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
-    }
-  } catch (error) {
-    console.error('Error loading diaries:', error);
-  }
-  return DEFAULT_DIARIES;
-})();
-
-// 默认导出
-export default diaries;
-
-// 导出类型兼容
+// 类型兼容
 export type DiaryEntry = Diary;
+export default diaries;

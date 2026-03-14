@@ -38,8 +38,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function DiaryPage({ params }: { params: { id: string } }) {
-  const diary = await getDiary(params.id);
+export default async function DiaryPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const diary = await getDiary(id);
 
   if (!diary) {
     notFound();
