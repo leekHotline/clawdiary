@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useRef, useState, useEffect, useMemo } from 'react';
+import { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { 
   OrbitControls, 
@@ -10,7 +10,8 @@ import {
   RoundedBox,
   Text,
   Float,
-  Sparkles
+  Sparkles,
+  Clone
 } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -35,162 +36,114 @@ const defaultAgents: Agent[] = [
   { id: 'review', name: 'reviewClawdBot', role: '审查专家', emoji: '✅', status: 'idle', position: [-2, 0, -3.5], color: '#f43f5e' },
 ];
 
-// 龙虾模型组件
-function LobsterModel({ 
-  position, 
-  isWorking, 
-  color = '#ff6b6b',
-  scale = 0.5 
-}: { 
-  position: [number, number, number];
-  isWorking: boolean;
-  color?: string;
-  scale?: number;
-}) {
+// GLB 龙虾模型 - 只加载一次，放在中心
+function GLBLobster({ isWorking }: { isWorking: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
-  const [hovered, setHovered] = useState(false);
-  const walkAngle = useRef(Math.random() * Math.PI * 2);
-  const walkRadius = useRef(1.5);
+  const { scene } = useGLTF('/3dmodel/space-lobster.glb');
   
   // 动画
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (!groupRef.current) return;
-    
     const time = state.clock.elapsedTime;
     
     if (isWorking) {
-      // 工作状态：轻微晃动（打字动作）
-      groupRef.current.rotation.z = Math.sin(time * 8) * 0.05;
-      groupRef.current.position.y = position[1] + Math.sin(time * 2) * 0.02;
+      // 工作状态：轻微晃动
+      groupRef.current.rotation.z = Math.sin(time * 8) * 0.03;
+      groupRef.current.position.y = Math.sin(time * 2) * 0.05;
     } else {
-      // 闲逛状态：绕圈走动
-      walkAngle.current += delta * 0.3;
-      const x = position[0] + Math.cos(walkAngle.current) * walkRadius.current;
-      const z = position[2] + Math.sin(walkAngle.current) * walkRadius.current;
-      groupRef.current.position.x = x;
-      groupRef.current.position.z = z;
-      groupRef.current.rotation.y = walkAngle.current + Math.PI;
-      
-      // 走路时的上下弹跳
-      groupRef.current.position.y = position[1] + Math.abs(Math.sin(time * 6)) * 0.05;
-    }
-    
-    // Hover 效果
-    if (hovered) {
-      groupRef.current.scale.setScalar(scale * 1.1);
-    } else {
-      groupRef.current.scale.setScalar(scale);
+      // 闲逛状态：缓慢旋转
+      groupRef.current.rotation.y = Math.sin(time * 0.5) * 0.2;
     }
   });
 
+  // 克隆场景避免污染原始资源
+  const clonedScene = scene.clone(true);
+  
+  // 调整模型朝向和缩放
+  useEffect(() => {
+    if (groupRef.current) {
+      groupRef.current.rotation.x = -Math.PI / 2; // 调整朝向
+      groupRef.current.scale.set(2, 2, 2); // 调整大小
+    }
+  }, []);
+
   return (
-    <group 
-      ref={groupRef} 
-      position={position}
-      onPointerOver={() => setHovered(true)}
-      onPointerOut={() => setHovered(false)}
-    >
-      {/* 龙虾身体 - 使用几何体构建 */}
-      {/* 头胸部 */}
-      <mesh position={[0, 0.3, 0]}>
-        <sphereGeometry args={[0.35, 32, 32]} />
-        <meshStandardMaterial color={color} roughness={0.3} metalness={0.2} />
-      </mesh>
-      
-      {/* 眼睛 */}
-      <mesh position={[-0.12, 0.45, 0.25]}>
-        <sphereGeometry args={[0.08, 16, 16]} />
-        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.5} />
-      </mesh>
-      <mesh position={[0.12, 0.45, 0.25]}>
-        <sphereGeometry args={[0.08, 16, 16]} />
-        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.5} />
-      </mesh>
-      <mesh position={[-0.12, 0.45, 0.3]}>
-        <sphereGeometry args={[0.04, 16, 16]} />
-        <meshStandardMaterial color="#1a1a2e" />
-      </mesh>
-      <mesh position={[0.12, 0.45, 0.3]}>
-        <sphereGeometry args={[0.04, 16, 16]} />
-        <meshStandardMaterial color="#1a1a2e" />
-      </mesh>
-      
-      {/* 触角 */}
-      <mesh position={[-0.2, 0.55, 0.2]} rotation={[0.3, 0, -0.5]}>
-        <cylinderGeometry args={[0.02, 0.01, 0.4, 8]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
-      <mesh position={[0.2, 0.55, 0.2]} rotation={[0.3, 0, 0.5]}>
-        <cylinderGeometry args={[0.02, 0.01, 0.4, 8]} />
-        <meshStandardMaterial color={color} />
-      </mesh>
-      
-      {/* 身体分段 */}
-      <mesh position={[0, 0.15, -0.3]}>
-        <sphereGeometry args={[0.28, 32, 32]} />
-        <meshStandardMaterial color={color} roughness={0.3} metalness={0.2} />
-      </mesh>
-      <mesh position={[0, 0.1, -0.55]}>
-        <sphereGeometry args={[0.24, 32, 32]} />
-        <meshStandardMaterial color={color} roughness={0.3} metalness={0.2} />
-      </mesh>
-      <mesh position={[0, 0.05, -0.75]}>
-        <sphereGeometry args={[0.2, 32, 32]} />
-        <meshStandardMaterial color={color} roughness={0.3} metalness={0.2} />
-      </mesh>
-      
-      {/* 尾巴 */}
-      <mesh position={[0, 0, -1]} rotation={[0.3, 0, 0]}>
-        <coneGeometry args={[0.15, 0.4, 8]} />
-        <meshStandardMaterial color={color} roughness={0.3} metalness={0.2} />
-      </mesh>
-      <mesh position={[0, -0.05, -1.3]} rotation={[0.5, 0, 0]}>
-        <coneGeometry args={[0.1, 0.3, 8]} />
-        <meshStandardMaterial color={color} roughness={0.3} metalness={0.2} />
-      </mesh>
-      
-      {/* 大钳子 - 左 */}
-      <group position={[-0.45, 0.15, 0.1]}>
-        <mesh rotation={[0, 0, -0.8]}>
-          <cylinderGeometry args={[0.06, 0.08, 0.35, 8]} />
-          <meshStandardMaterial color="#c92a2a" roughness={0.4} metalness={0.3} />
-        </mesh>
-        <mesh position={[-0.15, 0.1, 0]} rotation={[0, 0, -0.3]}>
-          <sphereGeometry args={[0.1, 16, 16]} />
-          <meshStandardMaterial color="#c92a2a" roughness={0.4} metalness={0.3} />
-        </mesh>
-      </group>
-      
-      {/* 大钳子 - 右 */}
-      <group position={[0.45, 0.15, 0.1]}>
-        <mesh rotation={[0, 0, 0.8]}>
-          <cylinderGeometry args={[0.06, 0.08, 0.35, 8]} />
-          <meshStandardMaterial color="#c92a2a" roughness={0.4} metalness={0.3} />
-        </mesh>
-        <mesh position={[0.15, 0.1, 0]} rotation={[0, 0, 0.3]}>
-          <sphereGeometry args={[0.1, 16, 16]} />
-          <meshStandardMaterial color="#c92a2a" roughness={0.4} metalness={0.3} />
-        </mesh>
-      </group>
-      
-      {/* 小腿 */}
-      {[-0.6, -0.4, -0.2, 0].map((z, i) => (
-        <group key={i}>
-          <mesh position={[-0.2, -0.1, z]} rotation={[0, 0, 0.5]}>
-            <cylinderGeometry args={[0.02, 0.015, 0.2, 6]} />
-            <meshStandardMaterial color={color} />
-          </mesh>
-          <mesh position={[0.2, -0.1, z]} rotation={[0, 0, -0.5]}>
-            <cylinderGeometry args={[0.02, 0.015, 0.2, 6]} />
-            <meshStandardMaterial color={color} />
-          </mesh>
-        </group>
-      ))}
+    <group ref={groupRef} position={[0, 0, 0]}>
+      <primitive object={clonedScene} />
     </group>
   );
 }
 
-// 工位组件（电脑桌）
+// 简化龙虾图标（用于工位）
+function LobsterIcon({ 
+  position, 
+  color = '#ff6b6b',
+  scale = 0.5,
+  status
+}: { 
+  position: [number, number, number];
+  color?: string;
+  scale?: number;
+  status: string;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+  
+  useFrame((state) => {
+    if (!groupRef.current) return;
+    const time = state.clock.elapsedTime;
+    
+    // 根据状态显示不同动画
+    if (status === 'online' || status === 'busy') {
+      groupRef.current.rotation.z = Math.sin(time * 8) * 0.05;
+      groupRef.current.position.y = position[1] + Math.sin(time * 2) * 0.02;
+    } else if (status === 'idle') {
+      groupRef.current.position.y = position[1] + Math.sin(time * 1.5) * 0.05;
+      groupRef.current.rotation.y = Math.sin(time * 0.5) * 0.3;
+    }
+  });
+
+  return (
+    <group ref={groupRef} position={position} scale={scale}>
+      {/* 简化龙虾图标 - 球体 + 大钳子 */}
+      <mesh>
+        <sphereGeometry args={[0.3, 16, 16]} />
+        <meshStandardMaterial color={color} roughness={0.3} metalness={0.3} />
+      </mesh>
+      
+      {/* 眼睛 */}
+      <mesh position={[-0.1, 0.2, 0.2]}>
+        <sphereGeometry args={[0.06, 8, 8]} />
+        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.5} />
+      </mesh>
+      <mesh position={[0.1, 0.2, 0.2]}>
+        <sphereGeometry args={[0.06, 8, 8]} />
+        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.5} />
+      </mesh>
+      
+      {/* 大钳子 */}
+      <mesh position={[-0.4, 0, 0.1]} rotation={[0, 0, -0.5]}>
+        <sphereGeometry args={[0.12, 8, 8]} />
+        <meshStandardMaterial color="#c92a2a" roughness={0.4} metalness={0.3} />
+      </mesh>
+      <mesh position={[0.4, 0, 0.1]} rotation={[0, 0, 0.5]}>
+        <sphereGeometry args={[0.12, 8, 8]} />
+        <meshStandardMaterial color="#c92a2a" roughness={0.4} metalness={0.3} />
+      </mesh>
+      
+      {/* 状态指示 */}
+      <mesh position={[0, 0.5, 0]}>
+        <sphereGeometry args={[0.08, 8, 8]} />
+        <meshStandardMaterial 
+          color={status === 'online' ? '#22c55e' : status === 'busy' ? '#f59e0b' : '#6b7280'}
+          emissive={status === 'online' ? '#22c55e' : status === 'busy' ? '#f59e0b' : '#6b7280'}
+          emissiveIntensity={0.8}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+// 工位组件
 function Workstation({ 
   position, 
   agent,
@@ -210,8 +163,6 @@ function Workstation({
     }
   };
 
-  const isWorking = agent.status === 'online' || agent.status === 'busy';
-
   return (
     <group position={position} onClick={onClick}>
       {/* 桌子 */}
@@ -220,22 +171,17 @@ function Workstation({
       </RoundedBox>
       
       {/* 桌腿 */}
-      <mesh position={[-0.7, -0.35, 0.4]}>
-        <cylinderGeometry args={[0.04, 0.04, 0.7, 8]} />
-        <meshStandardMaterial color="#374151" />
-      </mesh>
-      <mesh position={[0.7, -0.35, 0.4]}>
-        <cylinderGeometry args={[0.04, 0.04, 0.7, 8]} />
-        <meshStandardMaterial color="#374151" />
-      </mesh>
-      <mesh position={[-0.7, -0.35, -0.4]}>
-        <cylinderGeometry args={[0.04, 0.04, 0.7, 8]} />
-        <meshStandardMaterial color="#374151" />
-      </mesh>
-      <mesh position={[0.7, -0.35, -0.4]}>
-        <cylinderGeometry args={[0.04, 0.04, 0.7, 8]} />
-        <meshStandardMaterial color="#374151" />
-      </mesh>
+      {[
+        [-0.7, -0.35, 0.4],
+        [0.7, -0.35, 0.4],
+        [-0.7, -0.35, -0.4],
+        [0.7, -0.35, -0.4]
+      ].map((pos, i) => (
+        <mesh key={i} position={pos as [number, number, number]}>
+          <cylinderGeometry args={[0.04, 0.04, 0.7, 8]} />
+          <meshStandardMaterial color="#374151" />
+        </mesh>
+      ))}
 
       {/* 显示器 */}
       <RoundedBox args={[1.2, 0.75, 0.06]} radius={0.02} position={[0, 0.5, -0.3]}>
@@ -266,23 +212,13 @@ function Workstation({
         <meshStandardMaterial color="#1e293b" />
       </RoundedBox>
 
-      {/* 龙虾 Agent */}
-      <LobsterModel 
-        position={[0, 0.1, 0.5]} 
-        isWorking={isWorking}
+      {/* 简化龙虾 Agent */}
+      <LobsterIcon 
+        position={[0, 0.15, 0.5]} 
         color={agent.color}
         scale={0.4}
+        status={agent.status}
       />
-
-      {/* 状态指示灯 */}
-      <mesh position={[0.65, 0.5, -0.24]}>
-        <sphereGeometry args={[0.04, 16, 16]} />
-        <meshStandardMaterial 
-          color={getStatusColor()} 
-          emissive={getStatusColor()} 
-          emissiveIntensity={0.8} 
-        />
-      </mesh>
 
       {/* 名字标签 */}
       <Html position={[0, 1.1, 0]} center>
@@ -327,7 +263,7 @@ function Scene({ agents, onAgentClick }: { agents: Agent[]; onAgentClick: (id: s
       
       {/* 中心装饰 */}
       <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-        <group position={[0, 2, 0]}>
+        <group position={[0, 3, 0]}>
           <Text
             position={[0, 0, 0]}
             fontSize={0.5}
@@ -350,13 +286,10 @@ function Scene({ agents, onAgentClick }: { agents: Agent[]; onAgentClick: (id: s
         </group>
       </Float>
       
-      {/* 中心龙虾 */}
-      <LobsterModel 
-        position={[0, 0.5, 0]} 
-        isWorking={true} 
-        color="#ff6b6b"
-        scale={0.8}
-      />
+      {/* 中心 GLB 龙虾 */}
+      <Suspense fallback={null}>
+        <GLBLobster isWorking={true} />
+      </Suspense>
       
       {/* Agent 工位 - 圆形排列 */}
       {agents.map((agent, index) => {
@@ -387,7 +320,7 @@ function Loader() {
     <Html center>
       <div className="flex flex-col items-center">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent"></div>
-        <p className="mt-4 text-white">加载 3D 场景...</p>
+        <p className="mt-4 text-white">加载龙虾模型...</p>
       </div>
     </Html>
   );
