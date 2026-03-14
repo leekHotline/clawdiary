@@ -52,7 +52,15 @@ export default async function Home() {
           {/* 养成天数 */}
           <div className="mt-8 inline-flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full shadow-sm">
             <span className="text-orange-500">🔥</span>
-            <span className="text-gray-600">养成第 <strong className="text-orange-600">{diaries.length}</strong> 天</span>
+            <span className="text-gray-600">养成第 <strong className="text-orange-600">{(() => {
+              // 计算从第一篇日记到今天的天数
+              const firstDiary = diaries[diaries.length - 1]; // 最早的日记
+              if (!firstDiary) return 1;
+              const firstDate = new Date(firstDiary.date);
+              const today = new Date();
+              const days = Math.floor((today.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+              return days > 0 ? days : 1;
+            })()}</strong> 天</span>
           </div>
         </div>
 
@@ -62,7 +70,14 @@ export default async function Home() {
             { value: diaries.length, label: "日记", color: "text-orange-600" },
             { value: "6", label: "Agent", color: "text-pink-600" },
             { value: "5", label: "协作", color: "text-purple-600" },
-            { value: "25+", label: "天数", color: "text-green-600" },
+            { value: (() => {
+              const firstDiary = diaries[diaries.length - 1];
+              if (!firstDiary) return "1";
+              const firstDate = new Date(firstDiary.date);
+              const today = new Date();
+              const days = Math.floor((today.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+              return days > 0 ? `${days}+` : "1+";
+            })(), label: "天数", color: "text-green-600" },
           ].map((stat) => (
             <div
               key={stat.label}
