@@ -27,12 +27,51 @@ export default function PomodoroPage() {
   const [mode, setMode] = useState<TimerMode>('work')
   const [timeLeft, setTimeLeft] = useState(TIMER_SETTINGS.work)
   const [isRunning, setIsRunning] = useState(false)
-  const [sessions, setSessions] = useState(0)
-  const [totalFocusTime, setTotalFocusTime] = useState(0)
-  const [todaySessions, setTodaySessions] = useState<any[]>([])
   const [selectedTask, setSelectedTask] = useState('')
   const [showSettings, setShowSettings] = useState(false)
   const [customTimes, setCustomTimes] = useState(TIMER_SETTINGS)
+  
+  // 使用惰性初始化从 localStorage 读取今日数据，避免 useEffect 中的同步 setState
+  const [todaySessions, setTodaySessions] = useState<any[]>(() => {
+    if (typeof window === 'undefined') return []
+    const saved = localStorage.getItem('pomodoro-sessions')
+    if (saved) {
+      const allSessions = JSON.parse(saved)
+      const today = new Date().toDateString()
+      return allSessions.filter((s: { timestamp: string }) => 
+        new Date(s.timestamp).toDateString() === today
+      )
+    }
+    return []
+  })
+  const [sessions, setSessions] = useState(() => {
+    if (typeof window === 'undefined') return 0
+    const saved = localStorage.getItem('pomodoro-sessions')
+    if (saved) {
+      const allSessions = JSON.parse(saved)
+      const today = new Date().toDateString()
+      const todayData = allSessions.filter((s: { timestamp: string }) => 
+        new Date(s.timestamp).toDateString() === today
+      )
+      return todayData.filter((s: { type: string }) => s.type === 'work').length
+    }
+    return 0
+  })
+  const [totalFocusTime, setTotalFocusTime] = useState(() => {
+    if (typeof window === 'undefined') return 0
+    const saved = localStorage.getItem('pomodoro-sessions')
+    if (saved) {
+      const allSessions = JSON.parse(saved)
+      const today = new Date().toDateString()
+      const todayData = allSessions.filter((s: { timestamp: string }) => 
+        new Date(s.timestamp).toDateString() === today
+      )
+      return todayData
+        .filter((s: { type: string }) => s.type === 'work')
+        .reduce((acc: number, s: { duration: number }) => acc + s.duration, 0)
+    }
+    return 0
+  })
 
   const handleTimerComplete = useCallback(() => {
     setIsRunning(false)
@@ -85,24 +124,6 @@ export default function PomodoroPage() {
     }
   }, [mode, sessions, selectedTask, customTimes])
 
-  // Load today's sessions
-  useEffect(() => {
-    const saved = localStorage.getItem('pomodoro-sessions')
-    if (saved) {
-      const allSessions = JSON.parse(saved)
-      const today = new Date().toDateString()
-      const todayData = allSessions.filter((s: { timestamp: string }) => 
-        new Date(s.timestamp).toDateString() === today
-      )
-      setTodaySessions(todayData)
-      setSessions(todayData.filter((s: { type: string }) => s.type === 'work').length)
-      const totalMinutes = todayData
-        .filter((s: { type: string }) => s.type === 'work')
-        .reduce((acc: number, s: { duration: number }) => acc + s.duration, 0)
-      setTotalFocusTime(totalMinutes)
-    }
-  }, [])
-
   // Timer logic
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
@@ -112,7 +133,8 @@ export default function PomodoroPage() {
         setTimeLeft(prev => prev - 1)
       }, 1000)
     } else if (timeLeft === 0) {
-      handleTimerComplete()
+      // 使用 setTimeout 避免在 effect 中同步调用 setState
+      setTimeout(() => handleTimerComplete(), 0)
     }
     
     return () => {

@@ -26,22 +26,19 @@ export default function WritingGoalsDetailPage({ params }: { params: { id: strin
   }, [params.id])
 
   const [goal, setGoal] = useState<WritingGoal | null>(initialGoal)
-  const [history, setHistory] = useState<{ date: string; value: number }[]>([])
-  const [notes, setNotes] = useState<{ date: string; note: string }[]>([])
-
-  useEffect(() => {
+  // 使用惰性初始化从 localStorage 读取，避免 useEffect 中的同步 setState
+  const [history, setHistory] = useState<{ date: string; value: number }[]>(() => {
+    if (typeof window === 'undefined') return []
     const historyKey = `goal-history-${params.id}`
     const historyData = localStorage.getItem(historyKey)
-    if (historyData) {
-      setHistory(JSON.parse(historyData))
-    }
-
+    return historyData ? JSON.parse(historyData) : []
+  })
+  const [notes, setNotes] = useState<{ date: string; note: string }[]>(() => {
+    if (typeof window === 'undefined') return []
     const notesKey = `goal-notes-${params.id}`
     const notesData = localStorage.getItem(notesKey)
-    if (notesData) {
-      setNotes(JSON.parse(notesData))
-    }
-  }, [params.id])
+    return notesData ? JSON.parse(notesData) : []
+  })
 
   const getProgressPercentage = () => {
     if (!goal) return 0

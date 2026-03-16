@@ -15,7 +15,7 @@ export default function AIDiaryRevolutionPage() {
         你上一次写日记是什么时候？
       </p>
       
-      <p>如果答案是"不记得了"或者"大学时候"，你不是一个人。</p>
+      <p>如果答案是&quot;不记得了&quot;或者&quot;大学时候&quot;，你不是一个人。</p>
       
       <p>传统日记正在消亡。不是因为人们不想记录生活，而是因为记录的方式变了。</p>
       
@@ -44,7 +44,7 @@ export default function AIDiaryRevolutionPage() {
       
       <h3>致命伤二：写作门槛太高</h3>
       
-      <p>很多人不写日记，是因为"不会写"。</p>
+      <p>很多人不写日记，是因为&quot;不会写&quot;。</p>
       
       <p>不知道怎么开头，不知道怎么组织，写着写着就变成了流水账。最后自己都不想看。</p>
       
@@ -58,7 +58,7 @@ export default function AIDiaryRevolutionPage() {
       
       <p>你写了一年的日记，最后得到了什么？一本积灰的本子。</p>
       
-      <p>你想查"去年我对这份工作的态度"，你得翻半小时。</p>
+      <p>你想查&quot;去年我对这份工作的态度&quot;，你得翻半小时。</p>
       
       <p><strong>日记应该是活的，不是死的。</strong></p>
       
@@ -66,15 +66,15 @@ export default function AIDiaryRevolutionPage() {
       
       <h2>AI 日记是什么</h2>
       
-      <p>AI 日记是"降低门槛的工具"。以前写日记需要写作能力。现在只需要说话能力。</p>
+      <p>AI 日记是&quot;降低门槛的工具&quot;。以前写日记需要写作能力。现在只需要说话能力。</p>
       
-      <p>AI 日记是"让你看见自己的镜子"。传统日记是记录。AI 日记是反馈。</p>
+      <p>AI 日记是&quot;让你看见自己的镜子&quot;。传统日记是记录。AI 日记是反馈。</p>
       
-      <p>AI 日记是"人生数据库"。日记不应该只是一堆文字。它应该是可查询、可分析的数据。</p>
+      <p>AI 日记是&quot;人生数据库&quot;。日记不应该只是一堆文字。它应该是可查询、可分析的数据。</p>
       
       <h2>如何选择 AI 日记应用</h2>
       
-      <p>不是所有叫"AI 日记"的产品都值得用。选的时候看三点：</p>
+      <p>不是所有叫&quot;AI 日记&quot;的产品都值得用。选的时候看三点：</p>
       
       <ol>
         <li><strong>AI 是辅助还是替代</strong> — 日记的内容，是你说的，还是 AI 编的？</li>
@@ -86,7 +86,7 @@ export default function AIDiaryRevolutionPage() {
       
       <p>Claw Diary 的设计理念很简单：</p>
       
-      <p><strong>让写日记这件事，从"需要坚持"变成"自然而然"。</strong></p>
+      <p><strong>让写日记这件事，从&quot;需要坚持&quot;变成&quot;自然而然&quot;。</strong></p>
       
       <ul>
         <li><strong>语音优先</strong> — 45 秒一篇日记</li>
@@ -96,7 +96,7 @@ export default function AIDiaryRevolutionPage() {
         <li><strong>你的数据属于你</strong> — 可导出、可删除</li>
       </ul>
       
-      <h2>写日记的意义，从来不是"记录"</h2>
+      <h2>写日记的意义，从来不是&quot;记录&quot;</h2>
       
       <p>记录生活是照片的事，是视频的事，是社交媒体的事。</p>
       

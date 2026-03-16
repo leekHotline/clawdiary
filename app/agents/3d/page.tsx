@@ -446,9 +446,13 @@ export default function Agent3DPage() {
 
   // 每 2 秒轮询一次
   useEffect(() => {
-    fetchActivity();
+    // 使用 setTimeout 避免在 effect 中同步调用 fetchActivity
+    const timeoutId = setTimeout(() => fetchActivity(), 0);
     const interval = setInterval(fetchActivity, 2000);
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(interval);
+    };
   }, [fetchActivity]);
 
   // 更新时间显示（避免在渲染期间调用 Date.now()）

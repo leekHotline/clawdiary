@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 
 interface Challenge {
@@ -25,34 +25,28 @@ interface ActivityItem {
 }
 
 export default function ChallengeStatsPage({ params }: { params: { id: string } }) {
-  const [challenge, setChallenge] = useState<Challenge | null>(null)
-  const [dailyProgress, setDailyProgress] = useState<number[]>([])
-  const [recentActivity, setRecentActivity] = useState<ActivityItem[]>([])
-
-  useEffect(() => {
-    // Load challenge data
+  // 使用惰性初始化从 localStorage 读取，避免 useEffect 中的同步 setState
+  const [challenge, setChallenge] = useState<Challenge | null>(() => {
+    if (typeof window === 'undefined') return null
     const saved = localStorage.getItem('challenges')
     if (saved) {
       const challenges = JSON.parse(saved)
-      const found = challenges.find((c: Challenge) => c.id === params.id)
-      if (found) {
-        // Load progress
-        const progressKey = `challenge-progress-${params.id}`
-        const progressData = localStorage.getItem(progressKey)
-        const progress = progressData ? JSON.parse(progressData) : []
-        
-        // Load activity
-        const activityKey = `challenge-activity-${params.id}`
-        const activityData = localStorage.getItem(activityKey)
-        const activity = activityData ? JSON.parse(activityData) : []
-        
-        // Update all state at once
-        setChallenge(found)
-        setDailyProgress(progress)
-        setRecentActivity(activity)
-      }
+      return challenges.find((c: Challenge) => c.id === params.id) || null
     }
-  }, [params.id])
+    return null
+  })
+  const [dailyProgress, setDailyProgress] = useState<number[]>(() => {
+    if (typeof window === 'undefined') return []
+    const progressKey = `challenge-progress-${params.id}`
+    const progressData = localStorage.getItem(progressKey)
+    return progressData ? JSON.parse(progressData) : []
+  })
+  const [recentActivity, setRecentActivity] = useState<ActivityItem[]>(() => {
+    if (typeof window === 'undefined') return []
+    const activityKey = `challenge-activity-${params.id}`
+    const activityData = localStorage.getItem(activityKey)
+    return activityData ? JSON.parse(activityData) : []
+  })
 
   const getProgressPercentage = () => {
     if (!challenge) return 0

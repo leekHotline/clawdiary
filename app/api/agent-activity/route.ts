@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // 内存存储（serverless 会重置，但短时间内有效）
 // 生产环境建议使用 Vercel KV 或 Redis
-let activityState = {
+const activityState = {
   lastUpdate: Date.now(),
   agents: {
     lobster: { status: 'idle', message: '等待中...', lastActive: Date.now() },
