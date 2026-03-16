@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// MiniMax 图片生成 API
+const MINIMAX_API_URL = "https://api.minimaxi.com/v1/image_generation";
+
 // 内存存储历史记录
 let imageHistory: Array<{
   id: string;
@@ -15,93 +18,100 @@ let imageHistory: Array<{
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { prompt, width = 1024, height = 1024, seed, steps = 8, negative_prompt = "", model = "SDXL" } = body;
+    const { prompt, width = 1024, height = 1024, seed, model = "image-01" } = body;
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
     }
 
-    console.log(`[txt2img] Generating: "${prompt.substring(0, 50)}..."`);
-
-    const generatedSeed = seed || Math.floor(Math.random() * 2147483647);
-    const imageId = `img_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
-
-    // 尝试 Hugging Face API
-    let imageData: string | null = null;
-    
-    try {
-      const hfResponse = await fetch(
-        "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            inputs: prompt,
-            parameters: { width, height, seed: generatedSeed },
-          }),
-        }
+    const apiKey = process.env.MINIMAX_APIKEY;
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: "MINIMAX_APIKEY not configured. Please add it to Vercel environment variables." },
+        { status: 500 }
       );
-
-      if (hfResponse.ok) {
-        const buffer = await hfResponse.arrayBuffer();
-        imageData = `data:image/png;base64,${Buffer.from(buffer).toString('base64')}`;
-        console.log("[txt2img] Hugging Face success");
-      }
-    } catch (e) {
-      console.log("[txt2img] Hugging Face failed:", e);
     }
 
-    // 如果 Hugging Face 失败，使用占位图
-    if (!imageData) {
-      console.log("[txt2img] Using placeholder image");
-      
-      // 使用 Picsum Photos 作为占位图
-      const placeholderUrl = `https://picsum.photos/${width}/${height}?random=${generatedSeed}`;
-      
-      try {
-        const imgResponse = await fetch(placeholderUrl);
-        const buffer = await imgResponse.arrayBuffer();
-        imageData = `data:image/jpeg;base64,${Buffer.from(buffer).toString('base64')}`;
-      } catch {
-        // 最后的 fallback：纯色图片
-        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-          <rect fill="#1a1a2e" width="100%" height="100%"/>
-          <text x="50%" y="45%" fill="#ff6b6b" font-size="48" text-anchor="middle">🦞</text>
-          <text x="50%" y="55%" fill="#ffffff" font-size="14" text-anchor="middle">Space Lobster</text>
-        </svg>`;
-        imageData = `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
-      }
+    console.log(`[txt2img] Generating with MiniMax: "${prompt.substring(0, 50)}..."`);
+
+    // 计算 aspect_ratio
+    let aspectRatio = "1:1";
+    if (width > height) {
+      aspectRatio = "16:9";
+    } else if (height > width) {
+      aspectRatio = "9:16";
     }
+
+    const response = await fetch(MINIMAX_API_URL, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "image-01",
+        prompt,
+        aspect_ratio: aspectRatio,
+        response_format: "base64",
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("[txt2img] MiniMax API error:", errorText);
+      return NextResponse.json(
+        { error: `MiniMax API failed: ${response.status}`, details: errorText },
+        { status: response.status }
+      );
+    }
+
+    const data = await response.json();
+    console.log("[txt2img] MiniMax response ID:", data.id);
+
+    // 获取 base64 图片
+    const imageBase64 = data.data?.image_base64?.[0];
+    if (!imageBase64) {
+      return NextResponse.json(
+        { error: "No image data in MiniMax response", response: data },
+        { status: 500 }
+      );
+    }
+
+    // 构造 data URL
+    const imageDataUrl = `data:image/jpeg;base64,${imageBase64}`;
+
+    const imageId = `img_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+    const generatedSeed = seed || Math.floor(Math.random() * 2147483647);
 
     const historyItem = {
       id: imageId,
       prompt,
-      model: imageData.startsWith('data:image/jpeg') ? "Placeholder" : "SDXL",
+      model: "MiniMax image-01",
       seed: generatedSeed,
       width,
       height,
-      imageData,
+      imageData: imageDataUrl,
       timestamp: new Date().toISOString(),
     };
 
+    // 保存到历史
     imageHistory.unshift(historyItem);
     if (imageHistory.length > 50) {
       imageHistory = imageHistory.slice(0, 50);
     }
 
+    console.log(`[txt2img] Generated: ${imageId}, size: ${imageBase64.length} bytes`);
+
     return NextResponse.json({
       success: true,
       id: imageId,
-      image: imageData,
+      image: imageDataUrl,
       seed: generatedSeed,
-      model: historyItem.model,
+      model: "MiniMax image-01",
       prompt,
       width,
       height,
       timestamp: historyItem.timestamp,
-      note: imageData.startsWith('data:image/jpeg') ? 
-        "⚠️ AI 图片生成暂不可用，显示随机图片。请配置付费 API (Replicate/Stability AI) 以使用真实 AI 生成。" : 
-        undefined,
     });
   } catch (error) {
     console.error("[txt2img] Error:", error);

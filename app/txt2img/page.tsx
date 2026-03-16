@@ -20,7 +20,7 @@ export default function Txt2ImgPage() {
   const [width, setWidth] = useState(1024);
   const [height, setHeight] = useState(1024);
   const [steps, setSteps] = useState(8);
-  const [model, setModel] = useState("ZImageTurbo_INT8");
+  const [model, setModel] = useState("image-01");
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [statusMessage, setStatusMessage] = useState("");
@@ -247,8 +247,7 @@ export default function Txt2ImgPage() {
                 onChange={(e) => setModel(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 text-gray-900 dark:text-white"
               >
-                <option value="ZImageTurbo_INT8">Turbo (快速)</option>
-                <option value="ZImage_INT8">Standard (标准)</option>
+                <option value="image-01">MiniMax Image-01 (推荐)</option>
               </select>
             </div>
           </div>
