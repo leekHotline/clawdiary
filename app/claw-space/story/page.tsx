@@ -197,7 +197,7 @@ export default function StoryPage() {
 
         {/* 尾声 */}
         <div className="mt-12 text-center">
-          <p className="text-gray-500 italic">"故事还在继续..."</p>
+          <p className="text-gray-500 italic">&ldquo;故事还在继续...&rdquo;</p>
           <div className="mt-6">
             <Link
               href="/growth"

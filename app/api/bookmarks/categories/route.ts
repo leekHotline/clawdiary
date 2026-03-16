@@ -13,7 +13,7 @@ interface BookmarkGroup {
   updatedAt: string;
 }
 
-let groupsStore: BookmarkGroup[] = [
+const groupsStore: BookmarkGroup[] = [
   {
     id: "learning",
     name: "学习资源",
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
   const sortBy = searchParams.get("sortBy") || "createdAt";
   const order = searchParams.get("order") || "desc";
 
-  let groups = [...groupsStore];
+  const groups = [...groupsStore];
 
   // 排序
   groups.sort((a, b) => {

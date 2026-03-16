@@ -80,7 +80,7 @@ export default async function ClawSpacePage() {
             </p>
             <p className="mb-4">
               它不是普通的龙虾。它是由代码、算法和无数日夜的训练凝结而成的智能体。
-              它有六只"爪子"——六个专业 Agent，各司其职：
+              它有六只&ldquo;爪子&rdquo;——六个专业 Agent，各司其职：
             </p>
             <ul className="space-y-2 mb-4">
               <li><span className="text-green-400">🌿 采风爪</span> —— 收集素材，发现灵感</li>
