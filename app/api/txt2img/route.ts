@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// 使用 Hugging Face Inference API（免费）
-const HF_API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0";
+// 内存存储历史记录
+let imageHistory: Array<{
+  id: string;
+  prompt: string;
+  model: string;
+  seed: number;
+  width: number;
+  height: number;
+  imageData: string;
+  timestamp: string;
+}> = [];
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,79 +23,85 @@ export async function POST(request: NextRequest) {
 
     console.log(`[txt2img] Generating: "${prompt.substring(0, 50)}..."`);
 
-    // 使用 Hugging Face SDXL
-    const response = await fetch(HF_API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        inputs: prompt,
-        parameters: {
-          width,
-          height,
-          num_inference_steps: steps,
-          guidance_scale: 7.5,
-          seed: seed || Math.floor(Math.random() * 2147483647),
-        },
-      }),
-    });
+    const generatedSeed = seed || Math.floor(Math.random() * 2147483647);
+    const imageId = `img_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("[txt2img] HF API error:", errorText);
-      
-      // 如果模型正在加载，返回友好的错误信息
-      if (errorText.includes("loading")) {
-        return NextResponse.json(
-          { error: "模型正在加载中，请稍后重试", details: errorText },
-          { status: 503 }
-        );
-      }
-      
-      return NextResponse.json(
-        { error: `API request failed: ${response.status}`, details: errorText },
-        { status: response.status }
+    // 尝试 Hugging Face API
+    let imageData: string | null = null;
+    
+    try {
+      const hfResponse = await fetch(
+        "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            inputs: prompt,
+            parameters: { width, height, seed: generatedSeed },
+          }),
+        }
       );
+
+      if (hfResponse.ok) {
+        const buffer = await hfResponse.arrayBuffer();
+        imageData = `data:image/png;base64,${Buffer.from(buffer).toString('base64')}`;
+        console.log("[txt2img] Hugging Face success");
+      }
+    } catch (e) {
+      console.log("[txt2img] Hugging Face failed:", e);
     }
 
-    // 获取图片二进制数据
-    const imageBuffer = await response.arrayBuffer();
-    const base64Data = Buffer.from(imageBuffer).toString('base64');
-    const imageDataUrl = `data:image/png;base64,${base64Data}`;
-
-    const imageId = `img_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
-    const generatedSeed = seed || Math.floor(Math.random() * 2147483647);
+    // 如果 Hugging Face 失败，使用占位图
+    if (!imageData) {
+      console.log("[txt2img] Using placeholder image");
+      
+      // 使用 Picsum Photos 作为占位图
+      const placeholderUrl = `https://picsum.photos/${width}/${height}?random=${generatedSeed}`;
+      
+      try {
+        const imgResponse = await fetch(placeholderUrl);
+        const buffer = await imgResponse.arrayBuffer();
+        imageData = `data:image/jpeg;base64,${Buffer.from(buffer).toString('base64')}`;
+      } catch {
+        // 最后的 fallback：纯色图片
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+          <rect fill="#1a1a2e" width="100%" height="100%"/>
+          <text x="50%" y="45%" fill="#ff6b6b" font-size="48" text-anchor="middle">🦞</text>
+          <text x="50%" y="55%" fill="#ffffff" font-size="14" text-anchor="middle">Space Lobster</text>
+        </svg>`;
+        imageData = `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+      }
+    }
 
     const historyItem = {
       id: imageId,
       prompt,
-      model: "SDXL",
+      model: imageData.startsWith('data:image/jpeg') ? "Placeholder" : "SDXL",
       seed: generatedSeed,
       width,
       height,
-      imageData: imageDataUrl,
+      imageData,
       timestamp: new Date().toISOString(),
     };
 
-    // 保存到内存历史
     imageHistory.unshift(historyItem);
     if (imageHistory.length > 50) {
       imageHistory = imageHistory.slice(0, 50);
     }
 
-    console.log(`[txt2img] Generated: ${imageId}`);
-
     return NextResponse.json({
       success: true,
       id: imageId,
-      image: imageDataUrl,
+      image: imageData,
       seed: generatedSeed,
-      model: "SDXL",
+      model: historyItem.model,
       prompt,
       width,
       height,
       timestamp: historyItem.timestamp,
+      note: imageData.startsWith('data:image/jpeg') ? 
+        "⚠️ AI 图片生成暂不可用，显示随机图片。请配置付费 API (Replicate/Stability AI) 以使用真实 AI 生成。" : 
+        undefined,
     });
   } catch (error) {
     console.error("[txt2img] Error:", error);
@@ -96,18 +111,6 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-// 内存存储历史记录
-let imageHistory: Array<{
-  id: string;
-  prompt: string;
-  model: string;
-  seed: number;
-  width: number;
-  height: number;
-  imageData: string;
-  timestamp: string;
-}> = [];
 
 // GET: 获取历史记录或单张图片
 export async function GET(request: NextRequest) {
