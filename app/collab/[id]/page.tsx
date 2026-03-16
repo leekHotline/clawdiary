@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 // 邀请链接组件
@@ -163,6 +163,9 @@ export default function CollabDetailPage({ params }: { params: Promise<{ id: str
   const [showContributeModal, setShowContributeModal] = useState(false);
   const [newSectionTitle, setNewSectionTitle] = useState("");
   const [newSectionContent, setNewSectionContent] = useState("");
+  const [remainingDays, setRemainingDays] = useState(() => 
+    Math.max(0, Math.ceil((new Date(collabData.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+  );
 
   const handleContribute = async () => {
     // 模拟提交
@@ -171,10 +174,6 @@ export default function CollabDetailPage({ params }: { params: Promise<{ id: str
     setNewSectionTitle("");
     setNewSectionContent("");
   };
-
-  const remainingDays = useMemo(() => {
-    return Math.max(0, Math.ceil((new Date(collabData.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
-  }, [collabData.deadline]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 via-pink-50 to-orange-50">

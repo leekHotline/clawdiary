@@ -49,6 +49,9 @@ const defaultAgents: Agent[] = [
   { id: 'review', name: 'reviewClawdBot', role: '审查专家', emoji: '✅', status: 'idle', position: [-2, 0, -3.5], color: '#f43f5e' },
 ];
 
+// 默认 activity 对象（使用固定时间戳避免渲染期间调用 Date.now()）
+const defaultActivity: AgentActivity = { status: 'idle', message: '', lastActive: 0 };
+
 // GLB 龙虾模型 - 中心主角
 function GLBLobster({ activity }: { activity: AgentActivity }) {
   const groupRef = useRef<THREE.Group>(null);
@@ -378,7 +381,7 @@ function Scene({
       
       {/* 中心 GLB 龙虾 - 实时状态 */}
       <Suspense fallback={null}>
-        <GLBLobster activity={activities.lobster || { status: 'idle', message: '', lastActive: Date.now() }} />
+        <GLBLobster activity={activities.lobster || defaultActivity} />
       </Suspense>
       
       {/* Agent 工位 - 圆形排列 */}
@@ -393,7 +396,7 @@ function Scene({
             key={agent.id}
             position={[x, 0, z]}
             agent={agent}
-            activity={activities[agent.id] || { status: 'idle', message: '', lastActive: Date.now() }}
+            activity={activities[agent.id] || defaultActivity}
             onClick={() => onAgentClick(agent.id)}
           />
         );
@@ -424,6 +427,7 @@ export default function Agent3DPage() {
   const [activities, setActivities] = useState<Record<string, AgentActivity>>({});
   const [lastUpdate, setLastUpdate] = useState<number>(0);
   const [isConnected, setIsConnected] = useState(false);
+  const [timeAgo, setTimeAgo] = useState<string>('未连接');
 
   // 轮询获取实时状态
   const fetchActivity = useCallback(async () => {
@@ -447,20 +451,27 @@ export default function Agent3DPage() {
     return () => clearInterval(interval);
   }, [fetchActivity]);
 
+  // 更新时间显示（避免在渲染期间调用 Date.now()）
+  useEffect(() => {
+    const updateTime = () => {
+      if (!lastUpdate) {
+        setTimeAgo('未连接');
+        return;
+      }
+      const seconds = Math.floor((Date.now() - lastUpdate) / 1000);
+      if (seconds < 60) setTimeAgo(`${seconds}秒前`);
+      else setTimeAgo(`${Math.floor(seconds / 60)}分钟前`);
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, [lastUpdate]);
+
   const handleAgentClick = (id: string) => {
     const agent = agents.find(a => a.id === id);
     if (agent) {
       setSelectedAgent(agent);
     }
-  };
-
-  // 格式化最后更新时间
-  const formatLastUpdate = () => {
-    if (!lastUpdate) return '未连接';
-    const seconds = Math.floor((Date.now() - lastUpdate) / 1000);
-    if (seconds < 60) return `${seconds}秒前`;
-    const minutes = Math.floor(seconds / 60);
-    return `${minutes}分钟前`;
   };
 
   return (
@@ -479,7 +490,7 @@ export default function Agent3DPage() {
         <p className="text-sm text-purple-300">点击 Agent 查看详情</p>
         <div className="flex items-center justify-center gap-2 mt-1">
           <span className={`inline-block w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></span>
-          <span className="text-xs text-gray-400">实时状态: {formatLastUpdate()}</span>
+          <span className="text-xs text-gray-400">实时状态: {timeAgo}</span>
         </div>
       </div>
 
