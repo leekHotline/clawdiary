@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 
 interface Challenge {
@@ -85,20 +85,23 @@ export default function ChallengeStatsPage({ params }: { params: { id: string } 
     return streak
   }
 
-  const getWeekData = () => {
+  const weekData = useMemo(() => {
+    if (!challenge) return []
     const today = new Date()
-    const weekData = []
+    const data = []
     for (let i = 6; i >= 0; i--) {
       const date = new Date(today)
       date.setDate(date.getDate() - i)
-      const dayIndex = Math.floor((date.getTime() - new Date(challenge?.startDate || '').getTime()) / (1000 * 60 * 60 * 24))
-      weekData.push({
+      const dayIndex = Math.floor((date.getTime() - new Date(challenge.startDate).getTime()) / (1000 * 60 * 60 * 24))
+      data.push({
         date,
         value: dailyProgress[dayIndex] || 0
       })
     }
-    return weekData
-  }
+    return data
+  }, [challenge, dailyProgress])
+
+  const maxValue = Math.max(...weekData.map(d => d.value), 1)
 
   if (!challenge) {
     return (
@@ -117,7 +120,6 @@ export default function ChallengeStatsPage({ params }: { params: { id: string } 
     )
   }
 
-  const weekData = getWeekData()
   const maxValue = Math.max(...weekData.map(d => d.value), 1)
 
   return (

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 
 interface GratitudeEntry {
@@ -13,14 +13,17 @@ interface GratitudeEntry {
 
 const MOOD_EMOJIS = ['😢', '😕', '😐', '🙂', '😊', '😄', '🥰']
 
+// Pre-calculate yesterday's date string at module level (stable reference)
+const getYesterdayString = () => {
+  const yesterday = new Date()
+  yesterday.setDate(yesterday.getDate() - 1)
+  return yesterday.toDateString()
+}
+
 export default function GratitudeStatsPage() {
   const [entries, setEntries] = useState<GratitudeEntry[]>([])
   const [selectedMonth, setSelectedMonth] = useState(new Date())
   const [moodDistribution, setMoodDistribution] = useState<Record<number, number>>({})
-
-  useEffect(() => {
-    loadData()
-  }, [])
 
   const loadData = () => {
     const saved = localStorage.getItem('gratitude-entries')
@@ -37,16 +40,16 @@ export default function GratitudeStatsPage() {
     }
   }
 
-  const getMonthEntries = () => {
-    return entries.filter(entry => {
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [])
+
+  const monthStats = useMemo(() => {
+    const monthEntries = entries.filter(entry => {
       const date = new Date(entry.date)
       return date.getMonth() === selectedMonth.getMonth() && 
              date.getFullYear() === selectedMonth.getFullYear()
     })
-  }
-
-  const getMonthStats = () => {
-    const monthEntries = getMonthEntries()
     const totalItems = monthEntries.reduce((acc, e) => acc + e.items.length, 0)
     const avgMood = monthEntries.length > 0
       ? monthEntries.reduce((acc, e) => acc + e.mood, 0) / monthEntries.length
@@ -57,9 +60,9 @@ export default function GratitudeStatsPage() {
       totalItems,
       avgMood: avgMood.toFixed(1)
     }
-  }
+  }, [entries, selectedMonth])
 
-  const getMostCommonWords = () => {
+  const commonWords = useMemo(() => {
     const wordCount: Record<string, number> = {}
     entries.forEach(entry => {
       entry.items.forEach(item => {
@@ -73,9 +76,9 @@ export default function GratitudeStatsPage() {
     return Object.entries(wordCount)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 20)
-  }
+  }, [entries])
 
-  const getStreakInfo = () => {
+  const streakInfo = useMemo(() => {
     if (entries.length === 0) return { current: 0, longest: 0 }
     
     const sortedDates = entries
@@ -104,7 +107,7 @@ export default function GratitudeStatsPage() {
     
     // Calculate current streak
     const today = new Date().toDateString()
-    const yesterday = new Date(Date.now() - 86400000).toDateString()
+    const yesterday = getYesterdayString()
     
     if (uniqueDates.includes(today) || uniqueDates.includes(yesterday)) {
       currentStreak = 1
@@ -124,11 +127,7 @@ export default function GratitudeStatsPage() {
     }
     
     return { current: currentStreak, longest: Math.max(longestStreak, 1) }
-  }
-
-  const monthStats = getMonthStats()
-  const commonWords = getMostCommonWords()
-  const streakInfo = getStreakInfo()
+  }, [entries])
 
   const navigateMonth = (direction: number) => {
     const newMonth = new Date(selectedMonth)

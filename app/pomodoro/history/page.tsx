@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 
 interface PomodoroSession {
@@ -23,10 +23,6 @@ export default function PomodoroHistoryPage() {
   const [dailyStats, setDailyStats] = useState<DailyStats[]>([])
   const [selectedWeek, setSelectedWeek] = useState(0)
   const [filter, setFilter] = useState<'all' | 'work' | 'break'>('all')
-
-  useEffect(() => {
-    loadData()
-  }, [])
 
   const loadData = () => {
     const saved = localStorage.getItem('pomodoro-sessions')
@@ -61,6 +57,10 @@ export default function PomodoroHistoryPage() {
     }
   }
 
+  useEffect(() => {
+    loadData() // eslint-disable-line react-hooks/set-state-in-effect
+  }, [])
+
   const getWeekDates = (weekOffset: number) => {
     const today = new Date()
     const startOfWeek = new Date(today)
@@ -75,26 +75,24 @@ export default function PomodoroHistoryPage() {
     return dates
   }
 
-  const getWeekStats = (weekOffset: number) => {
-    const weekDates = getWeekDates(weekOffset)
+  const weekDates = useMemo(() => getWeekDates(selectedWeek), [selectedWeek])
+  const weekStats = useMemo(() => {
     const dateStrings = weekDates.map(d => d.toDateString())
-    
     return dailyStats
       .filter(stat => dateStrings.includes(stat.date))
       .reduce((acc, stat) => ({
         sessions: acc.sessions + stat.sessions,
         focusTime: acc.focusTime + stat.focusTime
       }), { sessions: 0, focusTime: 0 })
-  }
+  }, [weekDates, dailyStats])
 
-  const weekDates = getWeekDates(selectedWeek)
-  const weekStats = getWeekStats(selectedWeek)
-
-  const filteredSessions = sessions.filter(s => {
-    if (filter === 'all') return true
-    if (filter === 'work') return s.type === 'work'
-    return s.type !== 'work'
-  })
+  const filteredSessions = useMemo(() => {
+    return sessions.filter(s => {
+      if (filter === 'all') return true
+      if (filter === 'work') return s.type === 'work'
+      return s.type !== 'work'
+    })
+  }, [sessions, filter])
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('zh-CN', {

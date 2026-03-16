@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 
 interface MediationSession {
@@ -73,19 +73,27 @@ const SAMPLE_MEDITATIONS: MediationSession[] = [
 ]
 
 export default function MeditationDetailPage({ params }: { params: { id: string } }) {
-  const [meditation, setMeditation] = useState<MediationSession | null>(null)
+  // Derive meditation from params using useMemo (no setState in effect)
+  const meditation = useMemo(() => 
+    SAMPLE_MEDITATIONS.find(m => m.id === params.id) || null,
+    [params.id]
+  )
   const [isPlaying, setIsPlaying] = useState(false)
   const [timeElapsed, setTimeElapsed] = useState(0)
   const [isCompleted, setIsCompleted] = useState(false)
   const [userNotes, setUserNotes] = useState('')
 
-  useEffect(() => {
-    // Find meditation by ID
-    const found = SAMPLE_MEDITATIONS.find(m => m.id === params.id)
-    if (found) {
-      setMeditation(found)
-    }
-  }, [params.id])
+  const saveSession = useCallback(() => {
+    const sessions = JSON.parse(localStorage.getItem('meditation-sessions') || '[]')
+    sessions.push({
+      id: Date.now(),
+      meditationId: meditation?.id,
+      duration: meditation?.duration,
+      completedAt: new Date().toISOString(),
+      notes: userNotes
+    })
+    localStorage.setItem('meditation-sessions', JSON.stringify(sessions))
+  }, [meditation, userNotes])
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
@@ -107,19 +115,7 @@ export default function MeditationDetailPage({ params }: { params: { id: string 
     return () => {
       if (interval) clearInterval(interval)
     }
-  }, [isPlaying, timeElapsed, meditation])
-
-  const saveSession = () => {
-    const sessions = JSON.parse(localStorage.getItem('meditation-sessions') || '[]')
-    sessions.push({
-      id: Date.now(),
-      meditationId: meditation?.id,
-      duration: meditation?.duration,
-      completedAt: new Date().toISOString(),
-      notes: userNotes
-    })
-    localStorage.setItem('meditation-sessions', JSON.stringify(sessions))
-  }
+  }, [isPlaying, timeElapsed, meditation, saveSession])
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying)

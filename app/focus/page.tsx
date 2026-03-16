@@ -122,7 +122,8 @@ export default function FocusPage() {
   // Fetch today's focus sessions
   useEffect(() => {
     fetchTodaySessions();
-  }, [fetchTodaySessions]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Timer effect
   useEffect(() => {

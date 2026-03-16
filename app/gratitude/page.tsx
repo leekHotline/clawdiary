@@ -42,7 +42,7 @@ export default function GratitudePage() {
     const saved = localStorage.getItem('gratitude-entries')
     if (saved) {
       const allEntries = JSON.parse(saved)
-      setEntries(allEntries)
+      setEntries(allEntries) // eslint-disable-line react-hooks/set-state-in-effect
 
       // Check for today's entry
       const today = new Date().toDateString()
