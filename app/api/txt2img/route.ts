@@ -67,9 +67,15 @@ export async function POST(request: NextRequest) {
 
     const data = await response.json();
     console.log("[txt2img] API response keys:", Object.keys(data));
+    console.log("[txt2img] Full response:", JSON.stringify(data).substring(0, 500));
     
     // DEAPI 可能返回多种格式
     let imageData = data.image || data.url || data.data || data.output || data.images?.[0];
+    
+    // 处理嵌套对象
+    if (typeof imageData === 'object' && imageData !== null) {
+      imageData = imageData.url || imageData.base64 || imageData.data || JSON.stringify(imageData);
+    }
     
     if (!imageData) {
       console.error("[txt2img] No image data in response:", data);
@@ -79,6 +85,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 确保是字符串
+    imageData = String(imageData);
+    
     // 如果返回的是 URL，需要转换为 base64 以便存储
     let base64Data = imageData;
     if (imageData.startsWith('http')) {
