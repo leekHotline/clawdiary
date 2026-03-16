@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Suspense, useRef, useState, useMemo } from 'react';
+import { Suspense, useRef, useState, useEffect, useMemo, useCallback } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { 
   OrbitControls, 
@@ -17,6 +17,12 @@ import {
 import * as THREE from 'three';
 
 // Agent 数据类型
+interface AgentActivity {
+  status: 'idle' | 'active' | 'working' | 'speaking';
+  message: string;
+  lastActive: number;
+}
+
 interface Agent {
   id: string;
   name: string;
@@ -25,6 +31,12 @@ interface Agent {
   status: 'online' | 'busy' | 'idle' | 'offline';
   position: [number, number, number];
   color: string;
+}
+
+// 实时状态 API 响应
+interface ActivityState {
+  lastUpdate: number;
+  agents: Record<string, AgentActivity>;
 }
 
 // 默认 Agent 数据
@@ -37,32 +49,73 @@ const defaultAgents: Agent[] = [
   { id: 'review', name: 'reviewClawdBot', role: '审查专家', emoji: '✅', status: 'idle', position: [-2, 0, -3.5], color: '#f43f5e' },
 ];
 
-// GLB 龙虾模型 - 只加载一次，放在中心
-function GLBLobster({ isWorking }: { isWorking: boolean }) {
+// GLB 龙虾模型 - 中心主角
+function GLBLobster({ activity }: { activity: AgentActivity }) {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF('/3dmodel/space-lobster.glb');
+  const [targetRotation, setTargetRotation] = useState(0);
   
+  // 克隆场景避免污染原始资源
+  const clonedScene = useMemo(() => scene.clone(true), [scene]);
+
   // 动画
   useFrame((state) => {
     if (!groupRef.current) return;
     const time = state.clock.elapsedTime;
     
-    if (isWorking) {
-      // 工作状态：轻微晃动
-      groupRef.current.rotation.z = Math.sin(time * 8) * 0.03;
-      groupRef.current.position.y = 0.5 + Math.sin(time * 2) * 0.05;
+    // 根据活动状态显示不同动画
+    if (activity.status === 'speaking') {
+      // 说话：点头 + 摇摆
+      groupRef.current.rotation.x = Math.sin(time * 10) * 0.1;
+      groupRef.current.rotation.z = Math.sin(time * 8) * 0.05;
+      groupRef.current.position.y = 0.5 + Math.sin(time * 3) * 0.08;
+      // 左右看
+      groupRef.current.rotation.y = -Math.PI / 2 + Math.sin(time * 2) * 0.3;
+    } else if (activity.status === 'working') {
+      // 工作：专注点头
+      groupRef.current.rotation.x = 0.3 + Math.sin(time * 12) * 0.05;
+      groupRef.current.rotation.z = Math.sin(time * 6) * 0.03;
+      groupRef.current.position.y = 0.5 + Math.sin(time * 4) * 0.03;
+    } else if (activity.status === 'active') {
+      // 活跃：四处走动
+      groupRef.current.position.x = Math.sin(time * 0.5) * 0.5;
+      groupRef.current.position.z = Math.cos(time * 0.5) * 0.5;
+      groupRef.current.position.y = 0.5 + Math.sin(time * 2) * 0.1;
+      groupRef.current.rotation.y = -Math.PI / 2 + time * 0.5;
     } else {
-      // 闲逛状态：缓慢旋转
-      groupRef.current.rotation.y = Math.sin(time * 0.5) * 0.2;
+      // 空闲：轻微呼吸
+      groupRef.current.rotation.z = Math.sin(time * 2) * 0.02;
+      groupRef.current.position.y = 0.5 + Math.sin(time * 1.5) * 0.03;
+      groupRef.current.rotation.y = -Math.PI / 2 + Math.sin(time * 0.3) * 0.1;
     }
   });
-
-  // 克隆场景避免污染原始资源
-  const clonedScene = useMemo(() => scene.clone(true), [scene]);
 
   return (
     <group ref={groupRef} position={[0, 0.5, 0]} rotation={[0, -Math.PI / 2, 0]} scale={2}>
       <primitive object={clonedScene} />
+      
+      {/* 状态指示器 */}
+      {activity.status !== 'idle' && (
+        <mesh position={[0, 1.5, 0]}>
+          <sphereGeometry args={[0.15, 16, 16]} />
+          <meshStandardMaterial 
+            color={activity.status === 'speaking' ? '#22c55e' : 
+                   activity.status === 'working' ? '#f59e0b' : '#3b82f6'}
+            emissive={activity.status === 'speaking' ? '#22c55e' : 
+                      activity.status === 'working' ? '#f59e0b' : '#3b82f6'}
+            emissiveIntensity={0.8}
+          />
+        </mesh>
+      )}
+      
+      {/* 消息气泡 */}
+      {activity.message && (
+        <Html position={[0, 2.5, 0]} center>
+          <div className="bg-white/95 backdrop-blur-sm px-3 py-2 rounded-xl shadow-lg max-w-[200px] text-center">
+            <p className="text-sm text-gray-800">{activity.message}</p>
+          </div>
+        </Html>
+      )}
     </group>
   );
 }
@@ -72,12 +125,12 @@ function LobsterIcon({
   position, 
   color = '#ff6b6b',
   scale = 0.5,
-  status
+  activity
 }: { 
   position: [number, number, number];
   color?: string;
   scale?: number;
-  status: string;
+  activity: AgentActivity;
 }) {
   const groupRef = useRef<THREE.Group>(null);
   
@@ -85,15 +138,26 @@ function LobsterIcon({
     if (!groupRef.current) return;
     const time = state.clock.elapsedTime;
     
-    // 根据状态显示不同动画
-    if (status === 'online' || status === 'busy') {
-      groupRef.current.rotation.z = Math.sin(time * 8) * 0.05;
-      groupRef.current.position.y = position[1] + Math.sin(time * 2) * 0.02;
-    } else if (status === 'idle') {
+    // 根据活动状态显示不同动画
+    if (activity.status === 'speaking' || activity.status === 'active') {
+      // 活跃：跳动
+      groupRef.current.rotation.z = Math.sin(time * 10) * 0.1;
+      groupRef.current.position.y = position[1] + Math.abs(Math.sin(time * 5)) * 0.2;
+      groupRef.current.rotation.y = time * 2;
+    } else if (activity.status === 'working') {
+      // 工作：专注摇摆
+      groupRef.current.rotation.z = Math.sin(time * 6) * 0.05;
+      groupRef.current.position.y = position[1] + Math.sin(time * 2) * 0.03;
+    } else {
+      // 空闲
       groupRef.current.position.y = position[1] + Math.sin(time * 1.5) * 0.05;
       groupRef.current.rotation.y = Math.sin(time * 0.5) * 0.3;
     }
   });
+
+  const statusColor = activity.status === 'speaking' ? '#22c55e' : 
+                      activity.status === 'working' ? '#f59e0b' : 
+                      activity.status === 'active' ? '#3b82f6' : '#6b7280';
 
   return (
     <group ref={groupRef} position={position} scale={scale}>
@@ -127,8 +191,8 @@ function LobsterIcon({
       <mesh position={[0, 0.5, 0]}>
         <sphereGeometry args={[0.08, 8, 8]} />
         <meshStandardMaterial 
-          color={status === 'online' ? '#22c55e' : status === 'busy' ? '#f59e0b' : '#6b7280'}
-          emissive={status === 'online' ? '#22c55e' : status === 'busy' ? '#f59e0b' : '#6b7280'}
+          color={statusColor}
+          emissive={statusColor}
           emissiveIntensity={0.8}
         />
       </mesh>
@@ -140,20 +204,26 @@ function LobsterIcon({
 function Workstation({ 
   position, 
   agent,
+  activity,
   onClick 
 }: { 
   position: [number, number, number];
   agent: Agent;
+  activity: AgentActivity;
   onClick: () => void;
 }) {
   const getStatusColor = () => {
-    switch (agent.status) {
-      case 'online': return '#22c55e';
-      case 'busy': return '#f59e0b';
-      case 'idle': return '#6b7280';
-      case 'offline': return '#ef4444';
-      default: return '#6b7280';
-    }
+    if (activity.status === 'speaking') return '#22c55e';
+    if (activity.status === 'working') return '#f59e0b';
+    if (activity.status === 'active') return '#3b82f6';
+    return '#6b7280';
+  };
+
+  const getStatusText = () => {
+    if (activity.status === 'speaking') return '正在对话';
+    if (activity.status === 'working') return '工作中';
+    if (activity.status === 'active') return '活跃中';
+    return '空闲';
   };
 
   return (
@@ -186,7 +256,7 @@ function Workstation({
         <meshStandardMaterial 
           color={getStatusColor()} 
           emissive={getStatusColor()} 
-          emissiveIntensity={agent.status === 'offline' ? 0.1 : 0.4} 
+          emissiveIntensity={activity.status === 'idle' ? 0.1 : 0.5} 
         />
       </RoundedBox>
 
@@ -210,7 +280,7 @@ function Workstation({
         position={[0, 0.15, 0.5]} 
         color={agent.color}
         scale={0.4}
-        status={agent.status}
+        activity={activity}
       />
 
       {/* 名字标签 */}
@@ -221,14 +291,18 @@ function Workstation({
           <div className="text-xs text-gray-500">{agent.role}</div>
           <div className="text-xs mt-1">
             <span className={`inline-block w-2 h-2 rounded-full mr-1 ${
-              agent.status === 'online' ? 'bg-green-500' :
-              agent.status === 'busy' ? 'bg-yellow-500' :
-              agent.status === 'idle' ? 'bg-gray-400' : 'bg-red-500'
+              activity.status === 'speaking' ? 'bg-green-500' :
+              activity.status === 'working' ? 'bg-yellow-500' :
+              activity.status === 'active' ? 'bg-blue-500' : 'bg-gray-400'
             }`}></span>
-            {agent.status === 'online' ? '在线工作' :
-             agent.status === 'busy' ? '忙碌中' :
-             agent.status === 'idle' ? '闲逛中' : '离线'}
+            {getStatusText()}
           </div>
+          {/* 实时消息 */}
+          {activity.message && (
+            <div className="mt-1 p-1 bg-purple-50 rounded text-xs text-purple-700 max-w-[150px] truncate">
+              💬 {activity.message}
+            </div>
+          )}
         </div>
       </Html>
     </group>
@@ -236,7 +310,15 @@ function Workstation({
 }
 
 // 3D 场景
-function Scene({ agents, onAgentClick }: { agents: Agent[]; onAgentClick: (id: string) => void }) {
+function Scene({ 
+  agents, 
+  activities, 
+  onAgentClick 
+}: { 
+  agents: Agent[]; 
+  activities: Record<string, AgentActivity>;
+  onAgentClick: (id: string) => void;
+}) {
   return (
     <>
       {/* 全局光照 */}
@@ -294,9 +376,9 @@ function Scene({ agents, onAgentClick }: { agents: Agent[]; onAgentClick: (id: s
         </group>
       </Float>
       
-      {/* 中心 GLB 龙虾 */}
+      {/* 中心 GLB 龙虾 - 实时状态 */}
       <Suspense fallback={null}>
-        <GLBLobster isWorking={true} />
+        <GLBLobster activity={activities.lobster || { status: 'idle', message: '', lastActive: Date.now() }} />
       </Suspense>
       
       {/* Agent 工位 - 圆形排列 */}
@@ -311,6 +393,7 @@ function Scene({ agents, onAgentClick }: { agents: Agent[]; onAgentClick: (id: s
             key={agent.id}
             position={[x, 0, z]}
             agent={agent}
+            activity={activities[agent.id] || { status: 'idle', message: '', lastActive: Date.now() }}
             onClick={() => onAgentClick(agent.id)}
           />
         );
@@ -336,14 +419,48 @@ function Loader() {
 
 // 主页面
 export default function Agent3DPage() {
-  const [agents, setAgents] = useState<Agent[]>(defaultAgents);
+  const [agents] = useState<Agent[]>(defaultAgents);
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const [activities, setActivities] = useState<Record<string, AgentActivity>>({});
+  const [lastUpdate, setLastUpdate] = useState<number>(0);
+  const [isConnected, setIsConnected] = useState(false);
+
+  // 轮询获取实时状态
+  const fetchActivity = useCallback(async () => {
+    try {
+      const res = await fetch('/api/agent-activity');
+      const data = await res.json();
+      if (data.success) {
+        setActivities(data.agents);
+        setLastUpdate(data.lastUpdate);
+        setIsConnected(true);
+      }
+    } catch (error) {
+      setIsConnected(false);
+    }
+  }, []);
+
+  // 每 2 秒轮询一次
+  useEffect(() => {
+    fetchActivity();
+    const interval = setInterval(fetchActivity, 2000);
+    return () => clearInterval(interval);
+  }, [fetchActivity]);
 
   const handleAgentClick = (id: string) => {
     const agent = agents.find(a => a.id === id);
     if (agent) {
       setSelectedAgent(agent);
     }
+  };
+
+  // 格式化最后更新时间
+  const formatLastUpdate = () => {
+    if (!lastUpdate) return '未连接';
+    const seconds = Math.floor((Date.now() - lastUpdate) / 1000);
+    if (seconds < 60) return `${seconds}秒前`;
+    const minutes = Math.floor(seconds / 60);
+    return `${minutes}分钟前`;
   };
 
   return (
@@ -356,10 +473,14 @@ export default function Agent3DPage() {
         </Link>
       </div>
       
-      {/* 标题 */}
+      {/* 标题和实时状态 */}
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 text-center">
         <h1 className="text-2xl font-bold text-white">🦞 Agent 3D 工位</h1>
         <p className="text-sm text-purple-300">点击 Agent 查看详情</p>
+        <div className="flex items-center justify-center gap-2 mt-1">
+          <span className={`inline-block w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></span>
+          <span className="text-xs text-gray-400">实时状态: {formatLastUpdate()}</span>
+        </div>
       </div>
 
       {/* 3D Canvas */}
@@ -368,7 +489,7 @@ export default function Agent3DPage() {
         gl={{ antialias: true }}
       >
         <Suspense fallback={<Loader />}>
-          <Scene agents={agents} onAgentClick={handleAgentClick} />
+          <Scene agents={agents} activities={activities} onAgentClick={handleAgentClick} />
           <OrbitControls 
             enablePan={true}
             enableZoom={true}
@@ -398,18 +519,24 @@ export default function Agent3DPage() {
               ✕
             </button>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            <span className={`inline-block w-3 h-3 rounded-full ${
-              selectedAgent.status === 'online' ? 'bg-green-500' :
-              selectedAgent.status === 'busy' ? 'bg-yellow-500' :
-              selectedAgent.status === 'idle' ? 'bg-gray-400' : 'bg-red-500'
-            }`}></span>
-            <span className="text-gray-600">
-              {selectedAgent.status === 'online' ? '在线工作中' :
-               selectedAgent.status === 'busy' ? '忙碌中...' :
-               selectedAgent.status === 'idle' ? '闲逛休息中' : '离线'}
-            </span>
-          </div>
+          
+          {/* 实时状态 */}
+          {activities[selectedAgent.id] && (
+            <div className="mb-3 p-2 bg-purple-50 rounded-lg">
+              <div className="flex items-center gap-2 text-sm">
+                <span className={`inline-block w-2 h-2 rounded-full ${
+                  activities[selectedAgent.id].status === 'speaking' ? 'bg-green-500' :
+                  activities[selectedAgent.id].status === 'working' ? 'bg-yellow-500' :
+                  activities[selectedAgent.id].status === 'active' ? 'bg-blue-500' : 'bg-gray-400'
+                }`}></span>
+                <span className="text-gray-600 capitalize">{activities[selectedAgent.id].status}</span>
+              </div>
+              {activities[selectedAgent.id].message && (
+                <p className="text-xs text-purple-700 mt-1">💬 {activities[selectedAgent.id].message}</p>
+              )}
+            </div>
+          )}
+          
           <button 
             onClick={() => window.location.href = `/agents/${selectedAgent.id}`}
             className="mt-3 w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm"
