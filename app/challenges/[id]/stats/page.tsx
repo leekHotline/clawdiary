@@ -101,8 +101,6 @@ export default function ChallengeStatsPage({ params }: { params: { id: string } 
     return data
   }, [challenge, dailyProgress])
 
-  const maxValue = Math.max(...weekData.map(d => d.value), 1)
-
   if (!challenge) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 p-6">
