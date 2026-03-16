@@ -10,7 +10,7 @@ export interface AuthUser {
 }
 
 // 简单的认证检查（存根实现）
-export async function auth(request?: NextRequest): Promise<AuthUser | null> {
+export async function auth(_request?: NextRequest): Promise<AuthUser | null> {
   // 存根实现：返回默认用户
   // 生产环境应该检查 session/token
   return {

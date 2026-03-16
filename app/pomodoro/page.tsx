@@ -100,8 +100,8 @@ export default function PomodoroPage() {
     if (mode === 'work') {
       const newCount = sessions + 1
       setSessions(newCount)
-      setTotalFocusTime(prev => prev + customTimes[mode] / 60)
-      setTodaySessions(prev => [...prev, newSession])
+      setTotalFocusTime((prev: number) => prev + customTimes[mode] / 60)
+      setTodaySessions((prev: any[]) => [...prev, newSession])
       
       // Every 4 sessions, take a long break
       if (newCount % 4 === 0) {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 
 interface WritingGoal {
@@ -25,15 +25,15 @@ export default function WritingGoalsDetailPage({ params }: { params: { id: strin
     return null
   }, [params.id])
 
-  const [goal, setGoal] = useState<WritingGoal | null>(initialGoal)
+  const [goal] = useState<WritingGoal | null>(initialGoal)
   // 使用惰性初始化从 localStorage 读取，避免 useEffect 中的同步 setState
-  const [history, setHistory] = useState<{ date: string; value: number }[]>(() => {
+  const [history] = useState<{ date: string; value: number }[]>(() => {
     if (typeof window === 'undefined') return []
     const historyKey = `goal-history-${params.id}`
     const historyData = localStorage.getItem(historyKey)
     return historyData ? JSON.parse(historyData) : []
   })
-  const [notes, setNotes] = useState<{ date: string; note: string }[]>(() => {
+  const [notes] = useState<{ date: string; note: string }[]>(() => {
     if (typeof window === 'undefined') return []
     const notesKey = `goal-notes-${params.id}`
     const notesData = localStorage.getItem(notesKey)

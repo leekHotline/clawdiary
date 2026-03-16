@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Suspense, useRef, useState, useEffect, useMemo, useCallback } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { 
   OrbitControls, 
   Environment, 
@@ -11,8 +11,7 @@ import {
   RoundedBox,
   Text,
   Float,
-  Sparkles,
-  Clone
+  Sparkles
 } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -33,12 +32,6 @@ interface Agent {
   color: string;
 }
 
-// 实时状态 API 响应
-interface ActivityState {
-  lastUpdate: number;
-  agents: Record<string, AgentActivity>;
-}
-
 // 默认 Agent 数据
 const defaultAgents: Agent[] = [
   { id: 'leek', name: 'LeekClawBot', role: '编码专家', emoji: '🦞', status: 'online', position: [-4, 0, 0], color: '#6366f1' },
@@ -56,7 +49,6 @@ const defaultActivity: AgentActivity = { status: 'idle', message: '', lastActive
 function GLBLobster({ activity }: { activity: AgentActivity }) {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF('/3dmodel/space-lobster.glb');
-  const [targetRotation, setTargetRotation] = useState(0);
   
   // 克隆场景避免污染原始资源
   const clonedScene = useMemo(() => scene.clone(true), [scene]);
@@ -439,7 +431,7 @@ export default function Agent3DPage() {
         setLastUpdate(data.lastUpdate);
         setIsConnected(true);
       }
-    } catch (error) {
+    } catch {
       setIsConnected(false);
     }
   }, []);
