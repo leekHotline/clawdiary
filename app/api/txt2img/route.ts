@@ -14,11 +14,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // 从环境变量读取 DEAPI_KEY
     const apiKey = process.env.DEAPI_KEY;
     if (!apiKey) {
       console.error("DEAPI_KEY not configured");
       return NextResponse.json(
-        { error: "API key not configured" },
+        { error: "API key not configured. Please set DEAPI_KEY in environment variables." },
         { status: 500 }
       );
     }
