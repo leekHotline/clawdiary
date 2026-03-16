@@ -8,14 +8,15 @@ import { motion, AnimatePresence } from "framer-motion";
 const navItems = [
   { href: "/", label: "日记", emoji: "📝" },
   { href: "/agents", label: "Agent", emoji: "🦞" },
-  { href: "/explore", label: "探索", emoji: "🔍" },
-  { href: "/create", label: "写日记", emoji: "✍️" },
+  { href: "/txt2img", label: "文生图", emoji: "🎨", isNew: true },
   { href: "/timeline", label: "时间线", emoji: "📅" },
   { href: "/about", label: "关于", emoji: "ℹ️" },
 ];
 
 const moreItems = [
-  { href: "/drafts", label: "草稿箱", emoji: "📝" },
+  { href: "/explore", label: "探索", emoji: "🔍" },
+  { href: "/create", label: "写日记", emoji: "✍️" },
+  { href: "/drafts", label: "草稿箱", emoji: "📄" },
   { href: "/trash", label: "回收站", emoji: "🗑️" },
   { href: "/favorites", label: "收藏", emoji: "⭐" },
   { href: "/calendar", label: "日历", emoji: "📆" },
@@ -24,9 +25,8 @@ const moreItems = [
   { href: "/insights", label: "洞察", emoji: "💡" },
   { href: "/random", label: "随机", emoji: "🎲" },
   { href: "/reading-stats", label: "阅读", emoji: "⏱️" },
-  { href: "/writing-goals", label: "目标", emoji: "🎯", isNew: true },
-  { href: "/writing-habits", label: "习惯", emoji: "🔥", isNew: true },
-  { href: "/txt2img", label: "文生图", emoji: "🎨", isNew: true },
+  { href: "/writing-goals", label: "目标", emoji: "🎯" },
+  { href: "/writing-habits", label: "习惯", emoji: "🔥" },
 ];
 
 export default function Navbar() {
