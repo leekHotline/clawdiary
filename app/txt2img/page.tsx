@@ -74,9 +74,14 @@ export default function Txt2ImgPage() {
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           🎨 文生图
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-8">
-          输入描述，AI 为你生成图像
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-gray-600 dark:text-gray-400">
+            输入描述，AI 为你生成图像
+          </p>
+          <a href="/image-history" className="text-purple-600 hover:text-purple-700 dark:text-purple-400 text-sm">
+            📜 查看历史记录 →
+          </a>
+        </div>
 
         <div className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/20 mb-8">
           {/* 提示词输入 */}
