@@ -3,6 +3,43 @@ import { NextRequest, NextResponse } from "next/server";
 // MiniMax 图片生成 API
 const MINIMAX_API_URL = "https://api.minimaxi.com/v1/image_generation";
 
+// Telegram Bot Token (从环境变量获取)
+const TELEGRAM_BOT_TOKEN = process.env.SEARCH_DATA_CLAW_BOT_TOKEN || process.env.EVOLUTION_CLAW_BOT_TOKEN;
+
+// 发送图片到 Telegram
+async function sendPhotoToTelegram(chatId: string, photoBase64: string, caption: string): Promise<boolean> {
+  if (!TELEGRAM_BOT_TOKEN) {
+    console.error("[txt2img] TELEGRAM_BOT_TOKEN not configured");
+    return false;
+  }
+
+  try {
+    // 将 base64 转为 Buffer
+    const buffer = Buffer.from(photoBase64, 'base64');
+    const formData = new FormData();
+    formData.append('chat_id', chatId);
+    formData.append('photo', new Blob([buffer], { type: 'image/jpeg' }), 'image.jpg');
+    formData.append('caption', caption);
+
+    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    const result = await response.json();
+    if (result.ok) {
+      console.log(`[txt2img] Photo sent to Telegram chat ${chatId}`);
+      return true;
+    } else {
+      console.error("[txt2img] Telegram API error:", result.description);
+      return false;
+    }
+  } catch (error) {
+    console.error("[txt2img] Failed to send photo to Telegram:", error);
+    return false;
+  }
+}
+
 // 内存存储历史记录
 let imageHistory: Array<{
   id: string;
@@ -18,7 +55,7 @@ let imageHistory: Array<{
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { prompt, width = 1024, height = 1024, seed, model = "image-01" } = body;
+    const { prompt, width = 1024, height = 1024, seed, model = "image-01", telegramChatId } = body;
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
@@ -102,6 +139,13 @@ export async function POST(request: NextRequest) {
 
     console.log(`[txt2img] Generated: ${imageId}, size: ${imageBase64.length} bytes`);
 
+    // 如果指定了 Telegram chat ID，发送图片
+    let telegramSent = false;
+    if (telegramChatId) {
+      const caption = `🦞 AI 生成图片\n\nPrompt: ${prompt.substring(0, 200)}${prompt.length > 200 ? '...' : ''}`;
+      telegramSent = await sendPhotoToTelegram(telegramChatId, imageBase64, caption);
+    }
+
     return NextResponse.json({
       success: true,
       id: imageId,
@@ -112,6 +156,7 @@ export async function POST(request: NextRequest) {
       width,
       height,
       timestamp: historyItem.timestamp,
+      telegramSent,
     });
   } catch (error) {
     console.error("[txt2img] Error:", error);
