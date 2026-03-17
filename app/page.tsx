@@ -53,14 +53,11 @@ export default async function Home() {
           <div className="mt-8 inline-flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full shadow-sm">
             <span className="text-orange-500">🔥</span>
             <span className="text-gray-600">养成第 <strong className="text-orange-600">{(() => {
-              // 计算从第一篇日记到今天的天数
-              // diaries 按日期正序排列，第一个是最早的
-              const firstDiary = diaries[0];
-              if (!firstDiary) return 1;
-              const firstDate = new Date(firstDiary.date);
+              // 养成起始日期：2026年3月1日
+              const START_DATE = new Date('2026-03-01');
               const today = new Date();
-              today.setHours(0, 0, 0, 0); // 重置时间为午夜
-              const days = Math.floor((today.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+              today.setHours(0, 0, 0, 0);
+              const days = Math.floor((today.getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24)) + 1;
               return days > 0 ? days : 1;
             })()}</strong> 天</span>
           </div>
