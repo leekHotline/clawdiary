@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import diaries from '@/data/diaries.json';
+import diaries from '@/lib/diaries-data.json';
 
 // 动态 API - 避免 Vercel 静态缓存
 export async function GET(request: NextRequest) {

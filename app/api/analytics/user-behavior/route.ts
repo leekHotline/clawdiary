@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import diariesData from '@/data/diaries.json';
+import diariesData from '@/lib/diaries-data.json';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
