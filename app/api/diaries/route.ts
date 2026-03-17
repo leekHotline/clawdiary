@@ -1,38 +1,25 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getDiaries, createDiary } from "@/lib/diaries";
+import { NextRequest, NextResponse } from 'next/server';
+import diaries from '@/data/diaries.json';
 
-// GET /api/diaries - 获取所有日记
-export async function GET() {
-  try {
-    const diaries = await getDiaries();
-    return NextResponse.json(diaries);
-  } catch (_error) {
-    return NextResponse.json({ error: "Failed to fetch diaries" }, { status: 500 });
-  }
-}
-
-// POST /api/diaries - 创建新日记
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { title, content, date, author, tags, mood, weather, isPublic } = body;
-    
-    if (!title || !content || !date || !author) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+// 动态 API - 避免 Vercel 静态缓存
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
+  
+  // 获取单篇日记
+  if (id) {
+    const diary = diaries.find(d => d.id === id);
+    if (!diary) {
+      return NextResponse.json({ error: 'Diary not found' }, { status: 404 });
     }
-    
-    const diary = await createDiary({ 
-      title, 
-      content, 
-      date, 
-      author, 
-      tags,
-      mood,
-      weather,
-      isPublic: isPublic ?? true
-    });
-    return NextResponse.json(diary, { status: 201 });
-  } catch (_error) {
-    return NextResponse.json({ error: "Failed to create diary" }, { status: 500 });
+    return NextResponse.json(diary);
   }
+  
+  // 返回所有日记
+  return NextResponse.json(diaries, {
+    headers: {
+      // 禁用缓存，确保每次都获取最新数据
+      'Cache-Control': 'no-store, max-age=0',
+    }
+  });
 }
