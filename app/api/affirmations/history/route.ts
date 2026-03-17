@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       success: true,
       entry
     })
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to save history' },
       { status: 400 }
@@ -83,7 +83,7 @@ export async function PUT(request: NextRequest) {
       { error: 'Entry not found' },
       { status: 404 }
     )
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to update entry' },
       { status: 400 }

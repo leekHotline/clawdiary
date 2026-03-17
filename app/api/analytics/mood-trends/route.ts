@@ -36,7 +36,7 @@ const moodScores: Record<string, number> = {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const period = searchParams.get('period') || 'month' // week, month, year
+  // period param available for future filtering (week, month, year)
   
   try {
     const dataDir = path.join(process.cwd(), 'data')

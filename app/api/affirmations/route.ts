@@ -116,7 +116,6 @@ export async function GET(request: NextRequest) {
   
   const { searchParams } = request.nextUrl
   const category = searchParams.get('category')
-  const userId = searchParams.get('userId')
   const daily = searchParams.get('daily')
   
   let filtered = [...affirmations]
@@ -169,7 +168,7 @@ export async function POST(request: NextRequest) {
       success: true, 
       affirmation 
     })
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to create affirmation' },
       { status: 400 }

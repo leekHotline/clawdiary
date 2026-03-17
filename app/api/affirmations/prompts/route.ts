@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
       timeOfDay,
       suggestedPrompts
     })
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to generate prompts' },
       { status: 400 }

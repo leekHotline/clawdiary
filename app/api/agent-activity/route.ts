@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
         lastActive: Date.now(),
       }
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ 
       success: false, 
       error: 'Invalid request body' 

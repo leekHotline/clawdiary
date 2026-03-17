@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
       success: true, 
       favorites: favorites[uid] 
     })
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to add favorite' },
       { status: 400 }

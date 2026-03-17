@@ -19,7 +19,7 @@ interface TimeRecommendation {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const userId = searchParams.get('userId') || 'default'
-  const type = searchParams.get('type') || 'all' // all, tags, mood, time, content
+  // type param available for future filtering (all, tags, mood, time, content)
   
   try {
     const dataDir = path.join(process.cwd(), 'data')
@@ -28,7 +28,6 @@ export async function GET(request: Request) {
     // 收集用户偏好数据
     const tagPreferences: Record<string, number> = {}
     const moodHistory: string[] = []
-    const writingTimes: number[] = []
     const contentLengths: number[] = []
     const weatherPreferences: Record<string, string[]> = {}
     
@@ -195,6 +194,11 @@ function generateTagRecommendations(topTags: string[]): string[] {
     '尝试"创作"标签记录灵感',
   ]
   
+  // 如果用户已有常用标签，给出个性化建议
+  if (topTags.length > 0) {
+    return [`你常使用"${topTags[0]}"标签，继续保持！`, ...suggestions.slice(0, 2)]
+  }
+  
   return suggestions.slice(0, 3)
 }
 
@@ -232,6 +236,10 @@ function generateContentRecommendations(avgWordCount: number, topTags: string[])
     recommendations.push('你的日记内容丰富，尝试添加一些结构化的反思')
   } else {
     recommendations.push('你的日记长度适中，继续保持')
+  }
+  
+  if (topTags.length > 0) {
+    recommendations.push(`尝试围绕"${topTags[0]}"标签展开更多思考`)
   }
   
   recommendations.push('可以添加一些具体的例子来支持你的观点')
