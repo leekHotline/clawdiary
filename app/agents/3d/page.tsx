@@ -115,11 +115,11 @@ function GLBLobster({ activity }: { activity: AgentActivity }) {
   );
 }
 
-// 简化龙虾图标（用于工位）
-function LobsterIcon({ 
+// 精美 AI Agent 机器人模型（科幻风格）
+function AIAgentBot({ 
   position, 
-  color = '#ff6b6b',
-  scale = 0.5,
+  color = '#6366f1',
+  scale = 1,
   activity
 }: { 
   position: [number, number, number];
@@ -135,18 +135,17 @@ function LobsterIcon({
     
     // 根据活动状态显示不同动画
     if (activity.status === 'speaking' || activity.status === 'active') {
-      // 活跃：跳动
-      groupRef.current.rotation.z = Math.sin(time * 10) * 0.1;
-      groupRef.current.position.y = position[1] + Math.abs(Math.sin(time * 5)) * 0.2;
-      groupRef.current.rotation.y = time * 2;
+      // 活跃：浮动 + 轻微旋转
+      groupRef.current.position.y = position[1] + Math.sin(time * 2) * 0.15;
+      groupRef.current.rotation.y = Math.sin(time * 0.5) * 0.4;
     } else if (activity.status === 'working') {
-      // 工作：专注摇摆
-      groupRef.current.rotation.z = Math.sin(time * 6) * 0.05;
-      groupRef.current.position.y = position[1] + Math.sin(time * 2) * 0.03;
-    } else {
-      // 空闲
+      // 工作：专注点头
+      groupRef.current.rotation.x = Math.sin(time * 3) * 0.1;
       groupRef.current.position.y = position[1] + Math.sin(time * 1.5) * 0.05;
-      groupRef.current.rotation.y = Math.sin(time * 0.5) * 0.3;
+    } else {
+      // 空闲：轻微呼吸
+      groupRef.current.position.y = position[1] + Math.sin(time * 1.2) * 0.05;
+      groupRef.current.rotation.y = Math.sin(time * 0.3) * 0.2;
     }
   });
 
@@ -155,40 +154,121 @@ function LobsterIcon({
                       activity.status === 'active' ? '#3b82f6' : '#6b7280';
 
   return (
-    <group ref={groupRef} position={position} scale={scale}>
-      {/* 简化龙虾图标 - 球体 + 大钳子 */}
-      <mesh>
-        <sphereGeometry args={[0.3, 16, 16]} />
-        <meshStandardMaterial color={color} roughness={0.3} metalness={0.3} />
+    <group ref={groupRef} position={position} scale={scale * 0.8}>
+      {/* 身体 - 圆角立方体 */}
+      <RoundedBox args={[0.6, 0.8, 0.4]} radius={0.1} position={[0, 0.4, 0]}>
+        <meshStandardMaterial 
+          color={color} 
+          roughness={0.2} 
+          metalness={0.8}
+          emissive={color}
+          emissiveIntensity={0.1}
+        />
+      </RoundedBox>
+      
+      {/* 头部 - 圆球 */}
+      <mesh position={[0, 1.1, 0]}>
+        <sphereGeometry args={[0.35, 32, 32]} />
+        <meshStandardMaterial 
+          color={color} 
+          roughness={0.1} 
+          metalness={0.9}
+          emissive={color}
+          emissiveIntensity={0.15}
+        />
       </mesh>
       
-      {/* 眼睛 */}
-      <mesh position={[-0.1, 0.2, 0.2]}>
-        <sphereGeometry args={[0.06, 8, 8]} />
-        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.5} />
-      </mesh>
-      <mesh position={[0.1, 0.2, 0.2]}>
-        <sphereGeometry args={[0.06, 8, 8]} />
-        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.5} />
-      </mesh>
-      
-      {/* 大钳子 */}
-      <mesh position={[-0.4, 0, 0.1]} rotation={[0, 0, -0.5]}>
-        <sphereGeometry args={[0.12, 8, 8]} />
-        <meshStandardMaterial color="#c92a2a" roughness={0.4} metalness={0.3} />
-      </mesh>
-      <mesh position={[0.4, 0, 0.1]} rotation={[0, 0, 0.5]}>
-        <sphereGeometry args={[0.12, 8, 8]} />
-        <meshStandardMaterial color="#c92a2a" roughness={0.4} metalness={0.3} />
+      {/* 面罩/面屏 */}
+      <mesh position={[0, 1.1, 0.25]}>
+        <boxGeometry args={[0.5, 0.25, 0.05]} />
+        <meshStandardMaterial 
+          color="#0f172a" 
+          roughness={0.1} 
+          metalness={0.5}
+          transparent
+          opacity={0.9}
+        />
       </mesh>
       
-      {/* 状态指示 */}
-      <mesh position={[0, 0.5, 0]}>
-        <sphereGeometry args={[0.08, 8, 8]} />
+      {/* 眼睛 - 发光 */}
+      <mesh position={[-0.12, 1.15, 0.28]}>
+        <sphereGeometry args={[0.06, 16, 16]} />
+        <meshStandardMaterial 
+          color="#ffffff" 
+          emissive={statusColor}
+          emissiveIntensity={1.5}
+        />
+      </mesh>
+      <mesh position={[0.12, 1.15, 0.28]}>
+        <sphereGeometry args={[0.06, 16, 16]} />
+        <meshStandardMaterial 
+          color="#ffffff" 
+          emissive={statusColor}
+          emissiveIntensity={1.5}
+        />
+      </mesh>
+      
+      {/* 天线 */}
+      <mesh position={[0, 1.55, 0]}>
+        <cylinderGeometry args={[0.02, 0.02, 0.2, 8]} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.9} />
+      </mesh>
+      <mesh position={[0, 1.7, 0]}>
+        <sphereGeometry args={[0.05, 16, 16]} />
         <meshStandardMaterial 
           color={statusColor}
           emissive={statusColor}
-          emissiveIntensity={0.8}
+          emissiveIntensity={1}
+        />
+      </mesh>
+      
+      {/* 手臂 */}
+      <group position={[-0.45, 0.5, 0]}>
+        <mesh rotation={[0, 0, 0.3]}>
+          <cylinderGeometry args={[0.06, 0.06, 0.4, 12]} />
+          <meshStandardMaterial color={color} metalness={0.8} roughness={0.2} />
+        </mesh>
+        <mesh position={[0.1, -0.25, 0]}>
+          <sphereGeometry args={[0.08, 12, 12]} />
+          <meshStandardMaterial color="#94a3b8" metalness={0.9} />
+        </mesh>
+      </group>
+      <group position={[0.45, 0.5, 0]}>
+        <mesh rotation={[0, 0, -0.3]}>
+          <cylinderGeometry args={[0.06, 0.06, 0.4, 12]} />
+          <meshStandardMaterial color={color} metalness={0.8} roughness={0.2} />
+        </mesh>
+        <mesh position={[-0.1, -0.25, 0]}>
+          <sphereGeometry args={[0.08, 12, 12]} />
+          <meshStandardMaterial color="#94a3b8" metalness={0.9} />
+        </mesh>
+      </group>
+      
+      {/* 底座/腿 */}
+      <mesh position={[0, -0.1, 0]}>
+        <cylinderGeometry args={[0.2, 0.25, 0.2, 16]} />
+        <meshStandardMaterial color="#1e293b" metalness={0.8} />
+      </mesh>
+      
+      {/* 状态光圈 */}
+      <mesh position={[0, -0.05, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.3, 0.02, 8, 32]} />
+        <meshStandardMaterial 
+          color={statusColor}
+          emissive={statusColor}
+          emissiveIntensity={activity.status !== 'idle' ? 1.5 : 0.3}
+          transparent
+          opacity={activity.status !== 'idle' ? 1 : 0.4}
+        />
+      </mesh>
+      
+      {/* 胸部核心 - 发光 */}
+      <mesh position={[0, 0.55, 0.21]}>
+        <octahedronGeometry args={[0.1, 0]} />
+        <meshStandardMaterial 
+          color={statusColor}
+          emissive={statusColor}
+          emissiveIntensity={activity.status !== 'idle' ? 2 : 0.5}
         />
       </mesh>
     </group>
@@ -270,11 +350,11 @@ function Workstation({
         <meshStandardMaterial color="#1e293b" />
       </RoundedBox>
 
-      {/* 简化龙虾 Agent */}
-      <LobsterIcon 
-        position={[0, 0.15, 0.5]} 
+      {/* AI Agent 机器人 */}
+      <AIAgentBot 
+        position={[0, 0.2, 0.5]} 
         color={agent.color}
-        scale={0.4}
+        scale={0.5}
         activity={activity}
       />
 
