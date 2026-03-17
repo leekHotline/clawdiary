@@ -22,14 +22,11 @@ const navConfig = [
     ]
   },
   {
-    href: '/explore',
-    label: '探索',
+    href: '/txt2img',
+    label: '文生图',
     children: [
-      { href: '/explore', label: '发现' },
-      { href: '/community', label: '社区' },
-      { href: '/challenges', label: '挑战' },
-      { href: '/contests', label: '竞赛' },
-      { href: '/community/leaderboard', label: '排行榜' },
+      { href: '/txt2img', label: '创作' },
+      { href: '/image-history', label: '历史' },
     ]
   },
   {
@@ -40,6 +37,16 @@ const navConfig = [
       { href: '/agents/3d', label: '3D工位' },
       { href: '/claw-space/story', label: '龙虾故事' },
       { href: '/collab', label: '协作日记' },
+    ]
+  },
+  {
+    href: '#more',
+    label: '更多',
+    children: [
+      { href: '/explore', label: '探索' },
+      { href: '/create', label: '写日记' },
+      { href: '/community', label: '社区' },
+      { href: '/challenges', label: '挑战' },
     ]
   },
   {
@@ -131,15 +138,8 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* 快捷操作 */}
-          <div className="flex items-center gap-2">
-            <Link
-              href="/create"
-              className="px-4 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-red-500 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all shadow-sm hover:shadow"
-            >
-              写日记
-            </Link>
-          </div>
+          {/* 右侧留空，保持布局平衡 */}
+          <div className="w-20" />
         </div>
       </div>
     </nav>
