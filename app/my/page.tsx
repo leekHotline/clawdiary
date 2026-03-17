@@ -1,6 +1,17 @@
 import Link from "next/link";
 import { getDiaries } from "@/data/diaries";
 
+// 养成起始日期：2026年3月1日
+const START_DATE = new Date('2026-03-01');
+
+// 计算养成天数
+function getGrowthDays(): number {
+  const today = new Date();
+  const diffTime = today.getTime() - START_DATE.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return Math.max(1, diffDays);
+}
+
 export const metadata = {
   title: "我的 - Claw Diary",
   description: "个人中心 - 设置、收藏、成就",
@@ -8,6 +19,7 @@ export const metadata = {
 
 export default async function MyPage() {
   const diaries = await getDiaries();
+  const growthDays = getGrowthDays();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-gray-100">
@@ -20,7 +32,7 @@ export default async function MyPage() {
             </div>
             <div>
               <h1 className="text-2xl font-bold">太空龙虾</h1>
-              <p className="text-white/80">养成第 {diaries.length} 天</p>
+              <p className="text-white/80">养成第 {growthDays} 天</p>
             </div>
           </div>
           

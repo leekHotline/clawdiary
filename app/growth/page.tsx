@@ -2,6 +2,17 @@ import Link from "next/link";
 import { getDiaries } from "@/data/diaries";
 import { DiaryEntry } from "@/data/diaries";
 
+// 养成起始日期：2026年3月1日
+const START_DATE = new Date('2026-03-01');
+
+// 计算养成天数
+function getGrowthDays(): number {
+  const today = new Date();
+  const diffTime = today.getTime() - START_DATE.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return Math.max(1, diffDays);
+}
+
 // 为日记生成默认图片
 function getDiaryImage(diary: DiaryEntry): string | null {
   if (diary.image) return diary.image;
@@ -41,6 +52,7 @@ export const metadata = {
 
 export default async function GrowthPage() {
   const diaries = await getDiaries();
+  const growthDays = getGrowthDays();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-amber-50 to-yellow-50">
@@ -54,7 +66,7 @@ export default async function GrowthPage() {
         {/* 头部 */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">成长记录</h1>
-          <p className="text-gray-500">太空龙虾的养成日记，共 {diaries.length} 天</p>
+          <p className="text-gray-500">太空龙虾养成第 {growthDays} 天，共记录 {diaries.length} 篇日记</p>
         </div>
 
         {/* 日记列表 */}
