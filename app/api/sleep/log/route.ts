@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       success: true,
       record: newRecord,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to save sleep record' },
       { status: 500 }

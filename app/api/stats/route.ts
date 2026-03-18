@@ -64,7 +64,7 @@ export async function GET() {
       latestDiary: diaries[0] || null,
       oldestDiary: diaries[diaries.length - 1] || null,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch stats" }, { status: 500 });
   }
 }

@@ -88,7 +88,7 @@ export async function POST(
       checkedAt: new Date().toISOString()
     });
     
-  } catch (_error) {
+  } catch {
     return NextResponse.json({
       success: false,
       error: '扫描失败'
@@ -117,7 +117,7 @@ export async function PUT(request: NextRequest) {
       totalWords: sensitiveWords.size
     });
     
-  } catch (_error) {
+  } catch {
     return NextResponse.json({
       success: false,
       error: '添加失败'
@@ -148,7 +148,7 @@ export async function DELETE(request: NextRequest) {
       totalWords: sensitiveWords.size
     });
     
-  } catch (_error) {
+  } catch {
     return NextResponse.json({
       success: false,
       error: '删除失败'

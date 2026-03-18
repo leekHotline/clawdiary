@@ -38,8 +38,7 @@ export async function POST(request: NextRequest) {
       message: `Published ${published.length} scheduled diaries`,
       published,
     });
-  } catch (_error) {
-    console.error("Error publishing scheduled diaries:", _error);
+  } catch {
     return NextResponse.json({ error: "Failed to publish scheduled diaries" }, { status: 500 });
   }
 }

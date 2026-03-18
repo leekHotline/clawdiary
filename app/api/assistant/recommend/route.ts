@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getDiaries } from "@/lib/diaries";
 
 // GET /api/assistant/recommend - 获取写作推荐
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const diaries = await getDiaries();
     
@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
         })),
       },
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to get recommendations" }, { status: 500 });
   }
 }

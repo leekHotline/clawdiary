@@ -12,8 +12,7 @@ export async function GET(
       return NextResponse.json({ error: "Trash item not found" }, { status: 404 });
     }
     return NextResponse.json(item);
-  } catch (_error) {
-    console.error("Error fetching trash item:", _error);
+  } catch {
     return NextResponse.json({ error: "Failed to fetch trash item" }, { status: 500 });
   }
 }
@@ -29,8 +28,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Trash item not found" }, { status: 404 });
     }
     return NextResponse.json({ success: true });
-  } catch (_error) {
-    console.error("Error permanently deleting:", _error);
+  } catch {
     return NextResponse.json({ error: "Failed to permanently delete" }, { status: 500 });
   }
 }

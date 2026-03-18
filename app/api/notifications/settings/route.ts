@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
       success: true,
       setting: newSetting,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to create notification setting" },
       { status: 500 }
@@ -133,7 +133,7 @@ export async function PUT(request: NextRequest) {
       success: true,
       setting: notificationSettings[index],
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to update notification setting" },
       { status: 500 }

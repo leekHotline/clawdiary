@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       message: '排序更新成功',
       data: cardIds.map((id: string, index: number) => ({ id, order: index }))
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: '排序更新失败' },
       { status: 500 }

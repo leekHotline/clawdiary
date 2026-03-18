@@ -38,8 +38,7 @@ export async function GET(request: NextRequest) {
         total: inspirations.length,
       },
     });
-  } catch (_error) {
-    console.error("Error fetching inspirations:", _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to fetch inspirations" },
       { status: 500 }
@@ -81,8 +80,7 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: inspiration }, { status: 201 });
-  } catch (_error) {
-    console.error("Error creating inspiration:", _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to create inspiration" },
       { status: 500 }

@@ -5,8 +5,7 @@ export async function GET() {
   try {
     const drafts = await getDrafts();
     return NextResponse.json({ drafts });
-  } catch (_error) {
-    console.error("Error fetching drafts:", _error);
+  } catch {
     return NextResponse.json({ error: "Failed to fetch drafts" }, { status: 500 });
   }
 }
@@ -23,8 +22,7 @@ export async function POST(request: Request) {
       image: body.image,
     });
     return NextResponse.json(draft);
-  } catch (_error) {
-    console.error("Error creating draft:", _error);
+  } catch {
     return NextResponse.json({ error: "Failed to create draft" }, { status: 500 });
   }
 }

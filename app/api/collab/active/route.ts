@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 // GET - 获取活跃的协作日记（首页展示用）
-export async function GET(request: NextRequest) {
+export async function GET() {
   // 模拟数据
   const activeCollabs = [
     {

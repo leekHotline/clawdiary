@@ -89,8 +89,7 @@ export async function PUT(
       success: true,
       capsule: timeCapsules[capsuleIndex],
     });
-  } catch (_error) {
-    console.error('Failed to update time capsule:', _error);
+  } catch {
     return NextResponse.json(
       { error: '更新失败' },
       { status: 500 }

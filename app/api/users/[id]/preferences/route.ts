@@ -35,7 +35,7 @@ export async function GET(
       success: true,
       data: prefs,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: '获取偏好失败' },
       { status: 500 }
@@ -63,7 +63,7 @@ export async function PUT(
       data: userPreferences[userId],
       message: '偏好更新成功',
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: '更新偏好失败' },
       { status: 500 }

@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// 模拟数据存储（与 route.ts 共享）
-const collabDiaries: any[] = [];
-
 // GET - 获取单个协作日记详情
 export async function GET(
   request: NextRequest,
@@ -11,6 +8,7 @@ export async function GET(
   const { id } = await params;
   
   // 模拟数据
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const collab: any = {
     "collab-1": {
       id: "collab-1",
@@ -95,7 +93,6 @@ export async function PUT(
 ) {
   const { id } = await params;
   const body = await request.json();
-  const { title, description, deadline, targetWords, tags } = body;
   
   // 模拟更新
   return NextResponse.json({
@@ -110,7 +107,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
+  await params; // params reserved for future use
   
   return NextResponse.json({
     success: true,

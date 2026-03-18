@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
       success: true, 
       notification 
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to create notification" },
       { status: 400 }

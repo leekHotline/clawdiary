@@ -107,8 +107,7 @@ export async function GET(request: NextRequest) {
       },
       generatedAt: new Date().toISOString(),
     });
-  } catch (_error) {
-    console.error("获取趋势失败:", _error);
+  } catch {
     return NextResponse.json(
       { error: "获取趋势失败" },
       { status: 500 }

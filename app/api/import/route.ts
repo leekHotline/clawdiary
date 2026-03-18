@@ -174,8 +174,7 @@ export async function POST(request: NextRequest) {
       message: `成功导入 ${importedDiaries.length} 篇日记`
     });
     
-  } catch (_error) {
-    console.error('Import error:', _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: '导入失败' },
       { status: 500 }

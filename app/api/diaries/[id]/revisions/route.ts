@@ -30,8 +30,7 @@ export async function GET(
       revisions: history || [],
       totalRevisions: history?.length || 0,
     });
-  } catch (_error) {
-    console.error("获取版本历史失败:", _error);
+  } catch {
     return NextResponse.json(
       { error: "获取版本历史失败" },
       { status: 500 }

@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     }
     
     return NextResponse.json(scheduled);
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch scheduled diaries" }, { status: 500 });
   }
 }
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     });
     
     return NextResponse.json(scheduled, { status: 201 });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to create scheduled diary" }, { status: 500 });
   }
 }

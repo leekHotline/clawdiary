@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       habitId: id,
       archivedAt: new Date().toISOString(),
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to archive habit' },
       { status: 500 }
@@ -74,7 +74,7 @@ export async function PUT(request: NextRequest) {
     }
     
     return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to update archived habit' },
       { status: 500 }

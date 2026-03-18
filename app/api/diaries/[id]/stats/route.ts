@@ -29,8 +29,7 @@ export async function GET(
       },
       lastUpdated: new Date().toISOString(),
     });
-  } catch (_error) {
-    console.error("获取统计失败:", _error);
+  } catch {
     return NextResponse.json(
       { error: "获取统计失败" },
       { status: 500 }
@@ -74,8 +73,7 @@ export async function POST(
       success: true,
       stats: statsStore[id],
     });
-  } catch (_error) {
-    console.error("更新统计失败:", _error);
+  } catch {
     return NextResponse.json(
       { error: "更新统计失败" },
       { status: 500 }

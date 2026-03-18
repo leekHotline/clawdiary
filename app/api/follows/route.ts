@@ -90,8 +90,7 @@ export async function GET(request: NextRequest) {
         }
       }
     })
-  } catch (_error) {
-    console.error('获取关注列表失败:', _error)
+  } catch {
     return NextResponse.json(
       { success: false, error: '获取关注列表失败' },
       { status: 500 }
@@ -144,8 +143,7 @@ export async function POST(request: NextRequest) {
       data: newFollow,
       message: '关注成功'
     })
-  } catch (_error) {
-    console.error('关注失败:', _error)
+  } catch {
     return NextResponse.json(
       { success: false, error: '关注失败' },
       { status: 500 }
@@ -184,8 +182,7 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: '取消关注成功'
     })
-  } catch (_error) {
-    console.error('取消关注失败:', _error)
+  } catch {
     return NextResponse.json(
       { success: false, error: '取消关注失败' },
       { status: 500 }

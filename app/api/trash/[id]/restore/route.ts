@@ -41,8 +41,7 @@ export async function POST(
     }
 
     return NextResponse.json({ success: true, type });
-  } catch (_error) {
-    console.error("Error restoring from trash:", _error);
+  } catch {
     return NextResponse.json({ error: "Failed to restore from trash" }, { status: 500 });
   }
 }

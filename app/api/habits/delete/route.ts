@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       habitId: id,
       deletedAt: new Date().toISOString(),
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to delete habit' },
       { status: 500 }

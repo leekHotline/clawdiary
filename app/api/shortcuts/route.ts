@@ -243,7 +243,7 @@ export async function POST(request: NextRequest) {
       success: true,
       shortcut: newShortcut,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to create shortcut" },
       { status: 500 }
@@ -269,7 +269,7 @@ export async function PUT(request: NextRequest) {
       success: true,
       shortcut: shortcuts[index],
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to update shortcut" },
       { status: 500 }
@@ -298,7 +298,7 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: "Shortcut deleted",
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to delete shortcut" },
       { status: 500 }

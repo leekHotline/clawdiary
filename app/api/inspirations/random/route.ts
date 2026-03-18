@@ -17,8 +17,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: inspiration,
     });
-  } catch (_error) {
-    console.error("Error fetching random inspiration:", _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to fetch random inspiration" },
       { status: 500 }

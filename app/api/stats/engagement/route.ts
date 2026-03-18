@@ -36,7 +36,7 @@ export async function GET() {
       success: true,
       data: engagement,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: '获取互动统计失败' },
       { status: 500 }

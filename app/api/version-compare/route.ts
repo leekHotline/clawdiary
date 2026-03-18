@@ -104,8 +104,7 @@ export async function GET(request: NextRequest) {
         changePercent
       }
     });
-  } catch (_error) {
-    console.error('Version compare error:', _error);
+  } catch {
     return NextResponse.json(
       { error: '对比失败' },
       { status: 500 }

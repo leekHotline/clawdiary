@@ -34,8 +34,7 @@ const moodScores: Record<string, number> = {
   '愤怒': 1,
 }
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
+export async function GET() {
   // period param available for future filtering (week, month, year)
   
   try {
@@ -186,8 +185,7 @@ export async function GET(request: Request) {
         lastUpdated: new Date().toISOString()
       }
     })
-  } catch (_error) {
-    console.error('Mood trend error:', _error)
+  } catch {
     return NextResponse.json({ 
       success: false,
       error: '获取情绪趋势失败' 

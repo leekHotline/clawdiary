@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { 
   getChallengeById, 
   updateChallenge, 
-  deleteChallenge,
-  joinChallenge,
-  leaveChallenge 
+  deleteChallenge 
 } from "@/lib/challenges";
 
 // GET /api/challenges/[id] - 获取挑战详情
@@ -24,8 +22,7 @@ export async function GET(
     }
 
     return NextResponse.json({ success: true, data: challenge });
-  } catch (_error) {
-    console.error("Error fetching challenge:", _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to fetch challenge" },
       { status: 500 }
@@ -52,8 +49,7 @@ export async function PUT(
     }
 
     return NextResponse.json({ success: true, data: updated });
-  } catch (_error) {
-    console.error("Error updating challenge:", _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to update challenge" },
       { status: 500 }
@@ -78,8 +74,7 @@ export async function DELETE(
     }
 
     return NextResponse.json({ success: true, message: "Challenge deleted" });
-  } catch (_error) {
-    console.error("Error deleting challenge:", _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to delete challenge" },
       { status: 500 }

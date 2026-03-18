@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       default:
         return NextResponse.json({ success: false, error: 'Unknown type' }, { status: 400 })
     }
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ success: false, error: 'Failed to process request' }, { status: 500 })
   }
 }

@@ -38,8 +38,7 @@ export async function GET(request: NextRequest) {
       pinned: pinnedDiaries.slice(0, limit),
       total: pinnedDiaries.length,
     });
-  } catch (_error) {
-    console.error("获取置顶列表失败:", _error);
+  } catch {
     return NextResponse.json(
       { error: "获取置顶列表失败" },
       { status: 500 }
@@ -58,8 +57,7 @@ export async function PUT(request: NextRequest) {
       message: "置顶顺序已更新",
       updated: orders.length,
     });
-  } catch (_error) {
-    console.error("更新置顶顺序失败:", _error);
+  } catch {
     return NextResponse.json(
       { error: "更新失败" },
       { status: 500 }

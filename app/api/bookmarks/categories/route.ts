@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
       message: "分组创建成功",
       data: newGroup,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: "创建分组失败" },
       { status: 500 }
@@ -175,7 +175,7 @@ export async function PUT(request: NextRequest) {
       message: "分组更新成功",
       data: groupsStore[index],
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: "更新分组失败" },
       { status: 500 }
@@ -210,7 +210,7 @@ export async function DELETE(request: NextRequest) {
       success: true,
       message: "分组删除成功",
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: "删除分组失败" },
       { status: 500 }

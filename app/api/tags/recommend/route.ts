@@ -134,8 +134,7 @@ export async function POST(request: NextRequest) {
         keywordsFound: suggestions.reduce((a, b) => a + Math.ceil(b.score / 10), 0)
       }
     });
-  } catch (_error) {
-    console.error('Tag recommend error:', _error);
+  } catch {
     return NextResponse.json(
       { error: '分析失败' },
       { status: 500 }

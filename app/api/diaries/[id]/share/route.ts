@@ -76,8 +76,7 @@ export async function POST(
       allowComments: shareInfo.allowComments,
       message: "分享链接已创建",
     });
-  } catch (_error) {
-    console.error("创建分享失败:", _error);
+  } catch {
     return NextResponse.json(
       { error: "创建分享失败" },
       { status: 500 }
@@ -121,8 +120,7 @@ export async function PUT(
       shareInfo,
       message: "分享设置已更新",
     });
-  } catch (_error) {
-    console.error("更新分享失败:", _error);
+  } catch {
     return NextResponse.json(
       { error: "更新分享失败" },
       { status: 500 }

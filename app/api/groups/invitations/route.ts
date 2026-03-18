@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       },
       message: "邀请已发送",
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: "发送邀请失败" },
       { status: 500 }

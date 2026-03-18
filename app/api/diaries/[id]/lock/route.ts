@@ -55,8 +55,7 @@ export async function PUT(
         message: "日记已解锁",
       });
     }
-  } catch (_error) {
-    console.error("锁定操作失败:", _error);
+  } catch {
     return NextResponse.json(
       { error: "操作失败" },
       { status: 500 }

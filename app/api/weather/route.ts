@@ -44,8 +44,7 @@ export async function GET(request: NextRequest) {
         description: day.hourly?.[4]?.weatherDesc?.[0]?.value,
       })),
     });
-  } catch (_error) {
-    console.error("Weather API error:", _error);
+  } catch {
     return NextResponse.json({ error: "Failed to fetch weather" }, { status: 500 });
   }
 }

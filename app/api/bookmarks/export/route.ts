@@ -149,7 +149,7 @@ export async function POST(request: NextRequest) {
       skipped: bookmarks.length - validBookmarks.length,
       errors: errors.length > 0 ? errors : undefined,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: "导入失败" },
       { status: 500 }
@@ -179,7 +179,7 @@ export async function DELETE(request: NextRequest) {
       message: `已删除 ${deleted} 个书签`,
       deleted,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: "删除失败" },
       { status: 500 }

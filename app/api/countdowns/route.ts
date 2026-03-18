@@ -103,8 +103,7 @@ export async function POST(request: NextRequest) {
       success: true, 
       countdown: newCountdown 
     });
-  } catch (_error) {
-    console.error('Create countdown error:', _error);
+  } catch {
     return NextResponse.json(
       { error: '创建倒计时失败' },
       { status: 500 }

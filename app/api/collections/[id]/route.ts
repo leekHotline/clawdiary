@@ -77,7 +77,7 @@ export async function PUT(
       success: true,
       collection: collections[index],
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: '更新失败' }, { status: 500 });
   }
 }
@@ -98,7 +98,7 @@ export async function DELETE(
     collections.splice(index, 1);
 
     return NextResponse.json({ success: true });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: '删除失败' }, { status: 500 });
   }
 }

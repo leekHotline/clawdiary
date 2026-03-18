@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
         'Content-Disposition': `attachment; filename="${filename}"`
       }
     })
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Export failed' },
       { status: 400 }

@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       completed,
       updatedAt: new Date().toISOString(),
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to update streak' },
       { status: 500 }

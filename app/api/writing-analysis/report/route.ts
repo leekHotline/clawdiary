@@ -91,7 +91,7 @@ export async function GET() {
     };
     
     return NextResponse.json(report);
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to generate report" }, { status: 500 });
   }
 }

@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const styles = analysis.styles;
     
     return NextResponse.json(styles);
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch writing style" }, { status: 500 });
   }
 }
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     await saveWritingStyle(style);
     
     return NextResponse.json(style, { status: 201 });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to analyze writing style" }, { status: 500 });
   }
 }

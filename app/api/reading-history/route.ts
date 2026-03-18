@@ -123,8 +123,7 @@ export async function POST(request: NextRequest) {
       success: true, 
       record: newRecord 
     });
-  } catch (_error) {
-    console.error('Create reading record error:', _error);
+  } catch {
     return NextResponse.json(
       { error: '创建阅读记录失败' },
       { status: 500 }

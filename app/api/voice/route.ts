@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       },
       message: '语音上传成功',
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: '上传语音失败' },
       { status: 500 }

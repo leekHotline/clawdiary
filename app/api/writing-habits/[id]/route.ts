@@ -155,7 +155,7 @@ export async function PUT(
       data: habits[habitIndex],
       message: '习惯更新成功'
     })
-  } catch (_error) {
+  } catch {
     return NextResponse.json({
       success: false,
       error: '更新失败'

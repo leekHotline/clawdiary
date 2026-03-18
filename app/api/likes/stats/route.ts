@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: stats[type as keyof typeof stats] || stats.total,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: '获取统计失败' },
       { status: 500 }

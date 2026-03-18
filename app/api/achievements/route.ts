@@ -61,7 +61,7 @@ const allAchievements: Achievement[] = [
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const category = searchParams.get('category')
-  const userId = searchParams.get('userId') || 'default'
+  // userId reserved for future user-specific achievements
 
   let filtered = allAchievements
   if (category) {

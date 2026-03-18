@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       width: width || 1200,
       height: height || 630,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to generate cover" }, { status: 500 });
   }
 }

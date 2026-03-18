@@ -70,7 +70,6 @@ const generateCheckInData = () => {
 // GET - 获取签到信息
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const userId = searchParams.get('userId') || 'default'
   const action = searchParams.get('action')
 
   const records = generateCheckInData()

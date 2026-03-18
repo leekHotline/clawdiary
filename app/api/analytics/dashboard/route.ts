@@ -162,8 +162,7 @@ export async function GET() {
         lastUpdated: new Date().toISOString()
       }
     })
-  } catch (_error) {
-    console.error('Analytics error:', _error)
+  } catch {
     return NextResponse.json({ 
       success: false,
       error: '获取分析数据失败' 

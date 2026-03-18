@@ -55,7 +55,7 @@ export async function GET() {
       data: overview,
       timestamp: new Date().toISOString(),
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: '获取统计失败' },
       { status: 500 }

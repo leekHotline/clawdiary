@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDiaries } from "@/lib/diaries";
 
 // POST /api/assistant/write - 日记写作助手
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { action, content, title } = body;
+    const { action, content } = body;
     
     switch (action) {
       case "suggest-title": {
@@ -50,7 +49,7 @@ export async function POST(request: NextRequest) {
       default:
         return NextResponse.json({ error: "Unknown action" }, { status: 400 });
     }
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to process request" }, { status: 500 });
   }
 }

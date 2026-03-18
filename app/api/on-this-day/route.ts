@@ -116,8 +116,7 @@ export async function GET(request: Request) {
     };
 
     return NextResponse.json(result);
-  } catch (_error) {
-    console.error("Error fetching on-this-day data:", _error);
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch on-this-day data" },
       { status: 500 }

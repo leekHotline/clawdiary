@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
       success: true,
       collection: newCollection,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: '创建失败' }, { status: 500 });
   }
 }

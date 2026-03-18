@@ -130,8 +130,7 @@ export async function GET(request: Request) {
         }
       }
     })
-  } catch (_error) {
-    console.error('Export error:', _error)
+  } catch {
     return NextResponse.json({ 
       success: false,
       error: '导出失败' 

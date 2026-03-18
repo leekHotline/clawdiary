@@ -25,8 +25,7 @@ export async function POST(
       data: result,
       message: result.liked ? "Liked!" : "Unliked"
     });
-  } catch (_error) {
-    console.error("Error liking inspiration:", _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to like inspiration" },
       { status: 500 }

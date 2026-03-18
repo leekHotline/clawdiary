@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
       date,
       analyzedAt: new Date().toISOString(),
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to assess sleep quality' },
       { status: 500 }

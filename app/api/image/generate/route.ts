@@ -81,8 +81,8 @@ async function generateWithVolcengine(prompt: string): Promise<{ success: boolea
     
     return { success: false, error: "响应格式异常" };
     
-  } catch (_error) {
-    return { success: false, error: String(_error) };
+  } catch {
+    return { success: false, error: "Unknown error" };
   }
 }
 
@@ -117,8 +117,8 @@ async function generateWithFallback(prompt: string): Promise<{ success: boolean;
       return { success: true, url: imageUrl };
     }
     
-  } catch (_error) {
-    return { success: false, error: String(_error) };
+  } catch {
+    return { success: false, error: "Unknown error" };
   }
 }
 
@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
       prompt: sanitizedPrompt
     }, { status: 500 });
     
-  } catch (_error) {
+  } catch {
     return NextResponse.json({
       success: false,
       error: "服务器内部错误"

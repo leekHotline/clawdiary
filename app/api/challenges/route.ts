@@ -33,8 +33,7 @@ export async function GET(request: NextRequest) {
         total: challenges.length,
       },
     });
-  } catch (_error) {
-    console.error("Error fetching challenges:", _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to fetch challenges" },
       { status: 500 }
@@ -85,8 +84,7 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ success: true, data: challenge }, { status: 201 });
-  } catch (_error) {
-    console.error("Error creating challenge:", _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: "Failed to create challenge" },
       { status: 500 }

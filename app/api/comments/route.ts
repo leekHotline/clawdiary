@@ -138,7 +138,7 @@ export async function POST(request: NextRequest) {
       success: true,
       data: newComment
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({
       success: false,
       error: '创建评论失败'

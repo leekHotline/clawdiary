@@ -107,8 +107,7 @@ export async function PUT(
       success: true, 
       countdown: countdowns[index] 
     });
-  } catch (_error) {
-    console.error('Update countdown error:', _error);
+  } catch {
     return NextResponse.json(
       { error: '更新失败' },
       { status: 500 }

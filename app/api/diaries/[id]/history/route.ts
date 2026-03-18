@@ -9,8 +9,7 @@ export async function GET(
     const { id } = await params;
     const history = await getDiaryHistory(id);
     return NextResponse.json({ history });
-  } catch (_error) {
-    console.error("Error fetching diary history:", _error);
+  } catch {
     return NextResponse.json({ error: "Failed to fetch history" }, { status: 500 });
   }
 }

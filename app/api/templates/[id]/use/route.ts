@@ -45,8 +45,7 @@ export async function POST(
       },
       message: `已使用模板「${template.name}」创建草稿`
     });
-  } catch (_error) {
-    console.error('Error using template:', _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: '使用模板失败' },
       { status: 500 }

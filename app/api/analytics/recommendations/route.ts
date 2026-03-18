@@ -176,8 +176,7 @@ export async function GET(request: Request) {
         generatedAt: new Date().toISOString(),
       }
     })
-  } catch (_error) {
-    console.error('Recommendation error:', _error)
+  } catch {
     return NextResponse.json({ 
       success: false,
       error: '获取推荐失败' 

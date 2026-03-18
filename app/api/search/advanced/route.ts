@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
         },
       },
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: '搜索失败' },
       { status: 500 }

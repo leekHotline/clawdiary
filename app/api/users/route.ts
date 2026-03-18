@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
     const safeUsers = users.map(({ email, ...rest }) => rest);
     
     return NextResponse.json(safeUsers);
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch users" }, { status: 500 });
   }
 }
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     saveUsers(users);
     
     return NextResponse.json(newUser, { status: 201 });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
   }
 }
@@ -122,7 +122,7 @@ export async function PUT(request: NextRequest) {
     
     saveUsers(users);
     return NextResponse.json(users[index]);
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
   }
 }

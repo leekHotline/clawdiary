@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { message, context, diaryId } = body;
+    const { message, diaryId } = body;
 
     if (!message) {
       return NextResponse.json(
@@ -57,8 +57,7 @@ export async function POST(request: NextRequest) {
       response: contextualResponse,
       timestamp: new Date().toISOString(),
     });
-  } catch (_error) {
-    console.error("AI Chat error:", _error);
+  } catch {
     return NextResponse.json(
       { error: "Failed to process chat message" },
       { status: 500 }

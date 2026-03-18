@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
       data: groups,
       total: groups.length,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: '获取分组失败' },
       { status: 500 }
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       data: newGroup,
       message: '分组创建成功',
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json(
       { success: false, error: '创建分组失败' },
       { status: 500 }

@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
       },
       wordCount: textToAnalyze.length,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to analyze mood" }, { status: 500 });
   }
 }

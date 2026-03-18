@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 // GET /api/assistant - 获取助手状态和功能列表
 export async function GET() {
@@ -34,7 +34,7 @@ export async function GET() {
       ],
       status: "online",
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to get assistant status" }, { status: 500 });
   }
 }

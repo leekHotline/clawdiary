@@ -197,8 +197,7 @@ export async function POST(
       error: '未知操作' 
     }, { status: 400 });
 
-  } catch (_error) {
-    console.error('Password protection error:', _error);
+  } catch {
     return NextResponse.json({ 
       success: false, 
       error: '操作失败' 

@@ -33,8 +33,7 @@ export async function GET() {
       totalDiaries: diaries.length,
       randomIndex: randomIndex + 1,
     });
-  } catch (_error) {
-    console.error("获取随机日记失败:", _error);
+  } catch {
     return NextResponse.json(
       { error: "获取随机日记失败" },
       { status: 500 }

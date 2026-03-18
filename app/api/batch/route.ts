@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// 模拟数据库
-const diaries: any[] = [];
-
 // POST - 批量操作
 export async function POST(request: NextRequest) {
   try {
@@ -136,8 +133,7 @@ export async function POST(request: NextRequest) {
       ...result
     });
 
-  } catch (_error) {
-    console.error('Batch operation error:', _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: '批量操作失败' },
       { status: 500 }
@@ -201,8 +197,7 @@ export async function DELETE(request: NextRequest) {
       });
     }
 
-  } catch (_error) {
-    console.error('Batch delete error:', _error);
+  } catch {
     return NextResponse.json(
       { success: false, error: '批量删除失败' },
       { status: 500 }

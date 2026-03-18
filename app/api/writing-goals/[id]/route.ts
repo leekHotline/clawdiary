@@ -85,7 +85,7 @@ export async function PUT(
       data: goals[goalIndex],
       message: '目标更新成功'
     })
-  } catch (_error) {
+  } catch {
     return NextResponse.json({
       success: false,
       error: '更新失败'

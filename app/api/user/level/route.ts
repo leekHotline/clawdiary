@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
         : `+${amount} XP`
     });
     
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ 
       success: false, 
       error: '操作失败' 
@@ -150,7 +150,7 @@ export async function PUT(request: NextRequest) {
       }
     });
     
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ 
       success: false, 
       error: '更新失败' 

@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
       stats: recentStats,
       summary,
     });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch writing stats" }, { status: 500 });
   }
 }
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     await saveWritingStats(stats);
     
     return NextResponse.json(stats, { status: 201 });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to analyze text" }, { status: 500 });
   }
 }

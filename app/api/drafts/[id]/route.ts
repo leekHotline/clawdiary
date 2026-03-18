@@ -12,8 +12,7 @@ export async function GET(
       return NextResponse.json({ error: "Draft not found" }, { status: 404 });
     }
     return NextResponse.json(draft);
-  } catch (_error) {
-    console.error("Error fetching draft:", _error);
+  } catch {
     return NextResponse.json({ error: "Failed to fetch draft" }, { status: 500 });
   }
 }
@@ -30,8 +29,7 @@ export async function PUT(
       return NextResponse.json({ error: "Draft not found" }, { status: 404 });
     }
     return NextResponse.json(draft);
-  } catch (_error) {
-    console.error("Error updating draft:", _error);
+  } catch {
     return NextResponse.json({ error: "Failed to update draft" }, { status: 500 });
   }
 }
@@ -47,8 +45,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Draft not found" }, { status: 404 });
     }
     return NextResponse.json({ success: true });
-  } catch (_error) {
-    console.error("Error deleting draft:", _error);
+  } catch {
     return NextResponse.json({ error: "Failed to delete draft" }, { status: 500 });
   }
 }

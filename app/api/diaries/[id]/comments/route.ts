@@ -45,7 +45,7 @@ export async function GET(
     return NextResponse.json(comments.sort((a, b) => 
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     ));
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch comments" }, { status: 500 });
   }
 }
@@ -80,7 +80,7 @@ export async function POST(
     saveComments(comments);
     
     return NextResponse.json(newComment, { status: 201 });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to create comment" }, { status: 500 });
   }
 }
@@ -104,7 +104,7 @@ export async function DELETE(
     saveComments(filtered);
     
     return NextResponse.json({ success: true });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to delete comment" }, { status: 500 });
   }
 }

@@ -51,7 +51,7 @@ export async function GET(
     const bookmark = bookmarks.find(b => b.diaryId === id && b.userId === userId);
     
     return NextResponse.json({ bookmark: bookmark || null });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to get bookmark" }, { status: 500 });
   }
 }
@@ -101,7 +101,7 @@ export async function POST(
     saveBookmarks(bookmarks);
     
     return NextResponse.json(newBookmark, { status: 201 });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to save bookmark" }, { status: 500 });
   }
 }
@@ -127,7 +127,7 @@ export async function DELETE(
     saveBookmarks(filtered);
     
     return NextResponse.json({ success: true });
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: "Failed to delete bookmark" }, { status: 500 });
   }
 }
