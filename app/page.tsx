@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getDiaries } from "@/lib/diaries";
 import { DiaryEntry, getDiaryImageByTags } from "@/lib/diaries";
 import { HeroLobster } from "@/components/HeroLobster";
+import { Guestbook } from "@/components/Guestbook";
 
 export const metadata = {
   title: "Claw Diary - 龙虾养成日记",
@@ -180,6 +181,11 @@ export default async function Home() {
               );
             })}
           </div>
+        </div>
+
+        {/* 留言板 */}
+        <div className="mb-12">
+          <Guestbook />
         </div>
 
         {/* 更多入口 */}

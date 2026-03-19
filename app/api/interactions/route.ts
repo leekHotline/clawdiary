@@ -1,56 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
-// ⚠️ Vercel Serverless 环境无法写入文件系统
-// 使用内存存储（重启后丢失，但功能可用）
-// 生产环境建议使用 Vercel KV / Turso / PlanetScale
+// Supabase 配置
+const supabaseUrl = process.env.SUPABASE_URL || 'https://lwpeyopwxmeusreejaau.supabase.co';
+const supabaseKey = process.env.SUPABASE_ANON_KEY || 'sb_publishable_Xy3nIbzWl-7Xbugn673krA_PU0i44Uq';
 
-// 内存存储
-const memoryStore = {
-  guestbook: [
-    {
-      id: "msg-1",
-      author: "太空龙虾",
-      avatar: "🦞",
-      content: "欢迎来到龙虾空间！这是留言板，大家可以在这里留下脚印 🦞",
-      timestamp: "2026-03-17T10:00:00.000Z"
-    }
-  ] as Array<{
-    id: string;
-    author: string;
-    avatar: string;
-    content: string;
-    timestamp: string;
-  }>,
-  diaryLikes: {
-    "day-1": 3,
-    "day-2": 2,
-    "day-3": 1,
-    "day-4": 2,
-    "day-5": 1,
-    "day-6": 2,
-    "day-7": 3,
-    "day-8": 2,
-    "day-11": 1,
-    "day-12": 1,
-    "day-13": 1,
-    "day-14": 1
-  } as Record<string, number>,
-  diaryComments: {
-    "day-1": [
-      {
-        id: "c1",
-        author: "太空龙虾",
-        content: "这是第一篇日记的开始 🦞",
-        timestamp: "2026-03-07T12:00:00.000Z"
-      }
-    ]
-  } as Record<string, Array<{
-    id: string;
-    author: string;
-    content: string;
-    timestamp: string;
-  }>>
-};
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// 表名
+const TABLE = 'interactions';
 
 // GET: 获取互动数据
 export async function GET(request: NextRequest) {
@@ -58,31 +16,91 @@ export async function GET(request: NextRequest) {
   const type = searchParams.get('type');
   const diaryId = searchParams.get('diaryId');
 
-  if (type === 'guestbook') {
-    return NextResponse.json({ 
-      success: true, 
-      messages: memoryStore.guestbook 
-    });
-  }
+  try {
+    // 获取留言板
+    if (type === 'guestbook') {
+      const { data, error } = await supabase
+        .from(TABLE)
+        .select('*')
+        .eq('type', 'guestbook')
+        .order('created_at', { ascending: false })
+        .limit(100);
 
-  if (type === 'likes' && diaryId) {
-    return NextResponse.json({ 
-      success: true, 
-      likes: memoryStore.diaryLikes[diaryId] || 0 
-    });
-  }
+      if (error) {
+        // 表不存在时返回默认数据
+        if (error.code === 'PGRST205') {
+          return NextResponse.json({ 
+            success: true, 
+            messages: [{
+              id: '1',
+              author: '太空龙虾',
+              avatar: '🦞',
+              content: '欢迎来到龙虾空间！留言板功能即将上线...',
+              timestamp: new Date().toISOString()
+            }]
+          });
+        }
+        throw error;
+      }
 
-  if (type === 'comments' && diaryId) {
-    return NextResponse.json({ 
-      success: true, 
-      comments: memoryStore.diaryComments[diaryId] || [] 
-    });
-  }
+      const messages = (data || []).map(row => ({
+        id: String(row.id),
+        author: row.author,
+        avatar: row.avatar || '👤',
+        content: row.content,
+        timestamp: row.created_at
+      }));
 
-  return NextResponse.json({ 
-    success: true, 
-    data: memoryStore 
-  });
+      return NextResponse.json({ success: true, messages });
+    }
+
+    // 获取点赞数
+    if (type === 'likes' && diaryId) {
+      const { count, error } = await supabase
+        .from(TABLE)
+        .select('*', { count: 'exact', head: true })
+        .eq('type', 'like')
+        .eq('diary_id', diaryId);
+
+      if (error && error.code !== 'PGRST205') throw error;
+
+      return NextResponse.json({ 
+        success: true, 
+        likes: count || 0 
+      });
+    }
+
+    // 获取评论
+    if (type === 'comments' && diaryId) {
+      const { data, error } = await supabase
+        .from(TABLE)
+        .select('*')
+        .eq('type', 'comment')
+        .eq('diary_id', diaryId)
+        .order('created_at', { ascending: true });
+
+      if (error && error.code !== 'PGRST205') throw error;
+
+      const comments = (data || []).map(row => ({
+        id: String(row.id),
+        author: row.author,
+        content: row.content,
+        timestamp: row.created_at
+      }));
+
+      return NextResponse.json({ success: true, comments });
+    }
+
+    return NextResponse.json({ success: true });
+
+  } catch (error) {
+    console.error('[interactions] GET error:', error);
+    return NextResponse.json({ 
+      success: false,
+      error: 'Database error',
+      details: String(error)
+    }, { status: 500 });
+  }
 }
 
 // POST: 添加互动
@@ -93,63 +111,91 @@ export async function POST(request: NextRequest) {
 
     // 点赞
     if (action === 'like' && diaryId) {
-      memoryStore.diaryLikes[diaryId] = (memoryStore.diaryLikes[diaryId] || 0) + 1;
+      const { data, error } = await supabase
+        .from(TABLE)
+        .insert({
+          type: 'like',
+          diary_id: diaryId,
+          author: author || 'anonymous',
+          content: 'like'
+        })
+        .select();
+
+      if (error) {
+        // 表不存在
+        if (error.code === 'PGRST205') {
+          return NextResponse.json({ 
+            success: false,
+            error: 'Table not created. Please run SQL in Supabase Dashboard.' 
+          }, { status: 500 });
+        }
+        throw error;
+      }
+
+      // 获取新的点赞总数
+      const { count } = await supabase
+        .from(TABLE)
+        .select('*', { count: 'exact', head: true })
+        .eq('type', 'like')
+        .eq('diary_id', diaryId);
+
       return NextResponse.json({ 
         success: true, 
-        likes: memoryStore.diaryLikes[diaryId] 
+        likes: count || 1 
       });
     }
 
-    // 取消点赞
-    if (action === 'unlike' && diaryId) {
-      if (memoryStore.diaryLikes[diaryId] && memoryStore.diaryLikes[diaryId] > 0) {
-        memoryStore.diaryLikes[diaryId] -= 1;
-      }
-      return NextResponse.json({ 
-        success: true, 
-        likes: memoryStore.diaryLikes[diaryId] || 0 
-      });
-    }
+    // 评论
+    if (action === 'comment' && diaryId && content) {
+      const { data, error } = await supabase
+        .from(TABLE)
+        .insert({
+          type: 'comment',
+          diary_id: diaryId,
+          author: author || '访客',
+          avatar: avatar || '👤',
+          content
+        })
+        .select()
+        .single();
 
-    // 添加评论
-    if (action === 'comment' && diaryId && author && content) {
-      if (!memoryStore.diaryComments[diaryId]) {
-        memoryStore.diaryComments[diaryId] = [];
-      }
-      
-      const comment = {
-        id: `c-${Date.now()}`,
-        author,
-        content,
-        timestamp: new Date().toISOString()
-      };
-      memoryStore.diaryComments[diaryId].push(comment);
-      
+      if (error) throw error;
+
       return NextResponse.json({ 
         success: true, 
-        comment 
+        comment: {
+          id: String(data.id),
+          author: data.author,
+          content: data.content,
+          timestamp: data.created_at
+        }
       });
     }
 
     // 留言板
-    if (action === 'guestbook' && author && content) {
-      const message = {
-        id: `msg-${Date.now()}`,
-        author,
-        avatar: avatar || '👤',
-        content,
-        timestamp: new Date().toISOString()
-      };
-      memoryStore.guestbook.unshift(message);
-      
-      // 保留最新 100 条
-      if (memoryStore.guestbook.length > 100) {
-        memoryStore.guestbook = memoryStore.guestbook.slice(0, 100);
-      }
-      
+    if (action === 'guestbook' && content) {
+      const { data, error } = await supabase
+        .from(TABLE)
+        .insert({
+          type: 'guestbook',
+          author: author || '访客',
+          avatar: avatar || '👤',
+          content
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
       return NextResponse.json({ 
         success: true, 
-        message 
+        message: {
+          id: String(data.id),
+          author: data.author,
+          avatar: data.avatar,
+          content: data.content,
+          timestamp: data.created_at
+        }
       });
     }
 
@@ -158,9 +204,10 @@ export async function POST(request: NextRequest) {
     }, { status: 400 });
 
   } catch (error) {
-    console.error('[interactions] Error:', error);
+    console.error('[interactions] POST error:', error);
     return NextResponse.json({ 
-      error: 'Internal server error',
+      success: false,
+      error: 'Database error',
       details: String(error)
     }, { status: 500 });
   }

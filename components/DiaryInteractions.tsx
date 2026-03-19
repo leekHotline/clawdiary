@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface Comment {
   id: string;
@@ -22,7 +22,7 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [author, setAuthor] = useState('访客');
-  const [loading, setLoading] = useState(false);
+  const likeInProgress = useRef(false);
 
   // 检查本地是否已点赞
   useEffect(() => {
@@ -30,11 +30,25 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
     setLiked(likedDiaries.includes(diaryId));
   }, [diaryId]);
 
-  // 点赞
+  // 点赞 - 防止重复点击
   const handleLike = async () => {
-    if (liked) return;
+    // 双重检查：已点赞或请求进行中
+    if (liked || likeInProgress.current) return;
     
-    setLoading(true);
+    // 立即标记，防止重复
+    likeInProgress.current = true;
+    
+    // 先更新 UI（乐观更新）
+    setLiked(true);
+    setLikes(prev => prev + 1);
+    
+    // 保存到本地
+    const likedDiaries = JSON.parse(localStorage.getItem('likedDiaries') || '[]');
+    if (!likedDiaries.includes(diaryId)) {
+      likedDiaries.push(diaryId);
+      localStorage.setItem('likedDiaries', JSON.stringify(likedDiaries));
+    }
+
     try {
       const res = await fetch('/api/interactions', {
         method: 'POST',
@@ -44,16 +58,15 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
       const data = await res.json();
       if (data.success) {
         setLikes(data.likes);
-        setLiked(true);
-        // 保存到本地
-        const likedDiaries = JSON.parse(localStorage.getItem('likedDiaries') || '[]');
-        likedDiaries.push(diaryId);
-        localStorage.setItem('likedDiaries', JSON.stringify(likedDiaries));
       }
     } catch (e) {
       console.error('点赞失败', e);
+      // 失败时回滚
+      setLiked(false);
+      setLikes(prev => prev - 1);
+    } finally {
+      likeInProgress.current = false;
     }
-    setLoading(false);
   };
 
   // 发送评论
@@ -61,7 +74,6 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
     e.preventDefault();
     if (!newComment.trim()) return;
     
-    setLoading(true);
     try {
       const res = await fetch('/api/interactions', {
         method: 'POST',
@@ -81,7 +93,6 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
     } catch (e) {
       console.error('评论失败', e);
     }
-    setLoading(false);
   };
 
   // 格式化时间
@@ -101,11 +112,11 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
       <div className="flex items-center gap-4 mb-6">
         <button
           onClick={handleLike}
-          disabled={liked || loading}
+          disabled={liked}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
             liked 
-              ? 'bg-red-100 text-red-500' 
-              : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+              ? 'bg-red-100 text-red-500 cursor-default' 
+              : 'text-gray-400 hover:text-red-500 hover:bg-red-50 cursor-pointer'
           }`}
         >
           <span>{liked ? '❤️' : '🤍'}</span>
@@ -168,7 +179,7 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
             />
             <button
               type="submit"
-              disabled={loading || !newComment.trim()}
+              disabled={!newComment.trim()}
               className="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-lg hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               发送
