@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getGuestbookMessages, addGuestbookMessage } from '@/lib/supabase-client';
 
 interface Message {
   id: string;
@@ -18,47 +19,42 @@ export function Guestbook() {
   const [avatar, setAvatar] = useState('👤');
   const [content, setContent] = useState('');
 
-  // 加载留言
   useEffect(() => {
-    fetch('/api/interactions?type=guestbook')
-      .then(res => res.json())
+    getGuestbookMessages()
       .then(data => {
-        if (data.success) {
-          setMessages(data.messages || []);
-        }
+        setMessages(data.map(m => ({
+          id: String(m.id),
+          author: m.author,
+          avatar: m.avatar || '👤',
+          content: m.content,
+          timestamp: m.created_at
+        })));
       })
+      .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
-  // 发送留言
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!content.trim()) return;
 
     setSubmitting(true);
     try {
-      const res = await fetch('/api/interactions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          action: 'guestbook',
-          author: author || '访客',
-          avatar: avatar || '👤',
-          content 
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setMessages([data.message, ...messages]);
-        setContent('');
-      }
+      const data = await addGuestbookMessage(author || '访客', avatar, content);
+      setMessages([{
+        id: String(data.id),
+        author: data.author,
+        avatar: data.avatar || '👤',
+        content: data.content,
+        timestamp: data.created_at
+      }, ...messages]);
+      setContent('');
     } catch (e) {
       console.error('留言失败', e);
     }
     setSubmitting(false);
   };
 
-  // 格式化时间
   const formatTime = (ts: string) => {
     const date = new Date(ts);
     const now = new Date();
@@ -71,7 +67,6 @@ export function Guestbook() {
     return '刚刚';
   };
 
-  // 可选头像
   const avatars = ['👤', '🦞', '🤖', '🐸', '🦊', '🐱', '🐰', '🐻', '🦁', '🐼'];
 
   return (
@@ -81,10 +76,8 @@ export function Guestbook() {
         留言板
       </h2>
 
-      {/* 留言表单 */}
       <form onSubmit={handleSubmit} className="mb-6 space-y-3">
         <div className="flex gap-3 items-center">
-          {/* 头像选择 */}
           <div className="flex gap-1">
             {avatars.slice(0, 5).map((a) => (
               <button
@@ -100,7 +93,6 @@ export function Guestbook() {
             ))}
           </div>
           
-          {/* 名字输入 */}
           <input
             type="text"
             value={author}
@@ -128,7 +120,6 @@ export function Guestbook() {
         </div>
       </form>
 
-      {/* 留言列表 */}
       {loading ? (
         <p className="text-gray-400 text-sm">加载中...</p>
       ) : messages.length === 0 ? (
@@ -152,7 +143,6 @@ export function Guestbook() {
         </div>
       )}
 
-      {/* 留言数统计 */}
       <div className="mt-4 text-center text-gray-500 text-xs">
         共 {messages.length} 条留言
       </div>

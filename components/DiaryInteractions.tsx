@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { getLikes, addLike, getComments, addComment } from '@/lib/supabase-client';
 
 interface Comment {
   id: string;
@@ -11,38 +12,46 @@ interface Comment {
 
 interface Props {
   diaryId: string;
-  initialLikes?: number;
-  initialComments?: Comment[];
 }
 
-export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments = [] }: Props) {
-  const [likes, setLikes] = useState(initialLikes);
-  const [comments, setComments] = useState<Comment[]>(initialComments);
+export function DiaryInteractions({ diaryId }: Props) {
+  const [likes, setLikes] = useState(0);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [liked, setLiked] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [author, setAuthor] = useState('访客');
+  const [loading, setLoading] = useState(false);
   const likeInProgress = useRef(false);
 
-  // 检查本地是否已点赞
+  // 加载数据
   useEffect(() => {
+    // 检查本地是否已点赞
     const likedDiaries = JSON.parse(localStorage.getItem('likedDiaries') || '[]');
     setLiked(likedDiaries.includes(diaryId));
+
+    // 加载点赞数
+    getLikes(diaryId).then(setLikes).catch(console.error);
+
+    // 加载评论
+    getComments(diaryId).then(data => {
+      setComments(data.map(c => ({
+        id: String(c.id),
+        author: c.author,
+        content: c.content,
+        timestamp: c.created_at
+      })));
+    }).catch(console.error);
   }, [diaryId]);
 
-  // 点赞 - 防止重复点击
+  // 点赞
   const handleLike = async () => {
-    // 双重检查：已点赞或请求进行中
     if (liked || likeInProgress.current) return;
     
-    // 立即标记，防止重复
     likeInProgress.current = true;
-    
-    // 先更新 UI（乐观更新）
     setLiked(true);
     setLikes(prev => prev + 1);
     
-    // 保存到本地
     const likedDiaries = JSON.parse(localStorage.getItem('likedDiaries') || '[]');
     if (!likedDiaries.includes(diaryId)) {
       likedDiaries.push(diaryId);
@@ -50,18 +59,11 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
     }
 
     try {
-      const res = await fetch('/api/interactions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'like', diaryId }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setLikes(data.likes);
-      }
+      await addLike(diaryId);
+      const count = await getLikes(diaryId);
+      setLikes(count);
     } catch (e) {
       console.error('点赞失败', e);
-      // 失败时回滚
       setLiked(false);
       setLikes(prev => prev - 1);
     } finally {
@@ -74,41 +76,32 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
     e.preventDefault();
     if (!newComment.trim()) return;
     
+    setLoading(true);
     try {
-      const res = await fetch('/api/interactions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          action: 'comment', 
-          diaryId, 
-          author: author || '访客',
-          content: newComment 
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setComments([...comments, data.comment]);
-        setNewComment('');
-      }
+      const data = await addComment(diaryId, author || '访客', newComment);
+      setComments([...comments, {
+        id: String(data.id),
+        author: data.author,
+        content: data.content,
+        timestamp: data.created_at
+      }]);
+      setNewComment('');
     } catch (e) {
       console.error('评论失败', e);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // 格式化时间
   const formatTime = (ts: string) => {
     const date = new Date(ts);
     return date.toLocaleDateString('zh-CN', { 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
     });
   };
 
   return (
     <div className="mt-8">
-      {/* 点赞和评论按钮 */}
       <div className="flex items-center gap-4 mb-6">
         <button
           onClick={handleLike}
@@ -136,17 +129,13 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
         </button>
       </div>
 
-      {/* 评论区 */}
       {showComments && (
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50">
-          {/* 评论列表 */}
           {comments.length > 0 ? (
             <div className="space-y-4 mb-6">
               {comments.map((comment) => (
                 <div key={comment.id} className="flex gap-3">
-                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sm">
-                    👤
-                  </div>
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sm">👤</div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-medium text-gray-700 text-sm">{comment.author}</span>
@@ -161,7 +150,6 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
             <p className="text-gray-400 text-sm mb-6">还没有评论，来写第一条吧 ✨</p>
           )}
 
-          {/* 评论表单 */}
           <form onSubmit={handleComment} className="flex gap-3">
             <input
               type="text"
@@ -179,10 +167,10 @@ export function DiaryInteractions({ diaryId, initialLikes = 0, initialComments =
             />
             <button
               type="submit"
-              disabled={!newComment.trim()}
+              disabled={loading || !newComment.trim()}
               className="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-lg hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              发送
+              {loading ? '发送中...' : '发送'}
             </button>
           </form>
         </div>
