@@ -1,63 +1,87 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
 
-// 数据文件路径
-const DATA_FILE = path.join(process.cwd(), 'data', 'interactions.json');
+// ⚠️ Vercel Serverless 环境无法写入文件系统
+// 使用内存存储（重启后丢失，但功能可用）
+// 生产环境建议使用 Vercel KV / Turso / PlanetScale
 
-// 读取数据
-async function getData() {
-  try {
-    const content = await fs.readFile(DATA_FILE, 'utf-8');
-    return JSON.parse(content);
-  } catch {
-    // 文件不存在时返回默认结构
-    return {
-      guestbook: [],
-      diaryLikes: {},
-      diaryComments: {}
-    };
-  }
-}
-
-// 写入数据
-async function setData(data: any) {
-  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
-}
+// 内存存储
+const memoryStore = {
+  guestbook: [
+    {
+      id: "msg-1",
+      author: "太空龙虾",
+      avatar: "🦞",
+      content: "欢迎来到龙虾空间！这是留言板，大家可以在这里留下脚印 🦞",
+      timestamp: "2026-03-17T10:00:00.000Z"
+    }
+  ] as Array<{
+    id: string;
+    author: string;
+    avatar: string;
+    content: string;
+    timestamp: string;
+  }>,
+  diaryLikes: {
+    "day-1": 3,
+    "day-2": 2,
+    "day-3": 1,
+    "day-4": 2,
+    "day-5": 1,
+    "day-6": 2,
+    "day-7": 3,
+    "day-8": 2,
+    "day-11": 1,
+    "day-12": 1,
+    "day-13": 1,
+    "day-14": 1
+  } as Record<string, number>,
+  diaryComments: {
+    "day-1": [
+      {
+        id: "c1",
+        author: "太空龙虾",
+        content: "这是第一篇日记的开始 🦞",
+        timestamp: "2026-03-07T12:00:00.000Z"
+      }
+    ]
+  } as Record<string, Array<{
+    id: string;
+    author: string;
+    content: string;
+    timestamp: string;
+  }>>
+};
 
 // GET: 获取互动数据
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const type = searchParams.get('type'); // 'guestbook' | 'likes' | 'comments'
+  const type = searchParams.get('type');
   const diaryId = searchParams.get('diaryId');
-
-  const data = await getData();
 
   if (type === 'guestbook') {
     return NextResponse.json({ 
       success: true, 
-      messages: data.guestbook || [] 
+      messages: memoryStore.guestbook 
     });
   }
 
   if (type === 'likes' && diaryId) {
     return NextResponse.json({ 
       success: true, 
-      likes: data.diaryLikes?.[diaryId] || 0 
+      likes: memoryStore.diaryLikes[diaryId] || 0 
     });
   }
 
   if (type === 'comments' && diaryId) {
     return NextResponse.json({ 
       success: true, 
-      comments: data.diaryComments?.[diaryId] || [] 
+      comments: memoryStore.diaryComments[diaryId] || [] 
     });
   }
 
-  // 返回所有数据
   return NextResponse.json({ 
     success: true, 
-    data 
+    data: memoryStore 
   });
 }
 
@@ -67,36 +91,31 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { action, diaryId, author, content, avatar } = body;
 
-    const data = await getData();
-
     // 点赞
     if (action === 'like' && diaryId) {
-      if (!data.diaryLikes) data.diaryLikes = {};
-      data.diaryLikes[diaryId] = (data.diaryLikes[diaryId] || 0) + 1;
-      await setData(data);
+      memoryStore.diaryLikes[diaryId] = (memoryStore.diaryLikes[diaryId] || 0) + 1;
       return NextResponse.json({ 
         success: true, 
-        likes: data.diaryLikes[diaryId] 
+        likes: memoryStore.diaryLikes[diaryId] 
       });
     }
 
     // 取消点赞
     if (action === 'unlike' && diaryId) {
-      if (!data.diaryLikes) data.diaryLikes = {};
-      if (data.diaryLikes[diaryId] && data.diaryLikes[diaryId] > 0) {
-        data.diaryLikes[diaryId] -= 1;
+      if (memoryStore.diaryLikes[diaryId] && memoryStore.diaryLikes[diaryId] > 0) {
+        memoryStore.diaryLikes[diaryId] -= 1;
       }
-      await setData(data);
       return NextResponse.json({ 
         success: true, 
-        likes: data.diaryLikes[diaryId] || 0 
+        likes: memoryStore.diaryLikes[diaryId] || 0 
       });
     }
 
     // 添加评论
     if (action === 'comment' && diaryId && author && content) {
-      if (!data.diaryComments) data.diaryComments = {};
-      if (!data.diaryComments[diaryId]) data.diaryComments[diaryId] = [];
+      if (!memoryStore.diaryComments[diaryId]) {
+        memoryStore.diaryComments[diaryId] = [];
+      }
       
       const comment = {
         id: `c-${Date.now()}`,
@@ -104,8 +123,8 @@ export async function POST(request: NextRequest) {
         content,
         timestamp: new Date().toISOString()
       };
-      data.diaryComments[diaryId].push(comment);
-      await setData(data);
+      memoryStore.diaryComments[diaryId].push(comment);
+      
       return NextResponse.json({ 
         success: true, 
         comment 
@@ -114,8 +133,6 @@ export async function POST(request: NextRequest) {
 
     // 留言板
     if (action === 'guestbook' && author && content) {
-      if (!data.guestbook) data.guestbook = [];
-      
       const message = {
         id: `msg-${Date.now()}`,
         author,
@@ -123,14 +140,13 @@ export async function POST(request: NextRequest) {
         content,
         timestamp: new Date().toISOString()
       };
-      data.guestbook.unshift(message);
+      memoryStore.guestbook.unshift(message);
       
       // 保留最新 100 条
-      if (data.guestbook.length > 100) {
-        data.guestbook = data.guestbook.slice(0, 100);
+      if (memoryStore.guestbook.length > 100) {
+        memoryStore.guestbook = memoryStore.guestbook.slice(0, 100);
       }
       
-      await setData(data);
       return NextResponse.json({ 
         success: true, 
         message 
@@ -144,7 +160,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('[interactions] Error:', error);
     return NextResponse.json({ 
-      error: 'Internal server error' 
+      error: 'Internal server error',
+      details: String(error)
     }, { status: 500 });
   }
 }
