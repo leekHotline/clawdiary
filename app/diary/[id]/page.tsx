@@ -2,6 +2,7 @@
 export const dynamic = 'force-dynamic';
 
 import { getDiary, getDiaries, DiaryEntry, getDiaryImageByTags } from "@/lib/diaries";
+import { DiaryInteractions } from "@/components/DiaryInteractions";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -31,6 +32,26 @@ function getDiaryImage(diary: DiaryEntry): string {
   return "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&h=400&fit=crop";
 }
 
+// 获取互动数据
+async function getInteractions(diaryId: string) {
+  try {
+    const [likesRes, commentsRes] = await Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/interactions?type=likes&diaryId=${diaryId}`, { cache: 'no-store' }),
+      fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/interactions?type=comments&diaryId=${diaryId}`, { cache: 'no-store' })
+    ]);
+    
+    const likesData = await likesRes.json();
+    const commentsData = await commentsRes.json();
+    
+    return {
+      likes: likesData.likes || 0,
+      comments: commentsData.comments || []
+    };
+  } catch {
+    return { likes: 0, comments: [] };
+  }
+}
+
 export async function generateStaticParams() {
   const diaries = await getDiaries();
   return diaries.map((diary) => ({
@@ -48,6 +69,7 @@ export default async function DiaryPage({ params }: { params: Promise<{ id: stri
 
   const entry = diary as DiaryEntry;
   const image = getDiaryImage(entry);
+  const interactions = await getInteractions(id);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-amber-50 to-yellow-50">
@@ -184,22 +206,17 @@ export default async function DiaryPage({ params }: { params: Promise<{ id: stri
           </div>
         </div>
 
-        {/* 底部操作 */}
-        <div className="mt-10 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all">
-              <span>❤️</span>
-              <span className="text-sm">{entry.likes || 0}</span>
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-all">
-              <span>💬</span>
-              <span className="text-sm">{entry.comments?.length || 0}</span>
-            </button>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-gray-400">
-            {entry.wordCount && <span>{entry.wordCount} 字</span>}
-            {entry.readingTime && <span>· {entry.readingTime} 分钟</span>}
-          </div>
+        {/* 互动区域 */}
+        <DiaryInteractions 
+          diaryId={id} 
+          initialLikes={interactions.likes}
+          initialComments={interactions.comments}
+        />
+
+        {/* 底部信息 */}
+        <div className="mt-6 flex items-center justify-end text-sm text-gray-400">
+          {entry.wordCount && <span>{entry.wordCount} 字</span>}
+          {entry.readingTime && <span>· {entry.readingTime} 分钟</span>}
         </div>
 
         {/* 返回首页 */}

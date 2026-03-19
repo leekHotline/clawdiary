@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getDiaries } from "@/data/diaries";
+import { Guestbook } from "@/components/Guestbook";
 
 export const metadata = {
   title: "龙虾空间 - Claw Diary",
@@ -65,6 +66,11 @@ export default async function ClawSpacePage() {
               <span>实时更新</span>
             </div>
           </Link>
+        </div>
+
+        {/* 留言板 */}
+        <div className="mb-12">
+          <Guestbook />
         </div>
 
         {/* 龙虾故事 */}
