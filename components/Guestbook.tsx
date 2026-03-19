@@ -11,7 +11,11 @@ interface Message {
   timestamp: string;
 }
 
-export function Guestbook() {
+interface Props {
+  darkMode?: boolean; // 默认浅色模式
+}
+
+export function Guestbook({ darkMode = false }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -69,9 +73,34 @@ export function Guestbook() {
 
   const avatars = ['👤', '🦞', '🤖', '🐸', '🦊', '🐱', '🐰', '🐻', '🦁', '🐼'];
 
+  // 根据模式选择样式
+  const styles = darkMode ? {
+    container: 'bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10',
+    title: 'text-white',
+    input: 'bg-white/10 border-white/20 text-white placeholder:text-gray-500 focus:border-orange-500/50',
+    avatarBtn: 'bg-white/10 hover:bg-white/20',
+    avatarBtnActive: 'bg-orange-500/30 ring-2 ring-orange-500',
+    messageBg: 'bg-white/5',
+    author: 'text-white',
+    content: 'text-gray-300',
+    count: 'text-gray-500'
+  } : {
+    container: 'bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-200 shadow-sm',
+    title: 'text-gray-800',
+    input: 'bg-gray-50 border-gray-200 text-gray-800 placeholder:text-gray-400 focus:border-orange-400',
+    avatarBtn: 'bg-gray-100 hover:bg-gray-200',
+    avatarBtnActive: 'bg-orange-100 ring-2 ring-orange-400',
+    messageBg: 'bg-gray-50',
+    author: 'text-gray-700',
+    content: 'text-gray-600',
+    count: 'text-gray-400'
+  };
+
+  const s = styles;
+
   return (
-    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-      <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+    <div className={s.container}>
+      <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${s.title}`}>
         <span className="text-3xl">💬</span>
         留言板
       </h2>
@@ -85,7 +114,7 @@ export function Guestbook() {
                 type="button"
                 onClick={() => setAvatar(a)}
                 className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg transition-all ${
-                  avatar === a ? 'bg-orange-500/30 ring-2 ring-orange-500' : 'bg-white/10 hover:bg-white/20'
+                  avatar === a ? s.avatarBtnActive : s.avatarBtn
                 }`}
               >
                 {a}
@@ -98,7 +127,7 @@ export function Guestbook() {
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
             placeholder="你的名字"
-            className="w-28 px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm placeholder:text-gray-500 focus:outline-none focus:border-orange-500/50"
+            className={`w-28 px-3 py-2 border rounded-lg text-sm focus:outline-none ${s.input}`}
           />
         </div>
         
@@ -108,7 +137,7 @@ export function Guestbook() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="留下你的脚印..."
-            className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-orange-500/50"
+            className={`flex-1 px-4 py-3 border rounded-lg focus:outline-none ${s.input}`}
           />
           <button
             type="submit"
@@ -121,29 +150,29 @@ export function Guestbook() {
       </form>
 
       {loading ? (
-        <p className="text-gray-400 text-sm">加载中...</p>
+        <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm`}>加载中...</p>
       ) : messages.length === 0 ? (
-        <p className="text-gray-400 text-sm">还没有留言，来做第一个吧 ✨</p>
+        <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm`}>还没有留言，来做第一个吧 ✨</p>
       ) : (
         <div className="space-y-4 max-h-96 overflow-y-auto">
           {messages.map((msg) => (
-            <div key={msg.id} className="flex gap-3 p-3 bg-white/5 rounded-xl">
-              <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-xl">
+            <div key={msg.id} className={`flex gap-3 p-3 rounded-xl ${s.messageBg}`}>
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xl ${darkMode ? 'bg-white/10' : 'bg-gray-100'}`}>
                 {msg.avatar}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="font-medium text-white text-sm">{msg.author}</span>
-                  <span className="text-xs text-gray-500">{formatTime(msg.timestamp)}</span>
+                  <span className={`font-medium text-sm ${s.author}`}>{msg.author}</span>
+                  <span className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>{formatTime(msg.timestamp)}</span>
                 </div>
-                <p className="text-gray-300 text-sm break-words">{msg.content}</p>
+                <p className={`text-sm break-words ${s.content}`}>{msg.content}</p>
               </div>
             </div>
           ))}
         </div>
       )}
 
-      <div className="mt-4 text-center text-gray-500 text-xs">
+      <div className={`mt-4 text-center text-xs ${s.count}`}>
         共 {messages.length} 条留言
       </div>
     </div>

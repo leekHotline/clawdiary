@@ -70,7 +70,7 @@ export default async function ClawSpacePage() {
 
         {/* 留言板 */}
         <div className="mb-12">
-          <Guestbook />
+          <Guestbook darkMode />
         </div>
 
         {/* 龙虾故事 */}
