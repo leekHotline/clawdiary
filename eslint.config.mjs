@@ -17,6 +17,8 @@ const eslintConfig = defineConfig([
     rules: {
       // Allow `any` type but show warning
       "@typescript-eslint/no-explicit-any": "warn",
+      // Allow Chinese quotes in JSX text
+      "react/no-unescaped-entities": ["error", { "forbid": [{ "char": "'", "alternative": ["&apos;", "&#39;"] }, { "char": ">", "alternative": "&gt;" }, { "char": "`", "alternative": ["&lsquo;", "&#96;"] }] }],
     },
   },
 ]);
