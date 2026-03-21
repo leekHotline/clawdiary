@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -26,26 +26,28 @@ const promptSuggestions = [
   '总结今天的成就',
 ];
 
+// 初始化函数：从 localStorage 读取故事
+function getInitialStories(): SixWordStory[] {
+  if (typeof window === 'undefined') return [];
+  const saved = localStorage.getItem('sixWordStories');
+  return saved ? JSON.parse(saved) : [];
+}
+
+// 初始化函数：获取随机提示
+function getInitialRandomPrompt(): string {
+  return promptSuggestions[Math.floor(Math.random() * promptSuggestions.length)];
+}
+
 export default function SixWordsPage() {
   const [words, setWords] = useState('');
   const [mood, setMood] = useState<string | null>(null);
-  const [stories, setStories] = useState<SixWordStory[]>([]);
+  const [stories, setStories] = useState<SixWordStory[]>(getInitialStories);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
-  const [randomPrompt, setRandomPrompt] = useState('');
+  const [randomPrompt, setRandomPrompt] = useState(getInitialRandomPrompt);
 
   const wordCount = words.trim() ? words.trim().split(/\s+/).length : 0;
   const charCount = words.length;
-
-  useEffect(() => {
-    // Load stories from localStorage
-    const saved = localStorage.getItem('sixWordStories');
-    if (saved) {
-      setStories(JSON.parse(saved));
-    }
-    // Random prompt
-    setRandomPrompt(promptSuggestions[Math.floor(Math.random() * promptSuggestions.length)]);
-  }, []);
 
   const handleSubmit = async () => {
     if (!words.trim() || wordCount !== 6) return;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 
 type TimeOfDay = 'morning' | 'evening';
@@ -40,8 +40,24 @@ const eveningPrompts = [
   '今天最让我微笑的瞬间是...',
 ];
 
+// 初始化函数：从 localStorage 读取历史记录
+function getInitialHistory(): (MorningEntry | EveningEntry)[] {
+  if (typeof window === 'undefined') return [];
+  const saved = localStorage.getItem('daily-reflection-history');
+  return saved ? JSON.parse(saved) : [];
+}
+
+// 初始化函数：根据时间自动选择
+function getInitialTimeOfDay(): TimeOfDay {
+  if (typeof window === 'undefined') return 'morning';
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return 'morning';
+  if (hour >= 17 && hour < 23) return 'evening';
+  return 'morning';
+}
+
 export default function DailyReflectionPage() {
-  const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('morning');
+  const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>(getInitialTimeOfDay);
   const [currentDate] = useState(new Date().toLocaleDateString('zh-CN', { 
     year: 'numeric', 
     month: 'long', 
@@ -67,24 +83,8 @@ export default function DailyReflectionPage() {
   const [eveningPromptIndex, setEveningPromptIndex] = useState(0);
   
   // 历史记录
-  const [history, setHistory] = useState<(MorningEntry | EveningEntry)[]>([]);
+  const [history, setHistory] = useState<(MorningEntry | EveningEntry)[]>(getInitialHistory);
   const [showHistory, setShowHistory] = useState(false);
-
-  // 加载历史记录
-  useEffect(() => {
-    const saved = localStorage.getItem('daily-reflection-history');
-    if (saved) {
-      setHistory(JSON.parse(saved));
-    }
-    
-    // 检测时间自动选择
-    const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) {
-      setTimeOfDay('morning');
-    } else if (hour >= 17 && hour < 23) {
-      setTimeOfDay('evening');
-    }
-  }, []);
 
   // 保存晨间反思
   const saveMorningReflection = () => {

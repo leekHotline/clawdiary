@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 interface AITask {
@@ -24,6 +24,21 @@ interface TaskTemplate {
   category: string;
   estimatedTime: string;
   action: () => Promise<string>;
+}
+
+// 初始化函数：从 localStorage 读取历史（移到组件外部避免重复创建）
+function getInitialTaskHistory(): { tasks: AITask[]; results: Record<string, string> } {
+  if (typeof window === 'undefined') return { tasks: [], results: {} };
+  const saved = localStorage.getItem("ai-tasks-history");
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      return { tasks: parsed.tasks || [], results: parsed.results || {} };
+    } catch {
+      console.error("加载任务历史失败");
+    }
+  }
+  return { tasks: [], results: {} };
 }
 
 const taskTemplates: TaskTemplate[] = [
@@ -112,24 +127,19 @@ const categories = [
 ];
 
 export default function AITasksPage() {
-  const [tasks, setTasks] = useState<AITask[]>([]);
+  const taskIdCounter = useRef(0);
+
+  // 生成唯一任务ID
+  const generateTaskId = (templateId: string) => {
+    taskIdCounter.current += 1;
+    return `${templateId}-${taskIdCounter.current}`;
+  };
+
+  // 使用惰性初始化从 localStorage 读取状态
+  const [tasks, setTasks] = useState<AITask[]>(() => getInitialTaskHistory().tasks);
   const [activeCategory, setActiveCategory] = useState("all");
   const [runningTasks, setRunningTasks] = useState<string[]>([]);
-  const [completedResults, setCompletedResults] = useState<Record<string, string>>({});
-
-  // 加载保存的任务状态
-  useEffect(() => {
-    const saved = localStorage.getItem("ai-tasks-history");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setTasks(parsed.tasks || []);
-        setCompletedResults(parsed.results || {});
-      } catch (e) {
-        console.error("加载任务历史失败", e);
-      }
-    }
-  }, []);
+  const [completedResults, setCompletedResults] = useState<Record<string, string>>(() => getInitialTaskHistory().results);
 
   // 保存任务状态
   useEffect(() => {
@@ -140,7 +150,7 @@ export default function AITasksPage() {
   }, [tasks, completedResults]);
 
   const runTask = async (template: TaskTemplate) => {
-    const taskId = `${template.id}-${Date.now()}`;
+    const taskId = generateTaskId(template.id);
     
     // 添加新任务
     const newTask: AITask = {

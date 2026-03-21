@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 
 // AI 提示词数据 - 基于 2025 年最佳实践
@@ -137,21 +137,20 @@ const historicalMentors = [
   { name: '达芬奇', emoji: '🎨', prompt: '学会观察。描述一件你今天真正注意到的事物。' },
 ];
 
+// 初始化函数：从 localStorage 读取收藏
+function getInitialFavorites(): number[] {
+  if (typeof window === 'undefined') return [];
+  const saved = localStorage.getItem('prompt-favorites');
+  return saved ? JSON.parse(saved) : [];
+}
+
 export default function PromptsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [randomPrompt, setRandomPrompt] = useState<{ text: string; mood: string; difficulty: string; category: { name: string; emoji: string } } | null>(null);
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<number[]>(getInitialFavorites);
   const [searchQuery, setSearchQuery] = useState('');
   const [showMentor, setShowMentor] = useState(false);
   const [currentMentor, setCurrentMentor] = useState<typeof historicalMentors[0] | null>(null);
-
-  // 从 localStorage 加载收藏
-  useEffect(() => {
-    const saved = localStorage.getItem('prompt-favorites');
-    if (saved) {
-      setFavorites(JSON.parse(saved));
-    }
-  }, []);
 
   // 保存收藏到 localStorage
   const toggleFavorite = (promptId: number) => {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 
 interface Wisdom {
@@ -264,27 +264,29 @@ const categoryNames: Record<string, string> = {
   'mortality': '生命',
 }
 
+// 初始化函数：获取今日智慧
+function getInitialTodayWisdom(): Wisdom {
+  if (typeof window === 'undefined') return wisdomDatabase[0];
+  const today = new Date();
+  const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
+  const wisdomIndex = dayOfYear % wisdomDatabase.length;
+  return wisdomDatabase[wisdomIndex];
+}
+
+// 初始化函数：从 localStorage 读取收藏
+function getInitialFavorites(): string[] {
+  if (typeof window === 'undefined') return [];
+  const savedFavorites = localStorage.getItem('wisdom-favorites');
+  return savedFavorites ? JSON.parse(savedFavorites) : [];
+}
+
 export default function DailyWisdomPage() {
-  const [todayWisdom, setTodayWisdom] = useState<Wisdom | null>(null)
-  const [favorites, setFavorites] = useState<string[]>([])
+  const [todayWisdom, setTodayWisdom] = useState<Wisdom>(getInitialTodayWisdom)
+  const [favorites, setFavorites] = useState<string[]>(getInitialFavorites)
   const [showAll, setShowAll] = useState(false)
   const [copied, setCopied] = useState(false)
   const [reflectionInput, setReflectionInput] = useState('')
   const [activeQuestion, setActiveQuestion] = useState(0)
-
-  // 基于日期生成每日智慧
-  useEffect(() => {
-    const today = new Date()
-    const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
-    const wisdomIndex = dayOfYear % wisdomDatabase.length
-    setTodayWisdom(wisdomDatabase[wisdomIndex])
-
-    // 加载收藏
-    const savedFavorites = localStorage.getItem('wisdom-favorites')
-    if (savedFavorites) {
-      setFavorites(JSON.parse(savedFavorites))
-    }
-  }, [])
 
   const toggleFavorite = (id: string) => {
     const newFavorites = favorites.includes(id)
@@ -309,14 +311,6 @@ export default function DailyWisdomPage() {
   const getRandomWisdom = () => {
     const randomIndex = Math.floor(Math.random() * wisdomDatabase.length)
     setTodayWisdom(wisdomDatabase[randomIndex])
-  }
-
-  if (!todayWisdom) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-amber-50 via-orange-50 to-yellow-50">
-        <div className="text-2xl animate-pulse">加载智慧中...</div>
-      </div>
-    )
   }
 
   return (

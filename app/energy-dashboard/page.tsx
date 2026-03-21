@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 
 // 能量等级对应的颜色和描述
@@ -38,44 +38,54 @@ const generateHistoryData = () => {
   return data;
 };
 
-export default function EnergyDashboard() {
-  const [selectedMood, setSelectedMood] = useState<typeof MOODS[0] | null>(null);
-  const [showResult, setShowResult] = useState(false);
-  const [historyData] = useState(generateHistoryData);
-  const [streak, setStreak] = useState(0);
-  const [todayChecked, setTodayChecked] = useState(false);
-
-  useEffect(() => {
-    // 从 localStorage 读取连续打卡天数
-    const savedStreak = localStorage.getItem('energy-streak');
-    const lastCheck = localStorage.getItem('energy-last-check');
-    const today = new Date().toDateString();
-    
-    if (lastCheck === today) {
-      setTodayChecked(true);
-      const savedMood = localStorage.getItem('energy-today-mood');
-      if (savedMood) {
-        setSelectedMood(JSON.parse(savedMood));
-        setShowResult(true);
-      }
+// 初始化函数：从 localStorage 读取状态
+function getInitialState() {
+  if (typeof window === 'undefined') {
+    return { streak: 0, todayChecked: false, selectedMood: null, showResult: false };
+  }
+  
+  const savedStreak = localStorage.getItem('energy-streak');
+  const lastCheck = localStorage.getItem('energy-last-check');
+  const today = new Date().toDateString();
+  
+  let todayChecked = false;
+  let selectedMood: typeof MOODS[0] | null = null;
+  let showResult = false;
+  
+  if (lastCheck === today) {
+    todayChecked = true;
+    const savedMood = localStorage.getItem('energy-today-mood');
+    if (savedMood) {
+      selectedMood = JSON.parse(savedMood);
+      showResult = true;
     }
+  }
+  
+  let streak = 1;
+  if (savedStreak) {
+    const lastDate = localStorage.getItem('energy-last-date');
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
     
-    if (savedStreak) {
-      const lastDate = localStorage.getItem('energy-last-date');
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      
-      if (lastDate === yesterday.toDateString() || lastDate === today) {
-        setStreak(parseInt(savedStreak));
-      } else {
-        setStreak(1);
-        localStorage.setItem('energy-streak', '1');
-      }
+    if (lastDate === yesterday.toDateString() || lastDate === today) {
+      streak = parseInt(savedStreak);
     } else {
-      setStreak(1);
       localStorage.setItem('energy-streak', '1');
     }
-  }, []);
+  } else {
+    localStorage.setItem('energy-streak', '1');
+  }
+  
+  return { streak, todayChecked, selectedMood, showResult };
+}
+
+export default function EnergyDashboard() {
+  const initialState = useState(getInitialState)[0];
+  const [selectedMood, setSelectedMood] = useState<typeof MOODS[0] | null>(initialState.selectedMood);
+  const [showResult, setShowResult] = useState(initialState.showResult);
+  const [historyData] = useState(generateHistoryData);
+  const [streak, setStreak] = useState(initialState.streak);
+  const [todayChecked, setTodayChecked] = useState(initialState.todayChecked);
 
   const handleMoodSelect = (mood: typeof MOODS[0]) => {
     if (todayChecked) return;
