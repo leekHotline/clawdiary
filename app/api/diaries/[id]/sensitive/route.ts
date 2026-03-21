@@ -60,8 +60,8 @@ export async function POST(
 
 // GET 统计
 export async function HEAD(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  _request: NextRequest,
+  { params: _params }: { params: Promise<{ id: string }> }
 ) {
   return NextResponse.json({
     totalSensitive: sensitiveDiaries.size

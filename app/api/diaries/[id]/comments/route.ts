@@ -91,7 +91,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    await params; // 路由参数不需要使用
     const { searchParams } = new URL(request.url);
     const commentId = searchParams.get("commentId");
     

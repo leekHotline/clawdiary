@@ -129,7 +129,8 @@ export async function POST(request: NextRequest) {
       content: content.trim(),
       createdAt: new Date().toISOString(),
       likes: 0,
-      replies: []
+      replies: [],
+      parentId: parentId || null,
     };
 
     comments.unshift(newComment);

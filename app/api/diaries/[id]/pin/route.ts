@@ -68,8 +68,8 @@ export async function PUT(
 
 // 获取所有置顶日记
 export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  _request: NextRequest,
+  { params: _params }: { params: Promise<{ id: string }> }
 ) {
   // 获取置顶列表（用于批量查询）
   const pinnedList = Array.from(pinnedDiaries.entries())

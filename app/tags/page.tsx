@@ -152,7 +152,7 @@ export default function TagsPage() {
               
               {view === 'cloud' ? (
                 <div className="flex flex-wrap gap-3 justify-center py-8">
-                  {tags.map((tag, index) => {
+                  {tags.map((tag) => {
                     const sizes = ['text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl'];
                     const sizeClass = sizes[Math.min(tag.size, sizes.length - 1)];
                     

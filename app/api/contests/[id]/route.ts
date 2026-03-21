@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { contests, Contest, ContestEntry } from "../route";
+import { contests, ContestEntry } from "../route";
 
 // GET 获取比赛详情
 export async function GET(

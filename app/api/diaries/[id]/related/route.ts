@@ -48,7 +48,7 @@ export async function GET(
     })
     .sort((a, b) => b.score - a.score)
     .slice(0, 5)
-    .map(({ score, ...diary }) => diary);
+    .map(({ score: _score, ...diary }) => diary);
 
   return NextResponse.json({
     success: true,

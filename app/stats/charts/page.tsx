@@ -61,7 +61,6 @@ export default async function ChartsPage() {
   const {
     wordDistribution,
     tagCloud,
-    hourlyDistribution,
     weekdayDistribution,
     emotionCounts,
     growthCurve,
