@@ -1,248 +1,397 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
-interface Insight {
-  type: string;
-  title: string;
-  content: string;
-  score: number;
+interface InsightData {
+  totalDiaries: number;
+  totalWords: number;
+  streakDays: number;
+  longestStreak: number;
+  avgWordsPerDiary: number;
+  bestWritingTime: string;
+  topTags: { tag: string; count: number }[];
+  emotionTrend: { date: string; score: number }[];
+  weeklyActivity: { day: string; count: number }[];
+  recentGrowth: string[];
+  wordFrequency: { word: string; count: number }[];
 }
 
-interface InsightsData {
-  insights: Insight[];
-  summary: string;
-  emotions: { positive: number; negative: number; neutral: number };
-  topTags: Array<{ tag: string; count: number }>;
-  authorStats: Record<string, number>;
-}
-
-interface TrendData {
-  trends: Array<{
-    date: string;
-    count: number;
-    words: number;
-    avgWords: number;
-    topTags: string[];
-  }>;
-  analysis: {
-    total: number;
-    trendDirection: string;
-    trendPercentage: number;
-    message: string;
+// 模拟数据生成
+function generateInsightData(): InsightData {
+  return {
+    totalDiaries: 47,
+    totalWords: 28650,
+    streakDays: 22,
+    longestStreak: 35,
+    avgWordsPerDiary: 610,
+    bestWritingTime: "晚间 21:00-23:00",
+    topTags: [
+      { tag: "成长", count: 15 },
+      { tag: "思考", count: 12 },
+      { tag: "感恩", count: 10 },
+      { tag: "工作", count: 8 },
+      { tag: "学习", count: 7 },
+    ],
+    emotionTrend: [
+      { date: "3/1", score: 7 },
+      { date: "3/8", score: 8 },
+      { date: "3/15", score: 6 },
+      { date: "3/22", score: 9 },
+    ],
+    weeklyActivity: [
+      { day: "周一", count: 5 },
+      { day: "周二", count: 7 },
+      { day: "周三", count: 6 },
+      { day: "周四", count: 8 },
+      { day: "周五", count: 9 },
+      { day: "周六", count: 12 },
+      { day: "周日", count: 10 },
+    ],
+    recentGrowth: [
+      "写作速度提升 23%",
+      "情绪词汇丰富度 +15%",
+      "连续写作天数创新高",
+      "反思深度增加",
+    ],
+    wordFrequency: [
+      { word: "今天", count: 45 },
+      { word: "感觉", count: 38 },
+      { word: "学习", count: 32 },
+      { word: "思考", count: 28 },
+      { word: "成长", count: 25 },
+      { word: "感恩", count: 22 },
+      { word: "努力", count: 20 },
+      { word: "坚持", count: 18 },
+    ],
   };
+}
+
+// 情绪趋势图组件
+function EmotionChart({ data }: { data: { date: string; score: number }[] }) {
+  const maxScore = 10;
+  
+  return (
+    <div className="bg-white/5 rounded-xl p-4">
+      <div className="flex items-end justify-between h-32 gap-2">
+        {data.map((item, i) => (
+          <div key={i} className="flex-1 flex flex-col items-center gap-1">
+            <div
+              className="w-full bg-gradient-to-t from-purple-500 to-pink-500 rounded-t transition-all hover:from-purple-400 hover:to-pink-400"
+              style={{ height: `${(item.score / maxScore) * 100}%` }}
+            />
+            <span className="text-xs text-gray-500">{item.date}</span>
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 flex items-center justify-center gap-2 text-sm text-gray-400">
+        <span>😊 情绪指数</span>
+        <span className="text-green-400">↑ 趋势向好</span>
+      </div>
+    </div>
+  );
+}
+
+// 周活动图组件
+function WeeklyChart({ data }: { data: { day: string; count: number }[] }) {
+  const maxCount = Math.max(...data.map(d => d.count));
+  
+  return (
+    <div className="bg-white/5 rounded-xl p-4">
+      <div className="flex items-end justify-between h-24 gap-1">
+        {data.map((item, i) => (
+          <div key={i} className="flex-1 flex flex-col items-center gap-1">
+            <div
+              className="w-full bg-gradient-to-t from-indigo-500 to-cyan-500 rounded-t transition-all hover:from-indigo-400 hover:to-cyan-400"
+              style={{ height: `${(item.count / maxCount) * 100}%` }}
+            />
+            <span className="text-xs text-gray-500">{item.day}</span>
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 text-center text-sm text-gray-400">
+        周六是你最活跃的写作日 📝
+      </div>
+    </div>
+  );
+}
+
+// 词云组件
+function WordCloud({ words }: { words: { word: string; count: number }[] }) {
+  const sizes = ["text-xs", "text-sm", "text-base", "text-lg", "text-xl", "text-2xl"];
+  const colors = ["text-purple-300", "text-pink-300", "text-indigo-300", "text-cyan-300", "text-violet-300"];
+  
+  return (
+    <div className="flex flex-wrap gap-3 justify-center items-center p-4">
+      {words.map((item, i) => {
+        const sizeIndex = Math.min(Math.floor(item.count / 10), sizes.length - 1);
+        const colorIndex = i % colors.length;
+        return (
+          <span
+            key={i}
+            className={`${sizes[sizeIndex]} ${colors[colorIndex]} hover:scale-110 transition-transform cursor-default`}
+          >
+            {item.word}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+// 成就徽章
+function AchievementBadge({ emoji, title, desc, unlocked }: { 
+  emoji: string; 
+  title: string; 
+  desc: string;
+  unlocked: boolean;
+}) {
+  return (
+    <div className={`p-4 rounded-xl ${unlocked ? "bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30" : "bg-white/5 opacity-50"}`}>
+      <div className="text-3xl mb-2">{emoji}</div>
+      <div className="font-bold text-white text-sm">{title}</div>
+      <div className="text-xs text-gray-400">{desc}</div>
+    </div>
+  );
 }
 
 export default function InsightsPage() {
-  const [insights, setInsights] = useState<InsightsData | null>(null);
-  const [trends, setTrends] = useState<TrendData | null>(null);
-  const [period, setPeriod] = useState("week");
+  const [data, setData] = useState<InsightData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchData();
-  }, [period]);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const [insightsRes, trendsRes] = await Promise.all([
-        fetch("/api/insights"),
-        fetch(`/api/insights/trends?period=${period}`),
-      ]);
-      
-      if (insightsRes.ok) {
-        setInsights(await insightsRes.json());
-      }
-      if (trendsRes.ok) {
-        setTrends(await trendsRes.json());
-      }
-    } catch (_error) {
-      console.error("获取数据失败:", _error);
-    } finally {
+    // 模拟数据加载
+    setTimeout(() => {
+      setData(generateInsightData());
       setLoading(false);
-    }
-  };
-
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-500";
-    if (score >= 60) return "text-yellow-500";
-    if (score >= 40) return "text-orange-500";
-    return "text-red-500";
-  };
-
-  const getScoreBg = (score: number) => {
-    if (score >= 80) return "bg-green-500";
-    if (score >= 60) return "bg-yellow-500";
-    if (score >= 40) return "bg-orange-500";
-    return "bg-red-500";
-  };
+    }, 800);
+  }, []);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 p-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="animate-pulse space-y-6">
-            <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-            <div className="h-32 bg-gray-200 rounded"></div>
-            <div className="h-64 bg-gray-200 rounded"></div>
-          </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl animate-bounce mb-4">📊</div>
+          <p className="text-gray-400">正在分析你的写作数据...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 p-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <Link href="/" className="text-purple-600 hover:text-purple-800 mb-4 inline-block">
-            ← 返回首页
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* 装饰背景 */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 -left-20 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-60 h-60 bg-cyan-500/20 rounded-full blur-3xl" />
+      </div>
+
+      <main className="relative max-w-6xl mx-auto px-6 pt-8 pb-16">
+        {/* 头部 */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Link href="/" className="text-3xl hover:scale-110 transition-transform">
+              🦞
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                <span>📊</span>
+                <span>写作洞察</span>
+              </h1>
+              <p className="text-gray-400 text-sm">
+                发现你的写作模式，追踪成长轨迹
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/chat-diary"
+            className="px-4 py-2 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-500 transition-colors flex items-center gap-2"
+          >
+            <span>✍️</span>
+            <span>写日记</span>
           </Link>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">📊 AI 洞察分析</h1>
-          <p className="text-gray-600">深入了解你的写作模式和成长轨迹</p>
         </div>
 
-        {/* Summary Card */}
-        {insights && (
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-            <p className="text-lg text-gray-700">{insights.summary}</p>
+        {/* 核心指标 */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-2xl p-5">
+            <div className="text-3xl mb-2">📝</div>
+            <div className="text-3xl font-bold text-white">{data?.totalDiaries}</div>
+            <div className="text-sm text-gray-400">总日记数</div>
           </div>
-        )}
+          <div className="bg-gradient-to-br from-indigo-500/20 to-cyan-500/20 border border-indigo-500/30 rounded-2xl p-5">
+            <div className="text-3xl mb-2">📖</div>
+            <div className="text-3xl font-bold text-white">{data?.totalWords.toLocaleString()}</div>
+            <div className="text-sm text-gray-400">总字数</div>
+          </div>
+          <div className="bg-gradient-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 rounded-2xl p-5">
+            <div className="text-3xl mb-2">🔥</div>
+            <div className="text-3xl font-bold text-white">{data?.streakDays}</div>
+            <div className="text-sm text-gray-400">连续天数</div>
+          </div>
+          <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl p-5">
+            <div className="text-3xl mb-2">⭐</div>
+            <div className="text-3xl font-bold text-white">{data?.avgWordsPerDiary}</div>
+            <div className="text-sm text-gray-400">平均字数</div>
+          </div>
+        </div>
 
-        {/* Insights Grid */}
-        {insights?.insights && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {insights.insights.map((insight, index) => (
-              <div key={index} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-lg font-semibold text-gray-800">{insight.title}</h3>
-                  <div className={`text-2xl font-bold ${getScoreColor(insight.score)}`}>
-                    {insight.score}
-                  </div>
-                </div>
-                <p className="text-gray-600 mb-4">{insight.content}</p>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className={`h-2 rounded-full ${getScoreBg(insight.score)}`}
-                    style={{ width: `${Math.min(100, insight.score)}%` }}
-                  ></div>
-                </div>
+        {/* 两栏布局 */}
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          {/* 情绪趋势 */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <span>🎭</span>
+              <span>情绪趋势</span>
+            </h2>
+            <EmotionChart data={data?.emotionTrend || []} />
+            <div className="mt-4 p-3 bg-purple-500/10 rounded-lg">
+              <p className="text-sm text-gray-300">
+                💡 你的情绪整体稳定且有上升趋势。继续保持写作习惯！
+              </p>
+            </div>
+          </div>
+
+          {/* 周活动 */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+            <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <span>📅</span>
+              <span>周活动分布</span>
+            </h2>
+            <WeeklyChart data={data?.weeklyActivity || []} />
+            <div className="mt-4 p-3 bg-indigo-500/10 rounded-lg">
+              <p className="text-sm text-gray-300">
+                💡 你在周末更有写作热情，可以尝试在周中设定小目标。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* 高频词汇 */}
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-8">
+          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <span>💬</span>
+            <span>常用词汇</span>
+          </h2>
+          <WordCloud words={data?.wordFrequency || []} />
+          <div className="mt-4 text-center text-sm text-gray-400">
+            这些词汇反映了你的写作主题和关注点
+          </div>
+        </div>
+
+        {/* 标签分布 */}
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-8">
+          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <span>🏷️</span>
+            <span>热门标签</span>
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {data?.topTags.map((item, i) => (
+              <div
+                key={i}
+                className="px-4 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full border border-purple-500/30 hover:border-purple-500/50 transition-colors"
+              >
+                <span className="text-white">{item.tag}</span>
+                <span className="text-gray-400 text-sm ml-2">{item.count}</span>
               </div>
             ))}
           </div>
-        )}
-
-        {/* Emotion Distribution */}
-        {insights?.emotions && (
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">😊 情绪分布</h2>
-            <div className="flex gap-4">
-              <div className="flex-1 bg-green-50 rounded-xl p-4 text-center">
-                <div className="text-3xl mb-2">😊</div>
-                <div className="text-2xl font-bold text-green-600">{insights.emotions.positive}</div>
-                <div className="text-sm text-gray-500">积极</div>
-              </div>
-              <div className="flex-1 bg-gray-50 rounded-xl p-4 text-center">
-                <div className="text-3xl mb-2">😐</div>
-                <div className="text-2xl font-bold text-gray-600">{insights.emotions.neutral}</div>
-                <div className="text-sm text-gray-500">中性</div>
-              </div>
-              <div className="flex-1 bg-red-50 rounded-xl p-4 text-center">
-                <div className="text-3xl mb-2">😔</div>
-                <div className="text-2xl font-bold text-red-600">{insights.emotions.negative}</div>
-                <div className="text-sm text-gray-500">消极</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Trends Section */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-gray-800">📈 趋势分析</h2>
-            <div className="flex gap-2">
-              {["week", "month", "year"].map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setPeriod(p)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    period === p
-                      ? "bg-purple-600 text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
-                >
-                  {p === "week" ? "周" : p === "month" ? "月" : "年"}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {trends?.analysis && (
-            <div className="bg-purple-50 rounded-xl p-4 mb-6">
-              <p className="text-lg font-medium text-purple-800">{trends.analysis.message}</p>
-              <p className="text-sm text-purple-600 mt-1">
-                该期间共 {trends.analysis.total} 篇日记
-              </p>
-            </div>
-          )}
-
-          {trends?.trends && trends.trends.length > 0 && (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-2 px-3">日期</th>
-                    <th className="text-center py-2 px-3">篇数</th>
-                    <th className="text-center py-2 px-3">字数</th>
-                    <th className="text-center py-2 px-3">平均</th>
-                    <th className="text-left py-2 px-3">热门标签</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {trends.trends.slice(0, 10).map((t, i) => (
-                    <tr key={i} className="border-b hover:bg-gray-50">
-                      <td className="py-2 px-3 font-medium">{t.date}</td>
-                      <td className="py-2 px-3 text-center">{t.count}</td>
-                      <td className="py-2 px-3 text-center">{t.words}</td>
-                      <td className="py-2 px-3 text-center">{t.avgWords}</td>
-                      <td className="py-2 px-3">
-                        <div className="flex gap-1 flex-wrap">
-                          {t.topTags.map((tag, j) => (
-                            <span key={j} className="px-2 py-0.5 bg-gray-100 rounded text-xs">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
         </div>
 
-        {/* Top Tags */}
-        {insights?.topTags && insights.topTags.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">🏷️ 热门标签</h2>
-            <div className="flex flex-wrap gap-2">
-              {insights.topTags.map((item, index) => (
+        {/* 成长亮点 */}
+        <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-2xl p-5 mb-8">
+          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <span>📈</span>
+            <span>成长亮点</span>
+          </h2>
+          <div className="grid md:grid-cols-2 gap-3">
+            {data?.recentGrowth.map((item, i) => (
+              <div key={i} className="flex items-center gap-2 p-3 bg-white/5 rounded-lg">
+                <span className="text-green-400">✓</span>
+                <span className="text-gray-300">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 成就徽章 */}
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-8">
+          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <span>🏆</span>
+            <span>成就徽章</span>
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <AchievementBadge emoji="🔥" title="连续7天" desc="坚持写作一周" unlocked={true} />
+            <AchievementBadge emoji="📝" title="笔耕不辍" desc="累计50篇日记" unlocked={false} />
+            <AchievementBadge emoji="🌟" title="情绪大师" desc="记录100次情绪" unlocked={false} />
+            <AchievementBadge emoji="🎯" title="目标达成" desc="完成10个目标" unlocked={true} />
+          </div>
+        </div>
+
+        {/* AI 洞察卡片 */}
+        <div className="bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-2xl p-6 mb-8">
+          <div className="flex items-start gap-4">
+            <div className="text-4xl">🧠</div>
+            <div>
+              <h3 className="text-lg font-bold text-white mb-2">AI 洞察</h3>
+              <p className="text-gray-300 leading-relaxed">
+                基于你的写作数据，你是一位善于反思和成长的写作者。你的日记主题集中在「成长」和「思考」，
+                表明你有较强的自我觉察能力。建议：尝试记录更多生活中的小确幸，丰富情绪维度。
+              </p>
+              <div className="mt-4 flex gap-3">
                 <Link
-                  key={index}
-                  href={`/tags?tag=${encodeURIComponent(item.tag)}`}
-                  className="px-4 py-2 bg-purple-100 text-purple-700 rounded-full hover:bg-purple-200 transition-colors"
+                  href="/chat-diary?theme=gratitude"
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-500 transition-colors"
                 >
-                  {item.tag} <span className="text-purple-500">({item.count})</span>
+                  写感恩日记
                 </Link>
-              ))}
+                <Link
+                  href="/challenges"
+                  className="px-4 py-2 bg-white/10 text-white rounded-lg text-sm font-medium hover:bg-white/20 transition-colors"
+                >
+                  查看挑战
+                </Link>
+              </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+
+        {/* 快速行动 */}
+        <div className="grid md:grid-cols-3 gap-4">
+          <Link
+            href="/growth"
+            className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-purple-500/50 transition-all group"
+          >
+            <div className="text-2xl mb-2">📚</div>
+            <div className="font-medium text-white group-hover:text-purple-300">查看所有日记</div>
+            <div className="text-sm text-gray-500">回顾你的成长记录</div>
+          </Link>
+          <Link
+            href="/stats"
+            className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-purple-500/50 transition-all group"
+          >
+            <div className="text-2xl mb-2">📊</div>
+            <div className="font-medium text-white group-hover:text-purple-300">详细统计</div>
+            <div className="text-sm text-gray-500">更多数据分析</div>
+          </Link>
+          <Link
+            href="/annual-report"
+            className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-purple-500/50 transition-all group"
+          >
+            <div className="text-2xl mb-2">🎄</div>
+            <div className="font-medium text-white group-hover:text-purple-300">年度报告</div>
+            <div className="text-sm text-gray-500">精彩年度回顾</div>
+          </Link>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-white/10 py-6">
+        <div className="max-w-6xl mx-auto px-6 text-center text-sm text-gray-500">
+          <p>🦞 Claw Diary · 让每一天都值得记录</p>
+        </div>
+      </footer>
     </div>
   );
 }

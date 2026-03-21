@@ -223,11 +223,12 @@ export default async function Home() {
         </Link>
 
         {/* 更多入口 */}
-        <div className="grid grid-cols-4 gap-3 mb-12">
+        <div className="grid grid-cols-5 gap-3 mb-12">
           {[
+            { href: "/insights", emoji: "📊", label: "洞察", desc: "写作分析" },
             { href: "/explore", emoji: "🔍", label: "探索", desc: "发现内容" },
-            { href: "/collab", emoji: "🤝", label: "协作", desc: "共创日记" },
             { href: "/challenges", emoji: "🏆", label: "挑战", desc: "写作任务" },
+            { href: "/tools", emoji: "🧰", label: "工具", desc: "AI工具箱" },
             { href: "/my", emoji: "👤", label: "我的", desc: "个人中心" },
           ].map((item) => (
             <Link
