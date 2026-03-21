@@ -7,11 +7,18 @@ export const metadata = {
 
 const experiments = [
   {
+    href: '/experiment/reflection',
+    emoji: '🌅',
+    title: '每日反思',
+    desc: '晨间意图 + 晚间复盘，建立每日反思习惯',
+    status: 'new',
+  },
+  {
     href: '/experiment/prompts',
     emoji: '💡',
     title: 'AI 提示词库',
     desc: '56+ 精选写作提示词，随机灵感，智者对话',
-    status: 'new',
+    status: 'stable',
   },
   {
     href: '/experiment/writing-assistant',
