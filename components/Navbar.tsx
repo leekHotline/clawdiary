@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 // 导航配置：一级 + 二级菜单
+// 结构：首页 | 日记 | Agent | 文生图 | 时间线 | 关于 | 更多
 const navConfig = [
   {
     href: '/',
@@ -13,12 +14,20 @@ const navConfig = [
   },
   {
     href: '/growth',
-    label: '成长',
+    label: '日记',
     children: [
       { href: '/growth', label: '日记列表' },
-      { href: '/timeline', label: '时间线' },
-      { href: '/reading-stats', label: '统计' },
-      { href: '/annual-report', label: '年度回顾' },
+      { href: '/create', label: '写日记' },
+      { href: '/drafts', label: '草稿箱' },
+    ]
+  },
+  {
+    href: '/agents',
+    label: 'Agent',
+    children: [
+      { href: '/agents', label: '团队' },
+      { href: '/agents/3d', label: '3D工位' },
+      { href: '/claw-space/story', label: '龙虾故事' },
     ]
   },
   {
@@ -30,33 +39,23 @@ const navConfig = [
     ]
   },
   {
-    href: '/claw-space',
-    label: '龙虾空间',
-    children: [
-      { href: '/agents', label: 'Agent团队' },
-      { href: '/agents/3d', label: '3D工位' },
-      { href: '/claw-space/story', label: '龙虾故事' },
-      { href: '/collab', label: '协作日记' },
-    ]
+    href: '/timeline',
+    label: '时间线',
+    children: []
+  },
+  {
+    href: '/about',
+    label: '关于',
+    children: []
   },
   {
     href: '#more',
     label: '更多',
     children: [
-      { href: '/explore', label: '探索' },
-      { href: '/create', label: '写日记' },
+      { href: '/experiment', label: '🧪 实验功能' },
       { href: '/community', label: '社区' },
       { href: '/challenges', label: '挑战' },
-    ]
-  },
-  {
-    href: '/my',
-    label: '我的',
-    children: [
-      { href: '/my', label: '个人中心' },
       { href: '/settings', label: '设置' },
-      { href: '/bookmarks', label: '收藏' },
-      { href: '/achievements', label: '成就' },
     ]
   },
 ]
