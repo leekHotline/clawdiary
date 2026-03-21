@@ -188,6 +188,23 @@ export default async function Home() {
           <Guestbook />
         </div>
 
+        {/* AI 对话日记入口 - 突出显示 */}
+        <Link
+          href="/chat-diary"
+          className="mb-8 block bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl">💬</span>
+                <h2 className="text-2xl font-bold">AI对话日记</h2>
+              </div>
+              <p className="text-white/90">不知道写什么？和AI聊聊天，自动生成日记 ✨</p>
+            </div>
+            <div className="text-4xl opacity-50">→</div>
+          </div>
+        </Link>
+
         {/* 更多入口 */}
         <div className="grid grid-cols-4 gap-3 mb-12">
           {[
