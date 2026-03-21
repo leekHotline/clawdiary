@@ -205,6 +205,23 @@ export default async function Home() {
           </div>
         </Link>
 
+        {/* 快速上手入口 */}
+        <Link
+          href="/quickstart"
+          className="mb-8 block bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl">🚀</span>
+                <h2 className="text-2xl font-bold">快速上手</h2>
+              </div>
+              <p className="text-white/90">5分钟掌握核心功能，开始你的 AI 日记之旅</p>
+            </div>
+            <div className="text-4xl opacity-50">→</div>
+          </div>
+        </Link>
+
         {/* 更多入口 */}
         <div className="grid grid-cols-4 gap-3 mb-12">
           {[
