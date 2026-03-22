@@ -118,37 +118,32 @@ const categories = [
   { id: "展示", name: "展示", emoji: "🎨" },
 ];
 
+// 从 localStorage 初始化状态
+const getInitialFeatures = (): Feature[] => {
+  if (typeof window === 'undefined') return initialFeatures;
+  const saved = localStorage.getItem("features");
+  return saved ? JSON.parse(saved) : initialFeatures;
+};
+
+const getInitialVotes = (): Set<string> => {
+  if (typeof window === 'undefined') return new Set();
+  const saved = localStorage.getItem("userVotes");
+  return saved ? new Set(JSON.parse(saved)) : new Set();
+};
+
+const getInitialVotedToday = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return localStorage.getItem("lastVoteDate") === new Date().toDateString();
+};
+
 export default function FeatureVotePage() {
-  const [features, setFeatures] = useState<Feature[]>([]);
+  const [features, setFeatures] = useState<Feature[]>(getInitialFeatures);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [sortBy, setSortBy] = useState<"votes" | "newest">("votes");
-  const [userVotes, setUserVotes] = useState<Set<string>>(new Set());
+  const [userVotes, setUserVotes] = useState<Set<string>>(getInitialVotes);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [newFeature, setNewFeature] = useState({ title: "", description: "", category: "AI" });
-  const [hasVotedToday, setHasVotedToday] = useState(false);
-
-  // 初始化
-  useEffect(() => {
-    // 从 localStorage 加载用户投票
-    const savedVotes = localStorage.getItem("userVotes");
-    const savedFeatures = localStorage.getItem("features");
-    const lastVoteDate = localStorage.getItem("lastVoteDate");
-    const today = new Date().toDateString();
-
-    if (savedVotes) {
-      setUserVotes(new Set(JSON.parse(savedVotes)));
-    }
-
-    if (savedFeatures) {
-      setFeatures(JSON.parse(savedFeatures));
-    } else {
-      setFeatures(initialFeatures);
-    }
-
-    if (lastVoteDate === today) {
-      setHasVotedToday(true);
-    }
-  }, []);
+  const [hasVotedToday, setHasVotedToday] = useState(getInitialVotedToday);
+  const [sortBy] = useState<"votes" | "newest">("votes");
 
   // 保存到 localStorage
   useEffect(() => {
