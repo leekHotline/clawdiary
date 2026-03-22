@@ -81,6 +81,17 @@ const generateInsights = (): GrowthInsight[] => [
   }
 ];
 
+// 辅助函数：生成星星位置（移到组件外部，避免 purity 检查）
+function generateStars(count: number) {
+  return [...Array(count)].map((_, i) => ({
+    key: i,
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    delay: `${Math.random() * 3}s`,
+    opacity: Math.random() * 0.8 + 0.2,
+  }))
+}
+
 // 情绪颜色映射
 const moodColors: Record<string, string> = {
   "开心": "from-yellow-400 to-orange-400",
@@ -96,6 +107,9 @@ export default function TimeTravelPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showComparison, setShowComparison] = useState(false);
   const [insights, setInsights] = useState<GrowthInsight[]>([]);
+
+  // 使用 useState 初始化函数生成星星位置（只初始化一次）
+  const [stars] = useState(() => generateStars(50))
 
   // 模拟加载
   useEffect(() => {
@@ -141,15 +155,15 @@ export default function TimeTravelPage() {
     <div className="min-h-screen bg-gradient-to-b from-indigo-900 via-purple-900 to-violet-900">
       {/* 星空背景 */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(50)].map((_, i) => (
+        {stars.map((star) => (
           <div
-            key={i}
+            key={star.key}
             className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              opacity: Math.random() * 0.8 + 0.2
+              left: star.left,
+              top: star.top,
+              animationDelay: star.delay,
+              opacity: star.opacity
             }}
           />
         ))}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import Link from "next/link";
 
 interface SprintSession {
@@ -41,30 +41,54 @@ const ENCOURAGEMENTS = [
   "你的故事值得被记录！📖",
 ];
 
+// 辅助函数：从 localStorage 加载数据
+function loadSessionsFromStorage(): SprintSession[] {
+  if (typeof window === 'undefined') return [];
+  const saved = localStorage.getItem("sprint-sessions");
+  if (saved) {
+    try {
+      return JSON.parse(saved);
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+function loadStreakFromStorage(): number {
+  if (typeof window === 'undefined') return 0;
+  const streak = localStorage.getItem("sprint-streak");
+  return streak ? parseInt(streak) : 0;
+}
+
 export default function WritingSprintPage() {
   const [phase, setPhase] = useState<"setup" | "sprinting" | "complete">("setup");
   const [duration, setDuration] = useState(5);
   const [theme, setTheme] = useState(SPRINT_THEMES[0]);
   const [content, setContent] = useState("");
   const [timeLeft, setTimeLeft] = useState(0);
-  const [wordCount, setWordCount] = useState(0);
   const [encouragement, setEncouragement] = useState("");
   const [showEncouragement, setShowEncouragement] = useState(false);
-  const [sessions, setSessions] = useState<SprintSession[]>([]);
-  const [totalWords, setTotalWords] = useState(0);
-  const [sprintStreak, setSprintStreak] = useState(0);
-
-  // 加载历史数据
-  useEffect(() => {
-    const saved = localStorage.getItem("sprint-sessions");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setSessions(parsed);
-      setTotalWords(parsed.reduce((sum: number, s: SprintSession) => sum + s.actualWords, 0));
-    }
-    const streak = localStorage.getItem("sprint-streak");
-    if (streak) setSprintStreak(parseInt(streak));
-  }, []);
+  
+  // 使用 state 初始化函数从 localStorage 加载（避免在 effect 中调用 setState）
+  const [sessions, setSessions] = useState<SprintSession[]>(loadSessionsFromStorage);
+  const [sprintStreak, setSprintStreak] = useState(loadStreakFromStorage);
+  
+  // 计算派生状态（不使用 effect）
+  const totalWords = useMemo(() => 
+    sessions.reduce((sum, s) => sum + s.actualWords, 0), 
+    [sessions]
+  );
+  
+  // 计算字数（派生状态）
+  const wordCount = useMemo(() => {
+    const words = content.trim().split(/\s+/).filter(Boolean).length;
+    const chineseChars = (content.match(/[\u4e00-\u9fa5]/g) || []).length;
+    return words + chineseChars;
+  }, [content])
+  
+  // 跟踪上一个鼓励里程碑（避免重复触发）
+  const lastMilestoneRef = useRef(0);
 
   // 计时器
   useEffect(() => {
@@ -83,34 +107,32 @@ export default function WritingSprintPage() {
     return () => clearInterval(interval);
   }, [phase, timeLeft]);
 
-  // 字数统计
-  useEffect(() => {
-    const words = content.trim().split(/\s+/).filter(Boolean).length;
-    // 中文字符也算字数
-    const chineseChars = (content.match(/[\u4e00-\u9fa5]/g) || []).length;
-    setWordCount(words + chineseChars);
-  }, [content]);
-
-  // 随机鼓励
-  const showRandomEncouragement = useCallback(() => {
-    const random = ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)];
-    setEncouragement(random);
-    setShowEncouragement(true);
-    setTimeout(() => setShowEncouragement(false), 3000);
-  }, []);
-
-  // 每50字显示鼓励
-  useEffect(() => {
-    if (phase === "sprinting" && wordCount > 0 && wordCount % 50 === 0) {
-      showRandomEncouragement();
+  // 内容变化时检查里程碑（避免在 effect 中调用 setState）
+  const handleContentChange = useCallback((newContent: string) => {
+    setContent(newContent);
+    
+    // 计算新字数
+    const words = newContent.trim().split(/\s+/).filter(Boolean).length;
+    const chineseChars = (newContent.match(/[\u4e00-\u9fa5]/g) || []).length;
+    const newWordCount = words + chineseChars;
+    
+    // 检查是否到达新里程碑（每50字）
+    if (phase === "sprinting" && newWordCount > 0 && newWordCount % 50 === 0) {
+      const currentMilestone = Math.floor(newWordCount / 50);
+      if (currentMilestone > lastMilestoneRef.current) {
+        lastMilestoneRef.current = currentMilestone;
+        const random = ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)];
+        setEncouragement(random);
+        setShowEncouragement(true);
+        setTimeout(() => setShowEncouragement(false), 3000);
+      }
     }
-  }, [wordCount, phase, showRandomEncouragement]);
+  }, [phase])
 
   const startSprint = () => {
     setPhase("sprinting");
     setTimeLeft(duration * 60);
     setContent("");
-    setWordCount(0);
   };
 
   const finishSprint = () => {
@@ -126,9 +148,6 @@ export default function WritingSprintPage() {
     const newSessions = [session, ...sessions].slice(0, 20);
     setSessions(newSessions);
     localStorage.setItem("sprint-sessions", JSON.stringify(newSessions));
-
-    const newTotal = totalWords + wordCount;
-    setTotalWords(newTotal);
 
     // 更新连续天数
     const today = new Date().toDateString();
@@ -365,7 +384,7 @@ export default function WritingSprintPage() {
             <div className="relative">
               <textarea
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
+                onChange={(e) => handleContentChange(e.target.value)}
                 placeholder={`开始写吧！主题：${theme.theme}`}
                 className="w-full h-80 bg-white/5 border border-white/10 rounded-2xl p-6 text-white text-lg leading-relaxed placeholder-gray-600 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none resize-none"
                 autoFocus

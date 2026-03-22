@@ -1,7 +1,86 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
+
+// 辅助函数：生成随机索引（移到组件外部，避免 purity 检查）
+function generateRandomIndices() {
+  return {
+    diary: Math.floor(Math.random() * 1000),
+    emotion: Math.floor(Math.random() * 1000),
+    wisdom: Math.floor(Math.random() * 1000),
+    question: Math.floor(Math.random() * 1000),
+    challenge: Math.floor(Math.random() * 1000),
+  }
+}
+
+// 辅助函数：生成礼花项（移到组件外部）
+function generateConfettiItems(count: number) {
+  return [...Array(count)].map((_, i) => ({
+    key: i,
+    left: `${Math.random() * 100}%`,
+    delay: `${Math.random() * 0.5}s`,
+    duration: `${1 + Math.random()}s`,
+    emoji: ['🎉', '✨', '🌟', '💫', '🎁'][Math.floor(Math.random() * 5)],
+  }))
+}
+
+// 辅助函数：生成盲盒结果（移到组件外部，避免 purity 检查）
+function generateResult(
+  box: BlindBox,
+  indices: { diary: number; emotion: number; wisdom: number; question: number; challenge: number }
+): { type: string; data: any; message: string } {
+  switch (box.id) {
+    case 'memory': {
+      const randomDiary = mockDiaries[indices.diary % mockDiaries.length]
+      return {
+        type: 'diary',
+        data: randomDiary,
+        message: `回忆起 ${randomDiary.date} 的那天...`,
+      }
+    }
+    case 'emotion': {
+      const randomEmotion = emotionData[indices.emotion % emotionData.length]
+      return {
+        type: 'emotion',
+        data: randomEmotion,
+        message: `发现「${randomEmotion.emotion}」时刻`,
+      }
+    }
+    case 'wisdom': {
+      const randomWisdom = wisdomQuotes[indices.wisdom % wisdomQuotes.length]
+      return {
+        type: 'wisdom',
+        data: randomWisdom,
+        message: '提取到一条智慧金句',
+      }
+    }
+    case 'question': {
+      const randomQuestion = questionBank[indices.question % questionBank.length]
+      return {
+        type: 'question',
+        data: randomQuestion,
+        message: '今天的问题来啦',
+      }
+    }
+    case 'challenge': {
+      const randomChallenge = challengeBank[indices.challenge % challengeBank.length]
+      return {
+        type: 'challenge',
+        data: randomChallenge,
+        message: '接受今天的挑战？',
+      }
+    }
+    default: {
+      const defaultDiary = mockDiaries[0]
+      return {
+        type: 'diary',
+        data: defaultDiary,
+        message: `回忆起 ${defaultDiary.date} 的那天...`,
+      }
+    }
+  }
+}
 
 interface BlindBox {
   id: string
@@ -137,6 +216,9 @@ export default function DiaryBlindBoxPage() {
   const [result, setResult] = useState<any>(null)
   const [showConfetti, setShowConfetti] = useState(false)
 
+  // 使用 useState 初始化函数生成礼花属性（只初始化一次）
+  const [confettiItems] = useState(() => generateConfettiItems(20))
+
   const openBox = async (box: BlindBox) => {
     setSelectedBox(box)
     setIsOpening(true)
@@ -147,6 +229,16 @@ export default function DiaryBlindBoxPage() {
     
     let boxResult: { type: string; data: any; message: string }
     
+    // 使用辅助函数生成随机索引
+    const rawIndices = generateRandomIndices()
+    const indices = {
+      diary: rawIndices.diary % mockDiaries.length,
+      emotion: rawIndices.emotion % emotionData.length,
+      wisdom: rawIndices.wisdom % wisdomQuotes.length,
+      question: rawIndices.question % questionBank.length,
+      challenge: rawIndices.challenge % challengeBank.length,
+    }
+    
     try {
       // 尝试从API获取真实数据
       if (box.id === 'memory' || box.id === 'wisdom') {
@@ -155,69 +247,21 @@ export default function DiaryBlindBoxPage() {
           boxResult = await res.json()
         } else {
           // 降级到本地数据
-          boxResult = generateResult(box)
+          boxResult = generateResult(box, indices)
         }
       } else {
         // 其他类型使用本地数据
-        boxResult = generateResult(box)
+        boxResult = generateResult(box, indices)
       }
     } catch {
       // 网络错误时使用本地数据
-      boxResult = generateResult(box)
+      boxResult = generateResult(box, indices)
     }
     
     setResult(boxResult)
     setIsOpening(false)
     setShowConfetti(true)
     setTimeout(() => setShowConfetti(false), 2000)
-  }
-  
-  // 生成盲盒结果
-  const generateResult = (box: BlindBox): { type: string; data: any; message: string } => {
-    switch (box.id) {
-      case 'memory':
-        const randomDiary = mockDiaries[Math.floor(Math.random() * mockDiaries.length)]
-        return {
-          type: 'diary',
-          data: randomDiary,
-          message: `回忆起 ${randomDiary.date} 的那天...`,
-        }
-      case 'emotion':
-        const randomEmotion = emotionData[Math.floor(Math.random() * emotionData.length)]
-        return {
-          type: 'emotion',
-          data: randomEmotion,
-          message: `发现「${randomEmotion.emotion}」时刻`,
-        }
-      case 'wisdom':
-        const randomWisdom = wisdomQuotes[Math.floor(Math.random() * wisdomQuotes.length)]
-        return {
-          type: 'wisdom',
-          data: randomWisdom,
-          message: '提取到一条智慧金句',
-        }
-      case 'question':
-        const randomQuestion = questionBank[Math.floor(Math.random() * questionBank.length)]
-        return {
-          type: 'question',
-          data: randomQuestion,
-          message: '今天的问题来啦',
-        }
-      case 'challenge':
-        const randomChallenge = challengeBank[Math.floor(Math.random() * challengeBank.length)]
-        return {
-          type: 'challenge',
-          data: randomChallenge,
-          message: '接受今天的挑战？',
-        }
-      default:
-        const defaultDiary = mockDiaries[0]
-        return {
-          type: 'diary',
-          data: defaultDiary,
-          message: `回忆起 ${defaultDiary.date} 的那天...`,
-        }
-    }
   }
 
   const reset = () => {
@@ -238,20 +282,18 @@ export default function DiaryBlindBoxPage() {
       {/* 礼花效果 */}
       {showConfetti && (
         <div className="fixed inset-0 pointer-events-none z-50">
-          {[...Array(20)].map((_, i) => (
+          {confettiItems.map((item) => (
             <div
-              key={i}
+              key={item.key}
               className="absolute animate-bounce"
               style={{
-                left: `${Math.random() * 100}%`,
+                left: item.left,
                 top: `-20px`,
-                animationDelay: `${Math.random() * 0.5}s`,
-                animationDuration: `${1 + Math.random()}s`,
+                animationDelay: item.delay,
+                animationDuration: item.duration,
               }}
             >
-              <span className="text-2xl">
-                {['🎉', '✨', '🌟', '💫', '🎁'][Math.floor(Math.random() * 5)]}
-              </span>
+              <span className="text-2xl">{item.emoji}</span>
             </div>
           ))}
         </div>
