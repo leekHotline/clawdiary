@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Template {
   id: string;
@@ -287,6 +288,7 @@ const templates: Template[] = [
 const categories = ["全部", "情感记录", "成长反思", "目标规划", "创意灵感", "生活记录"];
 
 export default function DiaryTemplatesPage() {
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("全部");
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -310,7 +312,7 @@ export default function DiaryTemplatesPage() {
   const handleUseTemplate = (template: Template) => {
     // Navigate to chat-diary with template prompt
     const encodedPrompt = encodeURIComponent(template.prompt);
-    window.location.href = `/chat-diary?template=${encodedPrompt}&name=${encodeURIComponent(template.name)}`;
+    router.push(`/chat-diary?template=${encodedPrompt}&name=${encodeURIComponent(template.name)}`);
   };
 
   return (
