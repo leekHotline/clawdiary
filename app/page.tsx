@@ -222,6 +222,26 @@ export default async function Home() {
           </div>
         </Link>
 
+        {/* AI 情绪镜子入口 - 新功能 */}
+        <Link
+          href="/emotion-mirror"
+          className="mb-8 block bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white relative overflow-hidden"
+        >
+          <div className="absolute top-2 right-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+            ✨ 新功能
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl">🪞</span>
+                <h2 className="text-2xl font-bold">AI 情绪镜子</h2>
+              </div>
+              <p className="text-white/90">洞察你的情绪，发现内在的声音，获得个性化建议</p>
+            </div>
+            <div className="text-4xl opacity-50">→</div>
+          </div>
+        </Link>
+
         {/* 快速上手入口 */}
         <Link
           href="/quickstart"
