@@ -222,6 +222,26 @@ export default async function Home() {
           </div>
         </Link>
 
+        {/* AI 日记教练入口 - 新功能 */}
+        <Link
+          href="/diary-coach"
+          className="mb-8 block bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white relative overflow-hidden"
+        >
+          <div className="absolute top-2 right-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+            ✨ 新功能
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl">🎯</span>
+                <h2 className="text-2xl font-bold">AI 日记教练</h2>
+              </div>
+              <p className="text-white/90">个性化写作指导，发现你的写作模式和改进空间</p>
+            </div>
+            <div className="text-4xl opacity-50">→</div>
+          </div>
+        </Link>
+
         {/* AI 情绪镜子入口 */}
         <Link
           href="/emotion-mirror"
