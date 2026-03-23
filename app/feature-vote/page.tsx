@@ -40,7 +40,7 @@ const initialFeatures: Feature[] = [
     emoji: "📅",
     category: "分析",
     votes: 35,
-    status: "in-progress",
+    status: "completed",
   },
   {
     id: "ai-summary",
