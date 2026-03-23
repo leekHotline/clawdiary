@@ -279,14 +279,31 @@ export default async function Home() {
           </div>
         </Link>
 
-        {/* 周复盘报告入口 - 新功能 */}
+        {/* 日记人格报告入口 - 新功能 */}
         <Link
-          href="/weekly-reflection"
-          className="mb-8 block bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white relative overflow-hidden"
+          href="/diary-personality"
+          className="mb-8 block bg-gradient-to-r from-rose-500 via-pink-500 to-purple-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white relative overflow-hidden"
         >
           <div className="absolute top-2 right-2 px-2 py-1 bg-white/20 rounded-full text-xs">
             ✨ 新功能
           </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl">🎭</span>
+                <h2 className="text-2xl font-bold">日记人格报告</h2>
+              </div>
+              <p className="text-white/90">分析写作风格、情绪模式，发现你的专属日记人格画像</p>
+            </div>
+            <div className="text-4xl opacity-50">→</div>
+          </div>
+        </Link>
+
+        {/* 周复盘报告入口 */}
+        <Link
+          href="/weekly-reflection"
+          className="mb-8 block bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white"
+        >
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3 mb-2">
