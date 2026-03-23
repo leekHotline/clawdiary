@@ -279,6 +279,26 @@ export default async function Home() {
           </div>
         </Link>
 
+        {/* 周复盘报告入口 - 新功能 */}
+        <Link
+          href="/weekly-reflection"
+          className="mb-8 block bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white relative overflow-hidden"
+        >
+          <div className="absolute top-2 right-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+            ✨ 新功能
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl">📊</span>
+                <h2 className="text-2xl font-bold">周复盘报告</h2>
+              </div>
+              <p className="text-white/90">自动分析一周日记，生成洞察报告和成长建议</p>
+            </div>
+            <div className="text-4xl opacity-50">→</div>
+          </div>
+        </Link>
+
         {/* 日记能量站入口 */}
         <Link
           href="/energy-station"
