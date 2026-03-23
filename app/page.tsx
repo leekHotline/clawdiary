@@ -353,14 +353,34 @@ export default async function Home() {
           </div>
         </Link>
 
+        {/* 心情预报入口 - 新功能 */}
+        <Link
+          href="/mood-forecast"
+          className="mb-8 block bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white relative overflow-hidden"
+        >
+          <div className="absolute top-2 right-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+            ✨ 新功能
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl">🌤️</span>
+                <h2 className="text-2xl font-bold">心情预报</h2>
+              </div>
+              <p className="text-white/90">像天气预报一样，预测你的情绪变化趋势</p>
+            </div>
+            <div className="text-4xl opacity-50">→</div>
+          </div>
+        </Link>
+
         {/* 更多入口 */}
         <div className="grid grid-cols-5 gap-3 mb-12">
           {[
+            { href: "/mood-forecast", emoji: "🌤️", label: "预报", desc: "情绪预测" },
             { href: "/insights", emoji: "📊", label: "洞察", desc: "写作分析" },
             { href: "/explore", emoji: "🔍", label: "探索", desc: "发现内容" },
             { href: "/challenges", emoji: "🏆", label: "挑战", desc: "写作任务" },
             { href: "/tools", emoji: "🧰", label: "工具", desc: "AI工具箱" },
-            { href: "/my", emoji: "👤", label: "我的", desc: "个人中心" },
           ].map((item) => (
             <Link
               key={item.href}
