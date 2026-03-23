@@ -87,12 +87,23 @@ const formatDuration = (seconds: number): string => {
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 };
 
+// Helper function for localStorage initialization
+function loadInitialEntries(): VoiceEntry[] {
+  if (typeof window === "undefined") return [];
+  const saved = localStorage.getItem("voice-diary-entries");
+  if (!saved) return [];
+  return JSON.parse(saved).map((e: VoiceEntry) => ({
+    ...e,
+    timestamp: new Date(e.timestamp),
+  }));
+}
+
 export default function VoiceDiaryPage() {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [interimTranscript, setInterimTranscript] = useState("");
   const [duration, setDuration] = useState(0);
-  const [entries, setEntries] = useState<VoiceEntry[]>([]);
+  const [entries, setEntries] = useState<VoiceEntry[]>(loadInitialEntries);
   const [selectedEntry, setSelectedEntry] = useState<VoiceEntry | null>(null);
   const [showTip, setShowTip] = useState(true);
   
@@ -147,15 +158,6 @@ export default function VoiceDiaryPage() {
       };
       
       recognitionRef.current = recognition;
-    }
-
-    // 加载历史记录
-    const saved = localStorage.getItem("voice-diary-entries");
-    if (saved) {
-      setEntries(JSON.parse(saved).map((e: VoiceEntry) => ({
-        ...e,
-        timestamp: new Date(e.timestamp),
-      })));
     }
     
     return () => {

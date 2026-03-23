@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 // 功能分类
@@ -80,31 +80,28 @@ const categoryColors: Record<string, string> = {
   "分享": "from-indigo-500 to-violet-500",
 };
 
+// Helper function for localStorage initialization
+function loadInitialFeatures(): Feature[] {
+  if (typeof window === "undefined") return FEATURES;
+  const saved = localStorage.getItem("feature-audit-scores");
+  if (!saved) return FEATURES;
+  
+  const savedScores = JSON.parse(saved);
+  return FEATURES.map(f => {
+    const savedFeature = savedScores[f.id];
+    if (savedFeature) {
+      return { ...f, ...savedFeature };
+    }
+    return f;
+  });
+}
+
 export default function FeatureAuditPage() {
-  const [features, setFeatures] = useState<Feature[]>([]);
+  const [features, setFeatures] = useState<Feature[]>(loadInitialFeatures);
   const [filter, setFilter] = useState<"all" | "keep" | "review" | "remove">("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [sortBy, setSortBy] = useState<"score" | "name" | "usage">("score");
   const [showExport, setShowExport] = useState(false);
-
-  // 加载功能列表
-  useEffect(() => {
-    // 从 localStorage 加载自定义评分
-    const saved = localStorage.getItem("feature-audit-scores");
-    if (saved) {
-      const savedScores = JSON.parse(saved);
-      const merged = FEATURES.map(f => {
-        const saved = savedScores[f.id];
-        if (saved) {
-          return { ...f, ...saved };
-        }
-        return f;
-      });
-      setFeatures(merged);
-    } else {
-      setFeatures(FEATURES);
-    }
-  }, []);
 
   // 保存评分
   const saveFeature = (id: string, updates: Partial<Feature>) => {

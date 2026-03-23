@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 
 // 能量等级配置
@@ -43,12 +43,17 @@ const ENERGY_TASKS = [
   { id: "review", name: "回顾一周", energy: 15, completed: false, emoji: "📚" },
 ];
 
+// Helper function for random quote
+function getRandomQuote() {
+  return MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
+}
+
 export default function EnergyStationPage() {
   const [energy, setEnergy] = useState(386);
   const [streak, setStreak] = useState(7);
   const [todayWritten, setTodayWritten] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
-  const [quote, setQuote] = useState(MOTIVATIONAL_QUOTES[0]);
+  const [quote, setQuote] = useState(getRandomQuote);
   const [tasks, setTasks] = useState(ENERGY_TASKS);
 
   // 获取当前等级
@@ -83,11 +88,6 @@ export default function EnergyStationPage() {
       return t;
     }));
   };
-
-  // 初始化随机语录
-  useEffect(() => {
-    setQuote(MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)]);
-  }, []);
 
   const currentLevel = getCurrentLevel();
   const nextLevel = getNextLevel();

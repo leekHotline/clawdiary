@@ -112,22 +112,6 @@ export default function EmotionWeatherPage() {
   const [currentWeather, setCurrentWeather] = useState<EmotionWeather | null>(null);
   const [forecast, setForecast] = useState<Forecast[]>([]);
   const [weeklySummary, setWeeklySummary] = useState<string>("");
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-
-  useEffect(() => {
-    // 加载日记数据
-    fetch("/api/diaries")
-      .then((res) => res.json())
-      .then((data) => {
-        const sorted = [...data].sort(
-          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-        );
-        setDiaries(sorted);
-        analyzeWeather(sorted);
-      })
-      .catch((err) => console.error("加载日记失败:", err))
-      .finally(() => setIsLoading(false));
-  }, []);
 
   // 分析情绪天气
   const analyzeWeather = async (diaryList: Diary[]) => {
@@ -173,6 +157,21 @@ export default function EmotionWeatherPage() {
       setCurrentWeather(weatherMap.partly_cloudy);
     }
   };
+
+  useEffect(() => {
+    // 加载日记数据
+    fetch("/api/diaries")
+      .then((res) => res.json())
+      .then((data) => {
+        const sorted = [...data].sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+        setDiaries(sorted);
+        analyzeWeather(sorted);
+      })
+      .catch((err) => console.error("加载日记失败:", err))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   // 获取天气图标（小型）
   const getMiniWeather = (weatherKey: string) => {
@@ -278,8 +277,7 @@ export default function EmotionWeatherPage() {
               {forecast.map((f, index) => (
                 <div
                   key={index}
-                  className="text-center p-3 rounded-xl bg-white/50 hover:bg-white/80 transition-colors cursor-pointer"
-                  onClick={() => setSelectedDate(f.day)}
+                  className="text-center p-3 rounded-xl bg-white/50 hover:bg-white/80 transition-colors"
                 >
                   <div className="text-xs text-gray-500 mb-1">{f.day}</div>
                   <div className="text-2xl mb-1">{f.weather.emoji}</div>

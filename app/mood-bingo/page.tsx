@@ -91,44 +91,43 @@ function checkWin(tasks: BingoTask[]): boolean {
   return false;
 }
 
+// Helper functions for localStorage initialization
+function loadInitialTasks(): BingoTask[] {
+  if (typeof window === "undefined") return generateBingoCard();
+  const saved = localStorage.getItem("mood-bingo-card");
+  const savedDate = localStorage.getItem("mood-bingo-date");
+  const today = new Date().toDateString();
+  
+  if (saved && savedDate === today) {
+    return JSON.parse(saved);
+  }
+  
+  // New day or no saved data - generate new card
+  const newCard = generateBingoCard();
+  localStorage.setItem("mood-bingo-card", JSON.stringify(newCard));
+  localStorage.setItem("mood-bingo-date", today);
+  return newCard;
+}
+
+function loadInitialStreak(): number {
+  if (typeof window === "undefined") return 0;
+  const saved = localStorage.getItem("mood-bingo-streak");
+  return saved ? parseInt(saved) : 0;
+}
+
+function loadInitialTotalBingos(): number {
+  if (typeof window === "undefined") return 0;
+  const saved = localStorage.getItem("mood-bingo-total");
+  return saved ? parseInt(saved) : 0;
+}
+
 export default function MoodBingoPage() {
-  const [tasks, setTasks] = useState<BingoTask[]>([]);
-  const [streak, setStreak] = useState(0);
-  const [totalBingos, setTotalBingos] = useState(0);
+  const [tasks, setTasks] = useState<BingoTask[]>(loadInitialTasks);
+  const [streak, setStreak] = useState(loadInitialStreak);
+  const [totalBingos, setTotalBingos] = useState(loadInitialTotalBingos);
   const [showWinModal, setShowWinModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState<BingoTask | null>(null);
   const [winLines, setWinLines] = useState<number[][]>([]);
-
-  // 从 localStorage 加载
-  useEffect(() => {
-    const saved = localStorage.getItem("mood-bingo-card");
-    const savedStreak = localStorage.getItem("mood-bingo-streak");
-    const savedTotal = localStorage.getItem("mood-bingo-total");
-    
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // 检查是否是今天的卡
-      const savedDate = localStorage.getItem("mood-bingo-date");
-      const today = new Date().toDateString();
-      if (savedDate === today) {
-        setTasks(parsed);
-      } else {
-        // 新的一天，生成新卡
-        const newCard = generateBingoCard();
-        setTasks(newCard);
-        localStorage.setItem("mood-bingo-card", JSON.stringify(newCard));
-        localStorage.setItem("mood-bingo-date", today);
-      }
-    } else {
-      const newCard = generateBingoCard();
-      setTasks(newCard);
-      localStorage.setItem("mood-bingo-card", JSON.stringify(newCard));
-      localStorage.setItem("mood-bingo-date", new Date().toDateString());
-    }
-    
-    if (savedStreak) setStreak(parseInt(savedStreak));
-    if (savedTotal) setTotalBingos(parseInt(savedTotal));
-  }, []);
 
   // 完成任务
   const completeTask = (taskId: string) => {

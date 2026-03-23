@@ -31,6 +31,13 @@ const responseStyles = [
   { id: "poetic", name: "诗意浪漫", emoji: "🌙", desc: "文字优美，意境深远" },
 ];
 
+// Helper function for localStorage initialization
+function loadInitialSavedLetters(): Letter[] {
+  if (typeof window === "undefined") return [];
+  const saved = localStorage.getItem("time-mailbox-letters");
+  return saved ? JSON.parse(saved) : [];
+}
+
 export default function TimeMailboxPage() {
   const [diaries, setDiaries] = useState<Diary[]>([]);
   const [selectedDiary, setSelectedDiary] = useState<Diary | null>(null);
@@ -41,7 +48,7 @@ export default function TimeMailboxPage() {
     userLetter: string;
     response: string;
   } | null>(null);
-  const [savedLetters, setSavedLetters] = useState<Letter[]>([]);
+  const [savedLetters, setSavedLetters] = useState<Letter[]>(loadInitialSavedLetters);
   const [showHistory, setShowHistory] = useState(false);
 
   // 加载日记
@@ -56,12 +63,6 @@ export default function TimeMailboxPage() {
         setDiaries(sorted);
       })
       .catch((err) => console.error("加载日记失败:", err));
-
-    // 加载保存的信件
-    const saved = localStorage.getItem("time-mailbox-letters");
-    if (saved) {
-      setSavedLetters(JSON.parse(saved));
-    }
   }, []);
 
   // 发送信件

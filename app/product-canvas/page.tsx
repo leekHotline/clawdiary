@@ -129,27 +129,28 @@ const INITIAL_SECTIONS: CanvasSection[] = [
   },
 ];
 
-export default function ProductCanvasPage() {
-  const [sections, setSections] = useState<CanvasSection[]>([]);
-  const [showExport, setShowExport] = useState(false);
-  const [savedDate, setSavedDate] = useState<string>("");
+// Helper functions for localStorage initialization
+function loadInitialSections(): CanvasSection[] {
+  if (typeof window === "undefined") return INITIAL_SECTIONS;
+  const saved = localStorage.getItem("product-canvas");
+  if (!saved) return INITIAL_SECTIONS;
+  
+  const parsed = JSON.parse(saved);
+  return INITIAL_SECTIONS.map(s => {
+    const found = parsed.find((p: { id: string }) => p.id === s.id);
+    return found ? { ...s, answer: found.answer || "" } : s;
+  });
+}
 
-  // 加载保存的定位
-  useEffect(() => {
-    const saved = localStorage.getItem("product-canvas");
-    const savedDate = localStorage.getItem("product-canvas-date");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      const merged = INITIAL_SECTIONS.map(s => {
-        const found = parsed.find((p: any) => p.id === s.id);
-        return found ? { ...s, answer: found.answer || "" } : s;
-      });
-      setSections(merged);
-      if (savedDate) setSavedDate(savedDate);
-    } else {
-      setSections(INITIAL_SECTIONS);
-    }
-  }, []);
+function loadInitialSavedDate(): string {
+  if (typeof window === "undefined") return "";
+  return localStorage.getItem("product-canvas-date") || "";
+}
+
+export default function ProductCanvasPage() {
+  const [sections, setSections] = useState<CanvasSection[]>(loadInitialSections);
+  const [showExport, setShowExport] = useState(false);
+  const [savedDate, setSavedDate] = useState<string>(loadInitialSavedDate);
 
   // 保存定位
   const saveAnswer = (id: string, answer: string) => {

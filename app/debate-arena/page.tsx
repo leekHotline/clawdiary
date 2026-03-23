@@ -26,23 +26,23 @@ const SAMPLE_TOPICS = [
   '是否值得花大价钱进修学习？',
 ]
 
+// Helper function for localStorage initialization
+function loadInitialDebateHistory(): DebateTopic[] {
+  if (typeof window === 'undefined') return [];
+  const saved = localStorage.getItem('debate-history');
+  return saved ? JSON.parse(saved) : [];
+}
+
 export default function DebateArenaPage() {
   const [topic, setTopic] = useState('')
   const [stance, setStance] = useState<'pro' | 'con' | 'neutral'>('neutral')
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [debateHistory, setDebateHistory] = useState<DebateTopic[]>([])
+  const [debateHistory, setDebateHistory] = useState<DebateTopic[]>(loadInitialDebateHistory)
   const [showHistory, setShowHistory] = useState(false)
   const [currentView, setCurrentView] = useState<'setup' | 'debate' | 'result'>('setup')
   const [finalVerdict, setFinalVerdict] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const saved = localStorage.getItem('debate-history')
-    if (saved) {
-      setDebateHistory(JSON.parse(saved))
-    }
-  }, [])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })

@@ -133,19 +133,13 @@ function calculateStats(transactions: EmotionTransaction[]): EmotionStats {
 }
 
 export default function EmotionBankPage() {
-  const [transactions, setTransactions] = useState<EmotionTransaction[]>([]);
-  const [stats, setStats] = useState<EmotionStats | null>(null);
+  const [transactions, setTransactions] = useState<EmotionTransaction[]>(() => generateMockTransactions());
+  const [stats, setStats] = useState<EmotionStats | null>(() => calculateStats(generateMockTransactions()));
   const [selectedType, setSelectedType] = useState<'all' | 'income' | 'expense'>('all');
   const [showAddModal, setShowAddModal] = useState(false);
   const [newEmotion, setNewEmotion] = useState('');
   const [newType, setNewType] = useState<'income' | 'expense'>('income');
   const [newDescription, setNewDescription] = useState('');
-
-  useEffect(() => {
-    const mockTransactions = generateMockTransactions();
-    setTransactions(mockTransactions);
-    setStats(calculateStats(mockTransactions));
-  }, []);
 
   const filteredTransactions = transactions.filter(t => 
     selectedType === 'all' || t.type === selectedType

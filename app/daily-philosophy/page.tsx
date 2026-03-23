@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface PhilosophyEntry {
@@ -43,51 +43,53 @@ const quotes = [
   { quote: '语言的边界就是世界的边界。', author: '维特根斯坦', source: '逻辑哲学论', interpretation: '我们能理解的世界受限于我们能表达的语言。扩展语言，就扩展了世界。写日记，就是扩展自己的世界。', prompt: '有什么感受你今天没能用语言表达出来？试着写下来。' },
 ]
 
+// Helper functions for localStorage initialization
+function getTodayQuote() {
+  const today = new Date()
+  const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
+  return quotes[dayOfYear % quotes.length]
+}
+
+function loadInitialHistory(): PhilosophyEntry[] {
+  if (typeof window === 'undefined') return [];
+  const savedHistory = localStorage.getItem('philosophy-history');
+  return savedHistory ? JSON.parse(savedHistory) : [];
+}
+
+function loadInitialEntry(): PhilosophyEntry {
+  const todayStr = new Date().toLocaleDateString('zh-CN');
+  const history = loadInitialHistory();
+  
+  // Check if there's an entry for today
+  const todayEntry = history.find((e: PhilosophyEntry) => e.date === todayStr);
+  if (todayEntry) return todayEntry;
+  
+  // Create new entry for today
+  const today = getTodayQuote();
+  return {
+    date: todayStr,
+    quote: today.quote,
+    author: today.author,
+    source: today.source,
+    interpretation: today.interpretation,
+    journalPrompt: today.prompt,
+  };
+}
+
+function loadInitialReflection(): string {
+  const todayStr = new Date().toLocaleDateString('zh-CN');
+  const history = loadInitialHistory();
+  const todayEntry = history.find((e: PhilosophyEntry) => e.date === todayStr);
+  return todayEntry?.userReflection || '';
+}
+
 export default function DailyPhilosophy() {
-  const [entry, setEntry] = useState<PhilosophyEntry | null>(null)
-  const [reflection, setReflection] = useState('')
+  const [entry, setEntry] = useState<PhilosophyEntry | null>(loadInitialEntry)
+  const [reflection, setReflection] = useState(loadInitialReflection)
   const [isGenerating, setIsGenerating] = useState(false)
   const [saved, setSaved] = useState(false)
-  const [history, setHistory] = useState<PhilosophyEntry[]>([])
+  const [history, setHistory] = useState<PhilosophyEntry[]>(loadInitialHistory)
   const [showHistory, setShowHistory] = useState(false)
-
-  // 根据日期获取今日哲思
-  const getTodayQuote = () => {
-    const today = new Date()
-    const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
-    return quotes[dayOfYear % quotes.length]
-  }
-
-  // 初始化今日哲思
-  useEffect(() => {
-    const today = getTodayQuote()
-    const todayStr = new Date().toLocaleDateString('zh-CN')
-    
-    // 从本地存储加载历史
-    const savedHistory = localStorage.getItem('philosophy-history')
-    if (savedHistory) {
-      const parsed = JSON.parse(savedHistory)
-      setHistory(parsed)
-      
-      // 检查今天是否已有记录
-      const todayEntry = parsed.find((e: PhilosophyEntry) => e.date === todayStr)
-      if (todayEntry) {
-        setEntry(todayEntry)
-        setReflection(todayEntry.userReflection || '')
-      }
-    }
-    
-    if (!entry) {
-      setEntry({
-        date: todayStr,
-        quote: today.quote,
-        author: today.author,
-        source: today.source,
-        interpretation: today.interpretation,
-        journalPrompt: today.prompt,
-      })
-    }
-  }, [])
 
   // 保存反思
   const saveReflection = () => {

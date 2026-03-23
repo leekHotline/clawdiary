@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 // 模拟日记数据类型
@@ -100,9 +100,14 @@ const moodColors: Record<string, string> = {
   "期待": "from-green-400 to-emerald-500"
 };
 
+// Helper function for initial random memory
+function getInitialRandomMemory(): MemoryEntry {
+  return mockMemories[Math.floor(Math.random() * mockMemories.length)];
+}
+
 export default function MemoryGalleryPage() {
   const [selectedTab, setSelectedTab] = useState<"random" | "timeline" | "narrative">("random");
-  const [randomMemory, setRandomMemory] = useState<MemoryEntry | null>(null);
+  const [randomMemory, setRandomMemory] = useState<MemoryEntry | null>(getInitialRandomMemory);
   const [narrative, setNarrative] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [timelineFilter, setTimelineFilter] = useState<"all" | "week" | "month">("all");
@@ -143,11 +148,6 @@ export default function MemoryGalleryPage() {
       setIsGenerating(false);
     }, 1500);
   };
-
-  // 初始化随机回忆
-  useEffect(() => {
-    getRandomMemory();
-  }, []);
 
   // 筛选时间线
   const getFilteredMemories = () => {
