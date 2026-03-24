@@ -242,6 +242,26 @@ export default async function Home() {
           </div>
         </Link>
 
+        {/* 人生里程碑入口 - 新功能 */}
+        <Link
+          href="/life-milestones"
+          className="mb-8 block bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white relative overflow-hidden"
+        >
+          <div className="absolute top-2 right-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+            🆕 新功能
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl">🏆</span>
+                <h2 className="text-2xl font-bold">人生里程碑</h2>
+              </div>
+              <p className="text-white/90">AI自动识别日记中的重要时刻，记录成长的每一个足迹</p>
+            </div>
+            <div className="text-4xl opacity-50">→</div>
+          </div>
+        </Link>
+
         {/* AI 情绪镜子入口 */}
         <Link
           href="/emotion-mirror"
