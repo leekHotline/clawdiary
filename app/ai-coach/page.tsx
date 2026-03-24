@@ -48,7 +48,7 @@ const moods = [
 ]
 
 // AI 教练回复生成
-const generateCoachResponse = (userMessage: string, sessionHistory: Message[], topic: string, mood: string): string => {
+const generateCoachResponse = (userMessage: string, sessionHistory: Message[], _topic: string, _mood: string): string => {
   const lowerMessage = userMessage.toLowerCase()
   
   // 基于话题和情绪的智能回复

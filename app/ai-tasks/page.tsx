@@ -198,7 +198,7 @@ export default function AITasksPage() {
         )
       );
       setCompletedResults((prev) => ({ ...prev, [taskId]: result }));
-    } catch (error) {
+    } catch {
       clearInterval(progressInterval);
       setTasks((prev) =>
         prev.map((t) =>

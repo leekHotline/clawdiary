@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
 // Get chat history
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const limit = parseInt(searchParams.get("limit") || "50");
+  const _limit = parseInt(searchParams.get("limit") || "50");
 
   return NextResponse.json({
     success: true,

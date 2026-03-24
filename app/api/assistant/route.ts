@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { aiChat, aiAnalyze, aiAction } from "@/lib/ai-service";
+import { aiChat, aiAnalyze } from "@/lib/ai-service";
 import { getDiaries } from "@/lib/diaries";
 
 // GET /api/assistant - 获取助手状态和功能列表
@@ -37,7 +37,7 @@ export async function GET() {
       status: "online",
       poweredBy: "DeepSeek AI",
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to get assistant status" }, { status: 500 });
   }
 }
@@ -186,7 +186,7 @@ async function handleRecommend() {
       recommendations,
       poweredBy: "DeepSeek AI",
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({
       success: true,
       recommendations: [

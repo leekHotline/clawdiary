@@ -77,8 +77,6 @@ export async function POST(request: NextRequest) {
       if (matches) neutralCount += matches.length;
     });
     
-    const total = positiveCount + negativeCount + neutralCount;
-    
     let dominantMood = "neutral";
     if (positiveCount > negativeCount && positiveCount > neutralCount) {
       dominantMood = "positive";

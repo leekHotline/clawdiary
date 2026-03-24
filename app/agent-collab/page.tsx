@@ -188,13 +188,12 @@ const generateActivityLog = (): ActivityLog[] => {
 export default function AgentCollabPage() {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [selectedScenario, setSelectedScenario] = useState<CollabScenario | null>(null);
-  const [activityLogs, setActivityLogs] = useState<ActivityLog[]>([]);
+  const [activityLogs, setActivityLogs] = useState<ActivityLog[]>(() => generateActivityLog());
   const [isRunning, setIsRunning] = useState(false);
   const [runProgress, setRunProgress] = useState(0);
 
   // 模拟实时日志更新
   useEffect(() => {
-    setActivityLogs(generateActivityLog());
     const interval = setInterval(() => {
       setActivityLogs(generateActivityLog());
     }, 30000);
