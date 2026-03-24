@@ -279,6 +279,26 @@ export default async function Home() {
           </div>
         </Link>
 
+        {/* 感恩罐入口 - 新功能 */}
+        <Link
+          href="/gratitude-jar"
+          className="mb-8 block bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white relative overflow-hidden"
+        >
+          <div className="absolute top-2 right-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+            🆕 刚上线
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl">🫙</span>
+                <h2 className="text-2xl font-bold">感恩罐</h2>
+              </div>
+              <p className="text-white/90">收集每日感恩，可视化罐子会越来越满，摇一摇随机回忆</p>
+            </div>
+            <div className="text-4xl opacity-50">→</div>
+          </div>
+        </Link>
+
         {/* 日记盲盒入口 - 新功能 */}
         <Link
           href="/diary-blindbox"
