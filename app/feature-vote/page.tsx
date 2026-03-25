@@ -58,7 +58,7 @@ const initialFeatures: Feature[] = [
     emoji: "👥",
     category: "社交",
     votes: 28,
-    status: "planned",
+    status: "completed",
   },
   {
     id: "photo-story",
@@ -94,7 +94,7 @@ const initialFeatures: Feature[] = [
     emoji: "📄",
     category: "导出",
     votes: 18,
-    status: "planned",
+    status: "completed",
   },
   {
     id: "timeline-view",

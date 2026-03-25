@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
+import jsPDF from 'jspdf';
 
 interface ExportFormat {
   id: string;
@@ -9,9 +10,18 @@ interface ExportFormat {
   description: string;
   icon: string;
   extension: string;
+  isNew?: boolean;
 }
 
 const exportFormats: ExportFormat[] = [
+  {
+    id: 'pdf',
+    name: 'PDF',
+    description: '精美排版，适合打印和分享',
+    icon: '📕',
+    extension: '.pdf',
+    isNew: true
+  },
   {
     id: 'markdown',
     name: 'Markdown',
@@ -49,15 +59,246 @@ const exportFormats: ExportFormat[] = [
   }
 ];
 
+// PDF 导出模板配置
+const pdfTemplates = [
+  { id: 'elegant', name: '优雅经典', description: '简洁大气，适合日常记录', preview: '📖' },
+  { id: 'modern', name: '现代简约', description: '现代排版，适合分享展示', preview: '✨' },
+  { id: 'vintage', name: '复古日记', description: '怀旧风格，适合珍藏回忆', preview: '📜' },
+  { id: 'minimal', name: '极简纯净', description: '纯净留白，适合专注阅读', preview: '☐' },
+];
+
+// 示例日记数据（实际项目中应从 API 获取）
+const sampleDiaries = [
+  {
+    id: 1,
+    title: '春日漫步',
+    content: '今天阳光正好，微风不燥。走在公园的小路上，看着满树繁花，心情格外舒畅。春天就是这样，总能在不经意间给人惊喜。\n\n路过湖边时，看到几只鸭子悠闲地游来游去，突然觉得生活其实很简单，快乐就藏在日常的点点滴滴里。',
+    date: '2026-03-25',
+    mood: '😊',
+    weather: '☀️',
+    tags: ['春天', '公园', '散步']
+  },
+  {
+    id: 2,
+    title: '深夜思考',
+    content: '夜深了，窗外星星点点。突然想起小时候在乡下看星星的日子，那时候没有那么多烦恼，只知道抬头数星星。\n\n现在虽然生活在城市，但偶尔也会怀念那段无忧无虑的时光。也许，保持童心是我们最该学会的事情。',
+    date: '2026-03-24',
+    mood: '🤔',
+    weather: '🌙',
+    tags: ['深夜', '回忆', '星空']
+  },
+  {
+    id: 3,
+    title: '新的开始',
+    content: '今天是特别的一天。一个新的想法在脑海中萌芽，也许这就是转折点。\n\n不管结果如何，至少要勇敢尝试。人生不就是由无数个"开始"组成的吗？期待接下来的旅程。',
+    date: '2026-03-23',
+    mood: '💪',
+    weather: '⛅',
+    tags: ['新开始', '勇气', '期待']
+  }
+];
+
 export default function ExportCenterPage() {
-  const [selectedFormat, setSelectedFormat] = useState<string>('markdown');
+  const [selectedFormat, setSelectedFormat] = useState<string>('pdf');
+  const [selectedTemplate, setSelectedTemplate] = useState<string>('elegant');
   const [diaryId, setDiaryId] = useState('');
   const [includeMetadata, setIncludeMetadata] = useState(true);
   const [exporting, setExporting] = useState(false);
   const [exportHistory, setExportHistory] = useState<any[]>([]);
   const [previewData, setPreviewData] = useState<any>(null);
+  const [pdfProgress, setPdfProgress] = useState<string>('');
+  const pdfPreviewRef = useRef<HTMLDivElement>(null);
+
+  // 生成 PDF
+  const generatePDF = async () => {
+    setPdfProgress('正在准备数据...');
+    
+    // 获取日记数据
+    const diaries = diaryId 
+      ? sampleDiaries.filter(d => d.id === parseInt(diaryId))
+      : sampleDiaries;
+    
+    if (diaries.length === 0) {
+      alert('没有找到日记内容');
+      return;
+    }
+
+    setPdfProgress('正在生成 PDF...');
+
+    try {
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 20;
+      const contentWidth = pageWidth - margin * 2;
+      let yPosition = margin;
+
+      // 模板样式配置
+      const templateStyles: Record<string, any> = {
+        elegant: {
+          titleFont: [24, '#1a1a2e'],
+          bodyFont: [11, '#333333'],
+          accent: '#6366f1',
+          bg: '#fafafa'
+        },
+        modern: {
+          titleFont: [22, '#0f172a'],
+          bodyFont: [10, '#374151'],
+          accent: '#ec4899',
+          bg: '#ffffff'
+        },
+        vintage: {
+          titleFont: [23, '#5c4033'],
+          bodyFont: [11, '#4a4a4a'],
+          accent: '#8b7355',
+          bg: '#f5f0e8'
+        },
+        minimal: {
+          titleFont: [20, '#111827'],
+          bodyFont: [10, '#4b5563'],
+          accent: '#6b7280',
+          bg: '#ffffff'
+        }
+      };
+
+      const style = templateStyles[selectedTemplate];
+
+      // 添加背景色
+      pdf.setFillColor(style.bg);
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+
+      // 标题页
+      pdf.setFontSize(28);
+      pdf.setTextColor(style.titleFont[1]);
+      pdf.text('我的日记', pageWidth / 2, pageHeight / 3, { align: 'center' });
+      
+      pdf.setFontSize(14);
+      pdf.setTextColor(style.bodyFont[1]);
+      pdf.text(`${new Date().toLocaleDateString('zh-CN')} 导出`, pageWidth / 2, pageHeight / 3 + 12, { align: 'center' });
+      
+      pdf.setFontSize(10);
+      pdf.text(`共 ${diaries.length} 篇日记`, pageWidth / 2, pageHeight / 3 + 24, { align: 'center' });
+      pdf.text(`模板: ${pdfTemplates.find(t => t.id === selectedTemplate)?.name}`, pageWidth / 2, pageHeight / 3 + 32, { align: 'center' });
+
+      // 添加装饰线
+      pdf.setDrawColor(style.accent);
+      pdf.setLineWidth(0.5);
+      pdf.line(margin, pageHeight / 2 - 10, pageWidth - margin, pageHeight / 2 - 10);
+
+      // 页脚
+      pdf.setFontSize(9);
+      pdf.setTextColor('#9ca3af');
+      pdf.text('Generated by Claw Diary', pageWidth / 2, pageHeight - 15, { align: 'center' });
+
+      // 新页面开始日记内容
+      pdf.addPage();
+      yPosition = margin;
+
+      // 遍历日记
+      for (let i = 0; i < diaries.length; i++) {
+        const diary = diaries[i];
+        setPdfProgress(`正在处理第 ${i + 1}/${diaries.length} 篇...`);
+
+        // 检查是否需要新页
+        if (yPosition > pageHeight - 60) {
+          pdf.addPage();
+          yPosition = margin;
+        }
+
+        // 日记标题
+        pdf.setFontSize(16);
+        pdf.setTextColor(style.titleFont[1]);
+        pdf.text(diary.title, margin, yPosition);
+        yPosition += 8;
+
+        // 元数据行
+        if (includeMetadata) {
+          pdf.setFontSize(9);
+          pdf.setTextColor('#6b7280');
+          const metaLine = `${diary.date}  ${diary.mood} ${diary.weather}  ${diary.tags.map(t => '#' + t).join(' ')}`;
+          pdf.text(metaLine, margin, yPosition);
+          yPosition += 6;
+        }
+
+        // 分隔线
+        pdf.setDrawColor(style.accent);
+        pdf.setLineWidth(0.3);
+        pdf.line(margin, yPosition, margin + 30, yPosition);
+        yPosition += 6;
+
+        // 正文
+        pdf.setFontSize(style.bodyFont[0]);
+        pdf.setTextColor(style.bodyFont[1]);
+        const lines = pdf.splitTextToSize(diary.content, contentWidth);
+        
+        // 检查是否需要分页
+        const lineHeight = 5;
+        const totalHeight = lines.length * lineHeight;
+        if (yPosition + totalHeight > pageHeight - margin) {
+          pdf.addPage();
+          yPosition = margin;
+        }
+
+        pdf.text(lines, margin, yPosition);
+        yPosition += totalHeight + 12;
+
+        // 日记间分隔
+        if (i < diaries.length - 1) {
+          yPosition += 5;
+          pdf.setDrawColor('#e5e7eb');
+          pdf.setLineWidth(0.1);
+          pdf.line(margin, yPosition, pageWidth - margin, yPosition);
+          yPosition += 10;
+        }
+      }
+
+      // 添加页码
+      const totalPages = pdf.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(9);
+        pdf.setTextColor('#9ca3af');
+        pdf.text(`第 ${i} / ${totalPages} 页`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+      }
+
+      // 保存
+      const filename = diaryId 
+        ? `diary-${diaryId}.pdf`
+        : `diaries-${new Date().toISOString().split('T')[0]}.pdf`;
+      
+      pdf.save(filename);
+      
+      setPdfProgress('');
+      
+      // 记录历史
+      setExportHistory(prev => [{
+        format: 'pdf',
+        diaryId: diaryId || '全部',
+        timestamp: new Date().toISOString(),
+        filename
+      }, ...prev].slice(0, 10));
+
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+      alert('PDF 生成失败，请重试');
+      setPdfProgress('');
+    }
+  };
 
   const handleExport = async () => {
+    // PDF 特殊处理
+    if (selectedFormat === 'pdf') {
+      setExporting(true);
+      await generatePDF();
+      setExporting(false);
+      return;
+    }
+
     setExporting(true);
     try {
       const params = new URLSearchParams({
@@ -108,6 +349,16 @@ export default function ExportCenterPage() {
   };
 
   const handlePreview = async () => {
+    if (selectedFormat === 'pdf') {
+      // PDF 预览显示模板预览
+      setPreviewData({
+        format: 'pdf',
+        template: selectedTemplate,
+        content: 'PDF 预览会在导出时生成精美的排版格式，包含标题页、目录和正文内容。'
+      });
+      return;
+    }
+
     try {
       const params = new URLSearchParams({
         format: selectedFormat,
@@ -139,10 +390,15 @@ export default function ExportCenterPage() {
           <Link href="/" className="text-indigo-600 hover:underline mb-2 inline-block">
             ← 返回首页
           </Link>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-pink-600 bg-clip-text text-transparent mb-2">
-            📦 导出中心
-          </h1>
-          <p className="text-gray-600">批量导出日记，支持多种格式，安全备份你的珍贵回忆</p>
+          <div className="flex items-center gap-3">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-pink-600 bg-clip-text text-transparent">
+              📦 导出中心
+            </h1>
+            <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+              NEW: PDF 导出
+            </span>
+          </div>
+          <p className="text-gray-600 mt-2">批量导出日记，支持多种格式，安全备份你的珍贵回忆</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -156,12 +412,17 @@ export default function ExportCenterPage() {
                   <button
                     key={format.id}
                     onClick={() => setSelectedFormat(format.id)}
-                    className={`p-4 rounded-lg border-2 text-left transition-all ${
+                    className={`p-4 rounded-lg border-2 text-left transition-all relative ${
                       selectedFormat === format.id
                         ? 'border-indigo-500 bg-indigo-50'
                         : 'border-gray-100 hover:border-gray-200'
                     }`}
                   >
+                    {format.isNew && (
+                      <span className="absolute -top-2 -right-2 px-2 py-0.5 bg-green-500 text-white text-xs rounded-full">
+                        NEW
+                      </span>
+                    )}
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{format.icon}</span>
                       <div>
@@ -176,6 +437,30 @@ export default function ExportCenterPage() {
                 ))}
               </div>
             </div>
+
+            {/* PDF 模板选择 */}
+            {selectedFormat === 'pdf' && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h2 className="font-medium text-gray-700 mb-4">🎨 选择 PDF 模板</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {pdfTemplates.map(template => (
+                    <button
+                      key={template.id}
+                      onClick={() => setSelectedTemplate(template.id)}
+                      className={`p-4 rounded-lg border-2 text-center transition-all ${
+                        selectedTemplate === template.id
+                          ? 'border-pink-500 bg-pink-50'
+                          : 'border-gray-100 hover:border-gray-200'
+                      }`}
+                    >
+                      <div className="text-3xl mb-2">{template.preview}</div>
+                      <div className="font-medium text-gray-700 text-sm">{template.name}</div>
+                      <div className="text-xs text-gray-400 mt-1">{template.description}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* 导出范围 */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -219,7 +504,7 @@ export default function ExportCenterPage() {
                     disabled={exporting}
                     className="flex-1 py-3 bg-gradient-to-r from-indigo-500 to-pink-500 text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50"
                   >
-                    {exporting ? '⏳ 导出中...' : '📥 导出下载'}
+                    {exporting ? (pdfProgress || '⏳ 导出中...') : '📥 导出下载'}
                   </button>
                 </div>
               </div>
@@ -230,13 +515,49 @@ export default function ExportCenterPage() {
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="font-medium text-gray-700">👁️ 导出预览</h2>
-                  <span className="text-xs text-gray-400">
-                    共 {previewData.fullLength.toLocaleString()} 字符
-                  </span>
+                  {previewData.fullLength && (
+                    <span className="text-xs text-gray-400">
+                      共 {previewData.fullLength.toLocaleString()} 字符
+                    </span>
+                  )}
                 </div>
-                <pre className="bg-gray-50 rounded-lg p-4 text-sm text-gray-600 overflow-auto max-h-64 whitespace-pre-wrap">
-                  {previewData.content}
-                </pre>
+                {previewData.format === 'pdf' ? (
+                  <div className="bg-gradient-to-br from-indigo-100 to-pink-100 rounded-lg p-6 text-center">
+                    <div className="text-6xl mb-4">📕</div>
+                    <p className="text-gray-600 mb-2">PDF 模板: {pdfTemplates.find(t => t.id === previewData.template)?.name}</p>
+                    <p className="text-sm text-gray-500">{previewData.content}</p>
+                  </div>
+                ) : (
+                  <pre className="bg-gray-50 rounded-lg p-4 text-sm text-gray-600 overflow-auto max-h-64 whitespace-pre-wrap">
+                    {previewData.content}
+                  </pre>
+                )}
+              </div>
+            )}
+
+            {/* PDF 预览区 */}
+            {selectedFormat === 'pdf' && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6" ref={pdfPreviewRef}>
+                <h2 className="font-medium text-gray-700 mb-4">📄 PDF 效果预览</h2>
+                <div className="bg-gray-100 rounded-lg p-4 flex justify-center">
+                  <div className="w-48 bg-white shadow-lg rounded p-4 transform scale-90">
+                    <div className="text-center border-b pb-3 mb-3">
+                      <div className="text-lg font-bold text-gray-800">我的日记</div>
+                      <div className="text-xs text-gray-400">{new Date().toLocaleDateString('zh-CN')}</div>
+                    </div>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="text-sm font-medium text-gray-700">春日漫步</div>
+                        <div className="text-xs text-gray-400">2026-03-25 😊 ☀️</div>
+                        <div className="text-xs text-gray-500 mt-1 line-clamp-3">今天阳光正好，微风不燥...</div>
+                      </div>
+                      <div className="border-t pt-2">
+                        <div className="text-sm font-medium text-gray-700">深夜思考</div>
+                        <div className="text-xs text-gray-400">2026-03-24 🤔 🌙</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -247,6 +568,18 @@ export default function ExportCenterPage() {
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h2 className="font-medium text-gray-700 mb-4">⚡ 快捷导出</h2>
               <div className="space-y-2">
+                <button
+                  onClick={() => {
+                    setDiaryId('');
+                    setSelectedFormat('pdf');
+                    handleExport();
+                  }}
+                  className="w-full py-2 text-left px-3 rounded-lg hover:bg-pink-50 text-sm text-gray-600 flex items-center gap-2 border border-pink-100"
+                >
+                  <span>📕</span>
+                  <span className="flex-1">全部日记 → PDF</span>
+                  <span className="text-xs text-pink-500">NEW</span>
+                </button>
                 <button
                   onClick={() => {
                     setDiaryId('');
@@ -294,7 +627,11 @@ export default function ExportCenterPage() {
                     <div key={i} className="text-sm p-2 bg-gray-50 rounded">
                       <div className="flex items-center justify-between">
                         <span className="text-gray-700">{item.filename}</span>
-                        <span className="text-xs text-gray-400">{item.format}</span>
+                        <span className={`text-xs px-1.5 py-0.5 rounded ${
+                          item.format === 'pdf' ? 'bg-pink-100 text-pink-600' : 'bg-gray-100 text-gray-500'
+                        }`}>
+                          {item.format.toUpperCase()}
+                        </span>
                       </div>
                       <div className="text-xs text-gray-400">
                         {new Date(item.timestamp).toLocaleString('zh-CN')}
@@ -305,14 +642,29 @@ export default function ExportCenterPage() {
               )}
             </div>
 
+            {/* PDF 特性说明 */}
+            {selectedFormat === 'pdf' && (
+              <div className="bg-gradient-to-br from-pink-500 to-indigo-500 rounded-xl p-6 text-white">
+                <h3 className="font-medium mb-3">📕 PDF 导出特色</h3>
+                <div className="text-sm text-white/90 space-y-2">
+                  <p>✨ 精美封面和目录</p>
+                  <p>✨ 多种模板风格可选</p>
+                  <p>✨ 保留心情、天气、标签</p>
+                  <p>✨ 自动分页和页码</p>
+                  <p>✨ 适合打印和分享</p>
+                </div>
+              </div>
+            )}
+
             {/* 使用说明 */}
-            <div className="bg-gradient-to-br from-indigo-500 to-pink-500 rounded-xl p-6 text-white">
-              <h3 className="font-medium mb-3">💡 导出说明</h3>
-              <div className="text-sm text-white/80 space-y-2">
-                <p><strong>Markdown</strong>: 适合导入到 Obsidian、Notion 等笔记软件</p>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <h3 className="font-medium text-gray-700 mb-3">💡 格式说明</h3>
+              <div className="text-sm text-gray-500 space-y-2">
+                <p><strong className="text-pink-600">PDF</strong>: 适合打印、分享、存档</p>
+                <p><strong>Markdown</strong>: 适合导入到 Obsidian、Notion</p>
                 <p><strong>JSON</strong>: 适合数据备份和程序导入</p>
-                <p><strong>HTML</strong>: 美观格式，可直接在浏览器查看</p>
-                <p><strong>CSV</strong>: 可用 Excel 打开进行数据分析</p>
+                <p><strong>HTML</strong>: 美观格式，可直接浏览</p>
+                <p><strong>CSV</strong>: 可用 Excel 进行数据分析</p>
               </div>
             </div>
 
@@ -322,7 +674,7 @@ export default function ExportCenterPage() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">支持格式</span>
-                  <span className="font-medium text-indigo-600">5 种</span>
+                  <span className="font-medium text-indigo-600">6 种</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">本次导出</span>
@@ -353,6 +705,12 @@ export default function ExportCenterPage() {
                 </tr>
               </thead>
               <tbody className="text-gray-600">
+                <tr className="border-b border-gray-50 bg-pink-50">
+                  <td className="py-3 px-4">📕 PDF <span className="text-xs text-pink-500">NEW</span></td>
+                  <td className="py-3 px-4">精美排版，适合打印分享</td>
+                  <td className="py-3 px-4">打印、分享、存档</td>
+                  <td className="py-3 px-4">⭐⭐⭐⭐⭐</td>
+                </tr>
                 <tr className="border-b border-gray-50">
                   <td className="py-3 px-4">📝 Markdown</td>
                   <td className="py-3 px-4">保留格式，易读易编辑</td>
