@@ -433,6 +433,26 @@ export default async function Home() {
           </div>
         </Link>
 
+        {/* 日记音乐盒入口 - 新功能 */}
+        <Link
+          href="/diary-musicbox"
+          className="mb-8 block bg-gradient-to-r from-purple-600 via-violet-500 to-indigo-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white relative overflow-hidden"
+        >
+          <div className="absolute top-2 right-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+            ✨ 新功能
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl">🎵</span>
+                <h2 className="text-2xl font-bold">日记音乐盒</h2>
+              </div>
+              <p className="text-white/90">根据心情选择音景，创造沉浸式写作体验</p>
+            </div>
+            <div className="text-4xl opacity-50">→</div>
+          </div>
+        </Link>
+
         {/* 日记代理入口 - 新功能 */}
         <Link
           href="/diary-agent"
