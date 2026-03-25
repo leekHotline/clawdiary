@@ -262,6 +262,26 @@ export default async function Home() {
           </div>
         </Link>
 
+        {/* 情绪星座图入口 - 新功能 */}
+        <Link
+          href="/emotion-constellation"
+          className="mb-8 block bg-gradient-to-r from-indigo-600 via-purple-600 to-slate-700 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all text-white relative overflow-hidden"
+        >
+          <div className="absolute top-2 right-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+            ✨ 刚上线
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl">✨</span>
+                <h2 className="text-2xl font-bold">情绪星座图</h2>
+              </div>
+              <p className="text-white/90">将你的情绪化作星辰，生成独一无二的专属星座</p>
+            </div>
+            <div className="text-4xl opacity-50">→</div>
+          </div>
+        </Link>
+
         {/* AI 情绪镜子入口 */}
         <Link
           href="/emotion-mirror"
