@@ -1,395 +1,313 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState } from 'react';
+
+interface Tool {
+  id: number;
+  name: string;
+  icon: string;
+  category: string;
+  description: string;
+  tags: string[];
+  price: string;
+  stars: number;
+  url: string;
+}
+
+const tools: Tool[] = [
+  {
+    id: 1,
+    name: 'ChatGPT',
+    icon: '🤖',
+    category: 'AI对话',
+    description: 'OpenAI 出品的 AI 对话助手，支持多模态交互，适合日记反思和问题解答',
+    tags: ['AI对话', '写作助手', '多模态'],
+    price: '免费/付费',
+    stars: 5,
+    url: 'https://chat.openai.com',
+  },
+  {
+    id: 2,
+    name: 'Claude',
+    icon: '🧠',
+    category: 'AI对话',
+    description: 'Anthropic 出品的 AI 助手，擅长深度分析和写作，思考方式更接近人类',
+    tags: ['深度分析', '写作', '代码'],
+    price: '免费/付费',
+    stars: 5,
+    url: 'https://claude.ai',
+  },
+  {
+    id: 3,
+    name: 'Notion AI',
+    icon: '📝',
+    category: '笔记增强',
+    description: 'Notion 内置的 AI 助手，帮你自动整理笔记、生成摘要、写文章',
+    tags: ['笔记', '整理', '效率'],
+    price: '付费',
+    stars: 4,
+    url: 'https://notion.so',
+  },
+  {
+    id: 4,
+    name: 'Otter.ai',
+    icon: '🦦',
+    category: '语音转文字',
+    description: '实时语音转文字，记录会议、访谈灵感，适合语音日记整理',
+    tags: ['语音', '转录', '会议'],
+    price: '免费/付费',
+    stars: 4,
+    url: 'https://otter.ai',
+  },
+  {
+    id: 5,
+    name: 'Mem',
+    icon: '🧠',
+    category: 'AI笔记',
+    description: 'AI 驱动的笔记工具，自动整理和关联你的笔记，智能推荐相关内容',
+    tags: ['笔记', 'AI整理', '知识库'],
+    price: '付费',
+    stars: 4,
+    url: 'https://mem.ai',
+  },
+  {
+    id: 6,
+    name: 'Reflect',
+    icon: '🔮',
+    category: 'AI笔记',
+    description: 'AI 增强的笔记和日记工具，双向链接和 AI 帮你建立知识网络',
+    tags: ['日记', '双向链接', 'AI'],
+    price: '付费',
+    stars: 4,
+    url: 'https://reflect.app',
+  },
+  {
+    id: 7,
+    name: 'Day One',
+    icon: '📓',
+    category: '日记应用',
+    description: '老牌日记应用，支持加密、照片、日历视图，适合长期日记记录',
+    tags: ['日记', '加密', '照片'],
+    price: '付费',
+    stars: 4,
+    url: 'https://dayoneapp.com',
+  },
+  {
+    id: 8,
+    name: 'Journey',
+    icon: '🧭',
+    category: '日记应用',
+    description: '跨平台日记应用，支持 AI 分析情绪和写作建议，界面美观',
+    tags: ['日记', 'AI分析', '跨平台'],
+    price: '免费/付费',
+    stars: 4,
+    url: 'https://journey.cloud',
+  },
+  {
+    id: 9,
+    name: 'Flomo',
+    icon: '💭',
+    category: '卡片笔记',
+    description: '浮墨卡片笔记，帮你快速记录灵感，适合碎片化思考和知识管理',
+    tags: ['卡片笔记', '灵感', '轻量'],
+    price: '免费/付费',
+    stars: 4,
+    url: 'https://flomoapp.com',
+  },
+  {
+    id: 10,
+    name: 'Obsidian',
+    icon: '💎',
+    category: '知识管理',
+    description: '本地优先的知识管理工具，双向链接强大，适合深度知识整理',
+    tags: ['知识管理', '双向链接', '本地'],
+    price: '免费',
+    stars: 5,
+    url: 'https://obsidian.md',
+  },
+  {
+    id: 11,
+    name: 'Logseq',
+    icon: '📊',
+    category: '知识管理',
+    description: '开源大纲工具，支持双向链接和本地存储，适合知识管理和日记',
+    tags: ['大纲', '开源', '本地'],
+    price: '免费',
+    stars: 4,
+    url: 'https://logseq.com',
+  },
+  {
+    id: 12,
+    name: 'Capacities',
+    icon: '📦',
+    category: '知识管理',
+    description: '对象化的笔记工具，把内容变成可复用的对象，构建个人知识库',
+    tags: ['对象化', '知识库', '创意'],
+    price: '付费',
+    stars: 4,
+    url: 'https://capacities.io',
+  },
+];
+
+const categories = ['全部', 'AI对话', '笔记增强', '语音转文字', 'AI笔记', '日记应用', '卡片笔记', '知识管理'];
 
 export default function ToolsPage() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState('全部');
+  const [bookmarked, setBookmarked] = useState<number[]>([]);
+  const [voted, setVoted] = useState<number[]>([]);
 
-  const categories = [
-    { id: "all", name: "全部", emoji: "🌟" },
-    { id: "writing", name: "写作助手", emoji: "✍️" },
-    { id: "image", name: "图像生成", emoji: "🎨" },
-    { id: "code", name: "编程开发", emoji: "💻" },
-    { id: "audio", name: "音频处理", emoji: "🎵" },
-    { id: "video", name: "视频制作", emoji: "🎬" },
-    { id: "research", name: "研究分析", emoji: "🔬" },
-    { id: "productivity", name: "效率工具", emoji: "⚡" },
-  ];
+  const filteredTools = selectedCategory === '全部' 
+    ? tools 
+    : tools.filter(t => t.category === selectedCategory);
 
-  const tools = [
-    {
-      id: "claude",
-      name: "Claude",
-      emoji: "🤖",
-      category: "writing",
-      description: "安全、有帮助的AI助手，擅长长文本和代码",
-      url: "https://claude.ai",
-      tags: ["对话", "写作", "代码"],
-      hot: true,
-    },
-    {
-      id: "chatgpt",
-      name: "ChatGPT",
-      emoji: "💬",
-      category: "writing",
-      description: "OpenAI的智能对话助手，创意无限",
-      url: "https://chat.openai.com",
-      tags: ["对话", "GPT-4", "插件"],
-      hot: true,
-    },
-    {
-      id: "cursor",
-      name: "Cursor",
-      emoji: "🖱️",
-      category: "code",
-      description: "AI优先的代码编辑器，编程效率倍增",
-      url: "https://cursor.sh",
-      tags: ["编程", "IDE", "AI"],
-      hot: true,
-    },
-    {
-      id: "midjourney",
-      name: "Midjourney",
-      emoji: "🖼️",
-      category: "image",
-      description: "顶级AI绘图工具，创意无边界",
-      url: "https://midjourney.com",
-      tags: ["绘图", "创意", "设计"],
-      hot: true,
-    },
-    {
-      id: "dalle",
-      name: "DALL·E 3",
-      emoji: "🎨",
-      category: "image",
-      description: "OpenAI图像生成，文字转艺术",
-      url: "https://openai.com/dall-e-3",
-      tags: ["绘图", "OpenAI", "创意"],
-    },
-    {
-      id: "suno",
-      name: "Suno",
-      emoji: "🎶",
-      category: "audio",
-      description: "AI音乐生成，几秒创作歌曲",
-      url: "https://suno.ai",
-      tags: ["音乐", "创作", "AI生成"],
-      hot: true,
-    },
-    {
-      id: "elevenlabs",
-      name: "ElevenLabs",
-      emoji: "🗣️",
-      category: "audio",
-      description: "顶级AI语音合成，声音克隆",
-      url: "https://elevenlabs.io",
-      tags: ["语音", "TTS", "克隆"],
-    },
-    {
-      id: "runway",
-      name: "Runway",
-      emoji: "🎬",
-      category: "video",
-      description: "AI视频创作平台，创意视频生成",
-      url: "https://runwayml.com",
-      tags: ["视频", "Gen-2", "创意"],
-      hot: true,
-    },
-    {
-      id: "perplexity",
-      name: "Perplexity",
-      emoji: "🔍",
-      category: "research",
-      description: "AI搜索引擎，智能问答与引用",
-      url: "https://perplexity.ai",
-      tags: ["搜索", "研究", "问答"],
-      hot: true,
-    },
-    {
-      id: "notion-ai",
-      name: "Notion AI",
-      emoji: "📝",
-      category: "productivity",
-      description: "笔记协作AI助手，智能写作",
-      url: "https://notion.so",
-      tags: ["笔记", "协作", "写作"],
-    },
-    {
-      id: "copilot",
-      name: "GitHub Copilot",
-      emoji: "✈️",
-      category: "code",
-      description: "AI编程搭档，代码自动补全",
-      url: "https://github.com/features/copilot",
-      tags: ["编程", "代码", "GitHub"],
-    },
-    {
-      id: "raycast",
-      name: "Raycast AI",
-      emoji: "🚀",
-      category: "productivity",
-      description: "Mac效率神器，AI增强启动器",
-      url: "https://raycast.com",
-      tags: ["效率", "Mac", "启动器"],
-    },
-    {
-      id: "gamma",
-      name: "Gamma",
-      emoji: "📊",
-      category: "productivity",
-      description: "AI演示文稿生成，一键做PPT",
-      url: "https://gamma.app",
-      tags: ["PPT", "演示", "设计"],
-    },
-    {
-      id: "heygen",
-      name: "HeyGen",
-      emoji: "👤",
-      category: "video",
-      description: "AI数字人视频生成，虚拟主播",
-      url: "https://heygen.com",
-      tags: ["数字人", "视频", "营销"],
-    },
-    {
-      id: "jasper",
-      name: "Jasper",
-      emoji: "✍️",
-      category: "writing",
-      description: "企业级AI写作助手，营销文案",
-      url: "https://jasper.ai",
-      tags: ["营销", "文案", "企业"],
-    },
-    {
-      id: "ideogram",
-      name: "Ideogram",
-      emoji: "🔤",
-      category: "image",
-      description: "擅长文字渲染的AI绘图工具",
-      url: "https://ideogram.ai",
-      tags: ["绘图", "文字", "设计"],
-    },
-    {
-      id: "windsurf",
-      name: "Windsurf",
-      emoji: "🌊",
-      category: "code",
-      description: "Codeium出品的AI编辑器，深度协作",
-      url: "https://codeium.com/windsurf",
-      tags: ["编程", "IDE", "AI"],
-    },
-    {
-      id: "o1",
-      name: "OpenAI o1",
-      emoji: "🧠",
-      category: "research",
-      description: "推理能力强，适合复杂问题",
-      url: "https://openai.com/o1",
-      tags: ["推理", "研究", "复杂任务"],
-      hot: true,
-    },
-    {
-      id: "zed",
-      name: "Zed",
-      emoji: "⚡",
-      category: "code",
-      description: "高性能编辑器，AI辅助编码",
-      url: "https://zed.dev",
-      tags: ["编辑器", "快速", "AI"],
-    },
-    {
-      id: "whisper",
-      name: "Whisper",
-      emoji: "🎤",
-      category: "audio",
-      description: "OpenAI语音识别，多语言转录",
-      url: "https://openai.com/research/whisper",
-      tags: ["语音", "转录", "开源"],
-    },
-  ];
-
-  const toggleFavorite = (id: string) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
-    );
+  const toggleBookmark = (id: number) => {
+    if (bookmarked.includes(id)) {
+      setBookmarked(bookmarked.filter(b => b !== id));
+    } else {
+      setBookmarked([...bookmarked, id]);
+    }
   };
 
-  const filteredTools =
-    selectedCategory === "all"
-      ? tools
-      : tools.filter((t) => t.category === selectedCategory);
+  const handleVote = (id: number) => {
+    if (!voted.includes(id)) {
+      setVoted([...voted, id]);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-slate-900/70 border-b border-white/10">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Link href="/" className="text-2xl hover:scale-110 transition-transform">
-                🦞
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-white">AI 工具箱</h1>
-                <p className="text-xs text-gray-400">精选优质 AI 工具，助你效率翻倍</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-gray-400">
-              <span className="text-purple-400">❤️ {favorites.length}</span>
-              <span>收藏</span>
-            </div>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 p-4 md:p-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+            🛠️ AI 工具百宝箱
+          </h1>
+          <p className="text-gray-600">发现适合日记、知识管理、AI 写作的优质工具</p>
         </div>
-      </header>
 
-      {/* Category Tabs */}
-      <div className="sticky top-[73px] z-40 backdrop-blur-xl bg-slate-900/50 border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-4 py-3 overflow-x-auto">
-          <div className="flex gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                  selectedCategory === cat.id
-                    ? "bg-purple-600 text-white shadow-lg shadow-purple-500/30"
-                    : "bg-white/5 text-gray-300 hover:bg-white/10"
-                }`}
-              >
-                <span className="mr-1">{cat.emoji}</span>
-                {cat.name}
-              </button>
-            ))}
-          </div>
+        {/* Category Filter */}
+        <div className="flex flex-wrap gap-2 justify-center mb-8">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                selectedCategory === cat
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
+                  : 'bg-white text-gray-600 hover:bg-purple-100'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
-      </div>
 
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        {/* Stats Banner */}
-        <div className="mb-8 p-4 rounded-2xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-4">
-              <div className="text-3xl">🔮</div>
-              <div>
-                <div className="text-white font-semibold">2026 AI 工具精选</div>
-                <div className="text-sm text-gray-400">收录 {tools.length} 款优质工具</div>
-              </div>
-            </div>
-            <div className="flex gap-2 text-sm">
-              <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400">
-                📅 周更
-              </span>
-              <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400">
-                ✅ 实测
-              </span>
-              <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400">
-                🎯 精选
-              </span>
-            </div>
+        {/* Stats */}
+        <div className="flex justify-center gap-8 mb-8 text-center">
+          <div className="bg-white/60 backdrop-blur rounded-2xl p-4 px-6">
+            <div className="text-2xl font-bold text-purple-600">{tools.length}</div>
+            <div className="text-sm text-gray-500">工具总数</div>
+          </div>
+          <div className="bg-white/60 backdrop-blur rounded-2xl p-4 px-6">
+            <div className="text-2xl font-bold text-pink-600">{bookmarked.length}</div>
+            <div className="text-sm text-gray-500">已收藏</div>
+          </div>
+          <div className="bg-white/60 backdrop-blur rounded-2xl p-4 px-6">
+            <div className="text-2xl font-bold text-blue-600">{voted.length}</div>
+            <div className="text-sm text-gray-500">已投票</div>
           </div>
         </div>
 
         {/* Tools Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredTools.map((tool) => (
             <div
               key={tool.id}
-              className="group relative p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-purple-500/50 transition-all hover:shadow-xl hover:shadow-purple-500/10"
+              className="bg-white/80 backdrop-blur rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
             >
-              {/* Hot Badge */}
-              {tool.hot && (
-                <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-xs font-bold text-white shadow-lg">
-                  HOT
-                </div>
-              )}
-
-              {/* Header */}
-              <div className="flex items-start justify-between mb-3">
+              {/* Tool Header */}
+              <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="text-3xl">{tool.emoji}</div>
+                  <span className="text-3xl">{tool.icon}</span>
                   <div>
-                    <h3 className="font-semibold text-white group-hover:text-purple-300 transition-colors">
-                      {tool.name}
-                    </h3>
-                    <a
-                      href={tool.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-gray-500 hover:text-purple-400 transition-colors flex items-center gap-1"
-                    >
-                      访问官网 ↗
-                    </a>
+                    <h3 className="font-bold text-gray-800">{tool.name}</h3>
+                    <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded-full">
+                      {tool.category}
+                    </span>
                   </div>
                 </div>
                 <button
-                  onClick={() => toggleFavorite(tool.id)}
-                  className={`text-xl transition-transform hover:scale-125 ${
-                    favorites.includes(tool.id) ? "text-red-500" : "text-gray-600 hover:text-gray-400"
+                  onClick={() => toggleBookmark(tool.id)}
+                  className={`text-2xl transition-transform hover:scale-110 ${
+                    bookmarked.includes(tool.id) ? 'text-yellow-500' : 'text-gray-300'
                   }`}
                 >
-                  {favorites.includes(tool.id) ? "❤️" : "🤍"}
+                  {bookmarked.includes(tool.id) ? '⭐' : '☆'}
                 </button>
               </div>
 
               {/* Description */}
-              <p className="text-sm text-gray-400 mb-4">{tool.description}</p>
+              <p className="text-gray-600 text-sm mb-4">{tool.description}</p>
 
               {/* Tags */}
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 mb-4">
                 {tool.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2 py-0.5 rounded-full bg-white/5 text-xs text-gray-400"
+                    className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
 
-              {/* Quick Access Button */}
-              <a
-                href={tool.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 w-full flex items-center justify-center gap-2 py-2 rounded-xl bg-purple-600/20 text-purple-300 text-sm font-medium hover:bg-purple-600/30 transition-colors"
+              {/* Footer */}
+              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <span
+                      key={i}
+                      className={`text-sm ${i < tool.stars ? 'text-yellow-400' : 'text-gray-300'}`}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+                <span className="text-xs text-gray-500">{tool.price}</span>
+                <a
+                  href={tool.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm px-4 py-2 rounded-full hover:opacity-90 transition-opacity"
+                >
+                  访问 →
+                </a>
+              </div>
+
+              {/* Vote Button */}
+              <button
+                onClick={() => handleVote(tool.id)}
+                disabled={voted.includes(tool.id)}
+                className={`w-full mt-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  voted.includes(tool.id)
+                    ? 'bg-green-100 text-green-700 cursor-default'
+                    : 'bg-gray-100 text-gray-600 hover:bg-purple-100 hover:text-purple-600'
+                }`}
               >
-                <span>立即使用</span>
-                <span>→</span>
-              </a>
+                {voted.includes(tool.id) ? '✓ 已推荐' : '👍 推荐这个工具'}
+              </button>
             </div>
           ))}
         </div>
 
         {/* Empty State */}
         {filteredTools.length === 0 && (
-          <div className="text-center py-20">
-            <div className="text-5xl mb-4">🔍</div>
-            <p className="text-gray-400">该分类暂无工具</p>
+          <div className="text-center py-12">
+            <span className="text-6xl mb-4 block">🔍</span>
+            <p className="text-gray-500">该分类下还没有工具</p>
           </div>
         )}
-
-        {/* Suggest Section */}
-        <div className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 text-center">
-          <div className="text-3xl mb-3">💡</div>
-          <h3 className="text-lg font-semibold text-white mb-2">有好工具推荐？</h3>
-          <p className="text-sm text-gray-400 mb-4">发现好用的 AI 工具，欢迎告诉我们</p>
-          <Link
-            href="/feedback?type=tool"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-600 text-white font-medium hover:bg-purple-500 transition-colors"
-          >
-            提交推荐
-          </Link>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-white/10 mt-12 py-6">
-        <div className="max-w-6xl mx-auto px-4 text-center text-sm text-gray-500">
-          <p>🦞 Claw Diary AI 工具箱 · 精选好工具，效率更轻松</p>
-        </div>
-      </footer>
+      </div>
     </div>
   );
 }
