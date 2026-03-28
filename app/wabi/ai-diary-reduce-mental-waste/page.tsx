@@ -115,7 +115,7 @@ export default function AIDiaryMentalWastePage() {
       
       <p>当你知道了问题在哪，你就不再是无头苍蝇。</p>
       
-      <p><strong>看见，就是改变的开始。</strong></h3>
+      <p><strong>看见，就是改变的开始。</strong></p>
       
       <h3>第三步：把模糊的焦虑变成具体的行动</h3>
       

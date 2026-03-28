@@ -106,7 +106,7 @@ function generateRecommendation(
   const styleInfo = styleAnalysis[style] || styleAnalysis.balanced;
 
   // 生成推荐
-  const recommendation = "";
+  let recommendation = "";
   const confidence = 70 + Math.floor(Math.random() * 20);
 
   // 根据问题类型生成建议
