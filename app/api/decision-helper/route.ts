@@ -106,8 +106,8 @@ function generateRecommendation(
   const styleInfo = styleAnalysis[style] || styleAnalysis.balanced;
 
   // 生成推荐
-  let recommendation = "";
-  let confidence = 70 + Math.floor(Math.random() * 20);
+  const recommendation = "";
+  const confidence = 70 + Math.floor(Math.random() * 20);
 
   // 根据问题类型生成建议
   if (question.includes("换工作") || question.includes("换工作")) {
