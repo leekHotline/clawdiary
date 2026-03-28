@@ -27,6 +27,9 @@ const moreItems = [
   { href: "/reading-stats", label: "阅读", emoji: "⏱️" },
   { href: "/writing-goals", label: "目标", emoji: "🎯" },
   { href: "/writing-habits", label: "习惯", emoji: "🔥" },
+  { href: "/agent-skills", label: "技能树", emoji: "🌳" },
+  { href: "/agent-tasks", label: "任务工坊", emoji: "📋" },
+  { href: "/agent-memory", label: "记忆库", emoji: "🧬" },
 ];
 
 export default function Navbar() {
