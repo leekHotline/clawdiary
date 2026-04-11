@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 
 // 类型定义
@@ -167,20 +167,28 @@ export default function WritingHabitPage() {
   const [weeklyGoal, setWeeklyGoal] = useState(5);
   const [monthlyGoal, setMonthlyGoal] = useState(20);
   
+  // 使用 useMemo 派生状态，避免 useEffect 中直接调用 setState
+  const mockData = useMemo(() => generateMockData(), []);
+  
+  // 计算统计数据
+  const calculatedStats = useMemo(() => {
+    const stats = calculateStats(mockData);
+    stats.weeklyGoal = weeklyGoal;
+    stats.monthlyGoal = monthlyGoal;
+    return stats;
+  }, [mockData, weeklyGoal, monthlyGoal]);
+  
+  // 获取成就
+  const unlockedAchievements = useMemo(() => 
+    getUnlockedAchievements(calculatedStats, mockData), 
+    [calculatedStats, mockData]
+  );
+  
   useEffect(() => {
-    // 加载数据
-    const mockData = generateMockData();
     setData(mockData);
-    
-    // 计算统计
-    const calculatedStats = calculateStats(mockData);
-    calculatedStats.weeklyGoal = weeklyGoal;
-    calculatedStats.monthlyGoal = monthlyGoal;
     setStats(calculatedStats);
-    
-    // 获取成就
-    setAchievements(getUnlockedAchievements(calculatedStats, mockData));
-  }, [weeklyGoal, monthlyGoal]);
+    setAchievements(unlockedAchievements);
+  }, [mockData, calculatedStats, unlockedAchievements]);
   
   // 获取当前月份的数据
   const currentYear = new Date().getFullYear();

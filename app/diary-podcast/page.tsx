@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -49,10 +49,6 @@ export default function DiaryPodcastPage() {
   const [currentStep, setCurrentStep] = useState<'select' | 'generating' | 'result'>('select');
   const [generationProgress, setGenerationProgress] = useState(0);
 
-  useEffect(() => {
-    fetchDiaries();
-  }, []);
-
   const fetchDiaries = async () => {
     try {
       const res = await fetch('/api/diaries');
@@ -85,6 +81,10 @@ export default function DiaryPodcastPage() {
       ]);
     }
   };
+
+  useEffect(() => {
+    fetchDiaries();
+  }, [fetchDiaries]);
 
   const generatePodcast = async (diary: Diary) => {
     setSelectedDiary(diary);

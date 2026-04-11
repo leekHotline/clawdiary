@@ -79,7 +79,7 @@ const calculateStreak = (writingDays: Date[]): number => {
   today.setHours(0, 0, 0, 0);
   
   let streak = 0;
-  let checkDate = new Date(today);
+  const checkDate = new Date(today);
   
   while (true) {
     const dateStr = checkDate.toDateString();

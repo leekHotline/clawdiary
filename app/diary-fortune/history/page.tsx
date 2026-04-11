@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 
 // 运势记录类型
@@ -58,11 +58,7 @@ export default function FortuneHistoryPage() {
   const [records, setRecords] = useState<FortuneRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadHistory();
-  }, []);
-
-  const loadHistory = () => {
+  const loadHistory = useCallback(() => {
     setLoading(true);
     const historyRecords: FortuneRecord[] = [];
     
@@ -98,7 +94,11 @@ export default function FortuneHistoryPage() {
     historyRecords.sort((a, b) => new Date(b.drawnAt).getTime() - new Date(a.drawnAt).getTime());
     setRecords(historyRecords);
     setLoading(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    loadHistory();
+  }, [loadHistory]);
 
   const clearHistory = () => {
     if (confirm("确定要清除所有历史运势记录吗？")) {
@@ -114,19 +114,29 @@ export default function FortuneHistoryPage() {
     }
   };
 
+  // 使用 useMemo 预生成星空位置，避免渲染时调用 Math.random()
+  const stars = useMemo(() => 
+    Array.from({ length: 30 }, (_, i) => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      animationDelay: Math.random() * 3,
+      opacity: Math.random() * 0.5 + 0.1,
+    })), 
+  []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-900 via-indigo-900 to-violet-950">
       {/* 星空背景 */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {Array.from({ length: 30 }).map((_, i) => (
+        {stars.map((star, i) => (
           <div
             key={i}
             className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              opacity: Math.random() * 0.5 + 0.1,
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              animationDelay: `${star.animationDelay}s`,
+              opacity: star.opacity,
             }}
           />
         ))}
