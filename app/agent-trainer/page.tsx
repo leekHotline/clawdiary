@@ -6,6 +6,7 @@ import Link from "next/link";
 export default function AgentTrainerPage() {
   const [selectedLevel, setSelectedLevel] = useState<string>("beginner");
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
   const levels = [
     { id: "beginner", name: "初学者", emoji: "🌱" },
     { id: "intermediate", name: "进阶", emoji: "🚀" },
