@@ -2,249 +2,124 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { 
-  TrendingUp, 
-  Flame, 
-  Rocket, 
-  Star, 
-  ExternalLink, 
-  ArrowUpRight,
-  Sparkles,
-  Search,
-  Filter
-} from 'lucide-react'
+import { Radar, TrendingUp, Zap, Sparkles, Filter, ExternalLink, Star, ArrowUpRight } from 'lucide-react'
 
-// Mock Data based on current AI trends
-const trendingTools = [
-  {
-    id: 1,
-    name: 'Cursor',
-    description: 'The AI Code Editor built for pair programming.',
-    category: 'Development',
-    tags: ['Coding', 'AI Assistant', 'IDE'],
-    growth: '+124%',
-    users: '2.5M+',
-    status: 'Hot',
-    url: 'https://cursor.com',
-    icon: Flame
-  },
-  {
-    id: 2,
-    name: 'Claude 3.5 Sonnet',
-    description: 'Anthropic\'s most intelligent and capable model yet.',
-    category: 'LLM',
-    tags: ['Chat', 'Reasoning', 'Vision'],
-    growth: '+89%',
-    users: '10M+',
-    status: 'Trending',
-    url: 'https://anthropic.com',
-    icon: Sparkles
-  },
-  {
-    id: 3,
-    name: 'Midjourney v6',
-    description: 'High-quality AI image generation with incredible detail.',
-    category: 'Design',
-    tags: ['Image', 'Creative', 'Art'],
-    growth: '+45%',
-    users: '15M+',
-    status: 'Stable',
-    url: 'https://midjourney.com',
-    icon: Star
-  },
-  {
-    id: 4,
-    name: 'Perplexity AI',
-    description: 'AI-powered search engine that provides direct answers.',
-    category: 'Search',
-    tags: ['Research', 'Answers', 'Web'],
-    growth: '+156%',
-    users: '5M+',
-    status: 'Hot',
-    url: 'https://perplexity.ai',
-    icon: Search
-  },
-  {
-    id: 5,
-    name: 'v0.dev',
-    description: 'Generative UI system by Vercel. Describe UI, get code.',
-    category: 'Development',
-    tags: ['UI/UX', 'React', 'Tailwind'],
-    growth: '+210%',
-    users: '1M+',
-    status: 'Rocket',
-    url: 'https://v0.dev',
-    icon: Rocket
-  },
-  {
-    id: 6,
-    name: 'Suno',
-    description: 'Make a song about anything. High quality AI music generation.',
-    category: 'Audio',
-    tags: ['Music', 'Creative', 'Audio'],
-    growth: '+180%',
-    users: '3M+',
-    status: 'Hot',
-    url: 'https://suno.com',
-    icon: Flame
-  }
+// 模拟数据
+const radarItems = [
+  { id: 1, name: 'Suno V3', category: 'Audio Gen', trend: 'hot', desc: 'Breakthrough in AI music generation with realistic vocals.', score: 98, url: '#' },
+  { id: 2, name: 'Claude 3.5 Sonnet', category: 'LLM', trend: 'rising', desc: 'New benchmark in coding and reasoning tasks.', score: 96, url: '#' },
+  { id: 3, name: 'Luma Dream Machine', category: 'Video Gen', trend: 'hot', desc: 'Fast, high-quality text-to-video model.', score: 92, url: '#' },
+  { id: 4, name: 'Cursor Composer', category: 'DevTools', trend: 'rising', desc: 'Multi-file AI editing feature taking over dev workflows.', score: 95, url: '#' },
+  { id: 5, name: 'OpenAI Sora', category: 'Video Gen', trend: 'stable', desc: 'Photorealistic text-to-video generator.', score: 99, url: '#' },
+  { id: 6, name: 'Grok 1.5', category: 'LLM', trend: 'new', desc: 'Latest open-weight model with improved reasoning.', score: 88, url: '#' },
+  { id: 7, name: 'V0 by Vercel', category: 'DevTools', trend: 'hot', desc: 'Generative UI built on React and Tailwind.', score: 94, url: '#' },
+  { id: 8, name: 'Midjourney v6', category: 'Image Gen', trend: 'stable', desc: 'State of the art image generation with better text rendering.', score: 97, url: '#' },
 ]
 
-const categories = ['All', 'Development', 'LLM', 'Design', 'Search', 'Audio']
+export default function AIToolsRadarPage() {
+  const [filter, setFilter] = useState('all')
 
-export default function AIToolsRadar() {
-  const [activeCategory, setActiveCategory] = useState('All')
-  const [searchQuery, setSearchQuery] = useState('')
+  const filteredItems = filter === 'all' 
+    ? radarItems 
+    : radarItems.filter(item => item.trend === filter)
 
-  const filteredTools = trendingTools.filter(tool => {
-    const matchesCategory = activeCategory === 'All' || tool.category === activeCategory
-    const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          tool.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          tool.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-    return matchesCategory && matchesSearch
-  })
+  const getTrendBadge = (trend: string) => {
+    switch(trend) {
+      case 'hot': return <span className="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full"><Zap className="w-3 h-3" /> HOT</span>
+      case 'rising': return <span className="flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full"><TrendingUp className="w-3 h-3" /> RISING</span>
+      case 'new': return <span className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full"><Sparkles className="w-3 h-3" /> NEW</span>
+      default: return <span className="flex items-center gap-1 px-2 py-1 bg-gray-100 text-gray-700 text-xs font-bold rounded-full">STABLE</span>
+    }
+  }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-slate-50 p-6 md:p-12">
+      <div className="max-w-6xl mx-auto space-y-10">
         
-        {/* Header Section */}
-        <div className="text-center space-y-4">
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium mb-4"
-          >
-            <TrendingUp className="w-4 h-4" />
-            <span>Updated Daily</span>
-          </motion.div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
-            AI Tools <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600">Radar</span>
-          </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Discover the fastest-growing AI tools, models, and platforms shaping the future of technology.
-          </p>
-        </div>
-
-        {/* Controls Section */}
-        <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
-          <div className="relative w-full md:w-96">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search tools, tags, or categories..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-slate-700 placeholder-slate-400"
-            />
+        {/* Header Area */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-slate-200 pb-8">
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
+              <Radar className="w-4 h-4 animate-pulse" />
+              Live Radar
+            </div>
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">
+              AI Trend Radar
+            </h1>
+            <p className="text-lg text-slate-600 max-w-2xl">
+              Tracking the fastest-growing and most impactful AI tools in the market right now. Updated continuously.
+            </p>
           </div>
           
-          <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto scrollbar-hide">
-            {categories.map(category => (
+          <div className="flex gap-2">
+            {['all', 'hot', 'rising', 'new'].map(t => (
               <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
-                  activeCategory === category 
-                    ? 'bg-slate-900 text-white shadow-md scale-105' 
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                key={t}
+                onClick={() => setFilter(t)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold capitalize transition-all ${
+                  filter === t 
+                    ? 'bg-slate-900 text-white shadow-md' 
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                 }`}
               >
-                {category}
+                {t}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Grid Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTools.map((tool, index) => (
+        {/* Radar List */}
+        <div className="grid gap-4">
+          {filteredItems.map((item, index) => (
             <motion.div
-              key={tool.id}
-              initial={{ opacity: 0, y: 20 }}
+              key={item.id}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col h-full relative overflow-hidden"
+              transition={{ delay: index * 0.05 }}
+              className="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-200 transition-all flex flex-col md:flex-row gap-6 items-start md:items-center"
             >
-              {/* Status Badge */}
-              <div className="absolute top-4 right-4">
-                <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold ${
-                  tool.status === 'Hot' ? 'bg-orange-100 text-orange-700' :
-                  tool.status === 'Rocket' ? 'bg-purple-100 text-purple-700' :
-                  'bg-emerald-100 text-emerald-700'
-                }`}>
-                  {tool.status === 'Hot' && <Flame className="w-3 h-3" />}
-                  {tool.status === 'Rocket' && <Rocket className="w-3 h-3" />}
-                  {tool.status === 'Trending' && <TrendingUp className="w-3 h-3" />}
-                  {tool.status}
-                </span>
+              <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 flex items-center justify-center border border-indigo-100/50">
+                <span className="text-2xl font-black text-indigo-600">#{item.id}</span>
               </div>
-
-              {/* Header */}
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-700 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-                  <tool.icon className="w-7 h-7" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-                    {tool.name}
+              
+              <div className="flex-grow space-y-2">
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                    {item.name}
                   </h3>
-                  <p className="text-sm font-medium text-slate-500">{tool.category}</p>
-                </div>
-              </div>
-
-              {/* Description */}
-              <p className="text-slate-600 text-sm mb-6 flex-grow leading-relaxed">
-                {tool.description}
-              </p>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {tool.tags.map(tag => (
-                  <span key={tag} className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 text-xs font-medium border border-slate-200/50">
-                    {tag}
+                  {getTrendBadge(item.trend)}
+                  <span className="px-2 py-1 bg-slate-100 text-slate-600 text-xs font-medium rounded-md uppercase tracking-wide">
+                    {item.category}
                   </span>
-                ))}
+                </div>
+                <p className="text-slate-600 leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
 
-              {/* Footer Stats & Action */}
-              <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div>
-                    <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Growth</p>
-                    <p className="text-sm font-bold text-emerald-600">{tool.growth}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Users</p>
-                    <p className="text-sm font-bold text-slate-700">{tool.users}</p>
-                  </div>
+              <div className="flex items-center gap-6 w-full md:w-auto mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 border-slate-100">
+                <div className="flex flex-col items-center justify-center px-4">
+                  <span className="text-3xl font-black text-slate-800">{item.score}</span>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Score</span>
                 </div>
+                
                 <a 
-                  href={tool.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2.5 bg-slate-50 text-slate-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all duration-300 group/link"
+                  href={item.url}
+                  className="ml-auto md:ml-0 flex items-center justify-center w-12 h-12 rounded-xl bg-slate-50 text-slate-400 hover:bg-indigo-600 hover:text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-indigo-200"
                 >
-                  <ArrowUpRight className="w-5 h-5 group-hover/link:rotate-45 transition-transform" />
+                  <ArrowUpRight className="w-5 h-5" />
                 </a>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Empty State */}
-        {filteredTools.length === 0 && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-20"
-          >
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 text-slate-400 mb-4">
-              <Search className="w-8 h-8" />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">No tools found</h3>
-            <p className="text-slate-500">We couldn't find any tools matching "{searchQuery}" in the {activeCategory} category.</p>
-          </motion.div>
+        {filteredItems.length === 0 && (
+          <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-slate-300">
+            <Radar className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-slate-700">No signals found</h3>
+            <p className="text-slate-500 mt-2">Try adjusting your filters.</p>
+          </div>
         )}
 
       </div>
