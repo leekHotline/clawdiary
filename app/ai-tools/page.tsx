@@ -1,315 +1,253 @@
-import Link from "next/link";
-import { ArrowLeft, ExternalLink, Star, TrendingUp, Zap, MessageSquare, Image as ImageIcon, Video, Code, PenTool, Layout, FileText, Bot } from "lucide-react";
+"use client"
 
-export const metadata = {
-  title: "AI 工具推荐 - Claw Diary",
-  description: "发现最优秀的 AI 工具，提升你的工作效率和创造力",
-};
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { Search, ExternalLink, Star, ArrowRight, Sparkles, Filter, BookmarkPlus, Zap } from "lucide-react"
 
-const categories = [
-  { id: "all", name: "全部", icon: <Bot size={18} /> },
-  { id: "chat", name: "对话与助手", icon: <MessageSquare size={18} /> },
-  { id: "image", name: "图像生成", icon: <ImageIcon size={18} /> },
-  { id: "video", name: "视频创作", icon: <Video size={18} /> },
-  { id: "writing", name: "写作辅助", icon: <FileText size={18} /> },
-  { id: "design", name: "设计工具", icon: <PenTool size={18} /> },
-  { id: "code", name: "编程开发", icon: <Code size={18} /> },
-  { id: "productivity", name: "效率办公", icon: <Layout size={18} /> },
-];
+export default function AIToolsLibrary() {
+  const [searchQuery, setSearchQuery] = useState("")
+  const [activeCategory, setActiveCategory] = useState("All")
 
-const tools = [
-  {
-    id: "chatgpt",
-    name: "ChatGPT",
-    description: "OpenAI 开发的强大语言模型，能进行自然对话、解答问题、写代码和创作文章。",
-    category: "chat",
-    url: "https://chat.openai.com",
-    tags: ["GPT-4", "对话", "全能"],
-    featured: true,
-    logo: "💬",
-    rating: 4.9,
-    price: "免费 / $20/月"
-  },
-  {
-    id: "claude",
-    name: "Claude",
-    description: "Anthropic 开发的 AI 助手，以长文本处理能力、安全性和写作能力见长。",
-    category: "chat",
-    url: "https://claude.ai",
-    tags: ["大词表", "写作", "编程"],
-    featured: true,
-    logo: "🧠",
-    rating: 4.8,
-    price: "免费 / $20/月"
-  },
-  {
-    id: "midjourney",
-    name: "Midjourney",
-    description: "目前最强大的 AI 图像生成工具之一，能生成极具艺术感和高质量的图像。",
-    category: "image",
-    url: "https://www.midjourney.com",
-    tags: ["AI绘图", "艺术", "设计"],
-    featured: true,
-    logo: "🎨",
-    rating: 4.9,
-    price: "付费 ($10/月起)"
-  },
-  {
-    id: "cursor",
-    name: "Cursor",
-    description: "专为 AI 时代设计的代码编辑器，内置强大的代码生成、补全和重构能力。",
-    category: "code",
-    url: "https://cursor.sh",
-    tags: ["IDE", "编程", "Copilot"],
-    featured: true,
-    logo: "💻",
-    rating: 4.8,
-    price: "免费 / $20/月"
-  },
-  {
-    id: "notion-ai",
-    name: "Notion AI",
-    description: "无缝集成在 Notion 笔记中的 AI 助手，帮助写作、总结和头脑风暴。",
-    category: "productivity",
-    url: "https://www.notion.so/product/ai",
-    tags: ["笔记", "写作", "效率"],
-    featured: false,
-    logo: "📝",
-    rating: 4.7,
-    price: "附加订阅 ($10/月)"
-  },
-  {
-    id: "perplexity",
-    name: "Perplexity AI",
-    description: "下一代 AI 搜索引擎，直接给出带引用来源的答案，而非网页链接列表。",
-    category: "productivity",
-    url: "https://www.perplexity.ai",
-    tags: ["搜索", "研究", "问答"],
-    featured: true,
-    logo: "🔍",
-    rating: 4.8,
-    price: "免费 / $20/月"
-  },
-  {
-    id: "suno",
-    name: "Suno AI",
-    description: "令人惊叹的 AI 音乐生成平台，只需输入歌词和风格描述即可生成完整歌曲。",
-    category: "design",
-    url: "https://suno.com",
-    tags: ["音乐生成", "音频", "创意"],
-    featured: false,
-    logo: "🎵",
-    rating: 4.6,
-    price: "免费 / $8/月起"
-  },
-  {
-    id: "runway",
-    name: "Runway",
-    description: "先进的 AI 视频生成和编辑平台，包含 Gen-1 和 Gen-2 文本/图像转视频模型。",
-    category: "video",
-    url: "https://runwayml.com",
-    tags: ["视频生成", "视频编辑", "视觉特效"],
-    featured: true,
-    logo: "🎬",
-    rating: 4.7,
-    price: "免费额度 / $15/月起"
-  },
-  {
-    id: "kimi",
-    name: "Kimi 智能助手",
-    description: "月之暗面科技推出的 AI 助手，支持超长文本输入和优秀的中文处理能力。",
-    category: "chat",
-    url: "https://kimi.moonshot.cn",
-    tags: ["长文本", "中文", "免费"],
-    featured: false,
-    logo: "🌙",
-    rating: 4.7,
-    price: "免费"
-  },
-  {
-    id: "github-copilot",
-    name: "GitHub Copilot",
-    description: "最受欢迎的 AI 编程助手，在你的编辑器中实时提供代码建议。",
-    category: "code",
-    url: "https://github.com/features/copilot",
-    tags: ["代码补全", "开发", "插件"],
-    featured: false,
-    logo: "🐙",
-    rating: 4.8,
-    price: "$10/月"
-  }
-];
+  const categories = ["All", "Productivity", "Writing", "Development", "Design", "Research"]
 
-export default function AIToolsPage() {
-  // In a real app with client components, we'd add state for filtering
-  const activeCategory = "all";
-  
+  const tools = [
+    {
+      id: 1,
+      name: "ChatGPT",
+      description: "Advanced AI language model for conversation, text generation, and problem solving.",
+      category: "Productivity",
+      url: "https://chat.openai.com",
+      tags: ["LLM", "Chat", "Assistant"],
+      featured: true,
+      stars: 4.9
+    },
+    {
+      id: 2,
+      name: "Claude",
+      description: "Anthropic's AI assistant, excellent for long-form content, coding, and nuanced analysis.",
+      category: "Writing",
+      url: "https://claude.ai",
+      tags: ["Writing", "Analysis", "Coding"],
+      featured: true,
+      stars: 4.8
+    },
+    {
+      id: 3,
+      name: "Cursor",
+      description: "The AI-first code editor. Build software faster with an editor designed for pair programming with AI.",
+      category: "Development",
+      url: "https://cursor.sh",
+      tags: ["IDE", "Coding", "Copilot"],
+      featured: true,
+      stars: 4.9
+    },
+    {
+      id: 4,
+      name: "Midjourney",
+      description: "Generates high-quality images from text descriptions, operating through Discord.",
+      category: "Design",
+      url: "https://midjourney.com",
+      tags: ["Image", "Art", "Discord"],
+      featured: false,
+      stars: 4.7
+    },
+    {
+      id: 5,
+      name: "Perplexity",
+      description: "AI search engine that provides cited answers to complex queries in real-time.",
+      category: "Research",
+      url: "https://perplexity.ai",
+      tags: ["Search", "Research", "Citations"],
+      featured: true,
+      stars: 4.8
+    },
+    {
+      id: 6,
+      name: "Notion AI",
+      description: "Integrated AI assistant that helps you write, brainstorm, edit, and summarize within Notion.",
+      category: "Productivity",
+      url: "https://notion.so",
+      tags: ["Workspace", "Writing", "Notes"],
+      featured: false,
+      stars: 4.6
+    }
+  ]
+
+  const filteredTools = tools.filter(tool => {
+    const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          tool.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          tool.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    const matchesCategory = activeCategory === "All" || tool.category === activeCategory
+    return matchesSearch && matchesCategory
+  })
+
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20">
       {/* Header */}
-      <div className="bg-white border-b sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link 
-              href="/" 
-              className="p-2 -ml-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors"
-            >
-              <ArrowLeft size={20} />
-            </Link>
-            <h1 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-              <Zap className="text-amber-500" size={24} />
-              AI 工具精选推荐
-            </h1>
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 pt-8 pb-12 px-6 lg:px-12">
+        <div className="max-w-6xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-3 mb-4"
+          >
+            <div className="p-3 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl">
+              <Zap className="w-6 h-6" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">AI Tools Library</h1>
+          </motion.div>
+          <p className="text-gray-600 dark:text-gray-400 max-w-2xl text-lg mb-8">
+            A curated collection of the most powerful and useful AI tools to supercharge your workflow. Discover, compare, and integrate the best AI into your daily routine.
+          </p>
+
+          {/* Search and Filter */}
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search tools, categories, or tags..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-shadow shadow-sm"
+              />
+            </div>
+            <button className="flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm">
+              <Filter className="w-4 h-4" />
+              <span>Filters</span>
+            </button>
           </div>
-          <div className="text-sm text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full flex items-center gap-1">
-            <TrendingUp size={14} />
-            <span>持续更新中</span>
+
+          {/* Categories */}
+          <div className="flex flex-wrap gap-2 mt-6">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  activeCategory === category
+                    ? "bg-blue-600 text-white shadow-md"
+                    : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                }`}
+              >
+                {category}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-        {/* Hero Section */}
-        <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-8 md:p-12 text-white mb-10 shadow-lg relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/10 rounded-full blur-2xl translate-y-1/3 -translate-x-1/4" />
-          
-          <div className="relative z-10 max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
-              探索 AI 时代的效率利器
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-6 lg:px-12 py-12">
+        
+        {/* Featured Section */}
+        {searchQuery === "" && activeCategory === "All" && (
+          <div className="mb-12">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-amber-500" />
+              Featured Tools
             </h2>
-            <p className="text-indigo-100 text-lg md:text-xl mb-6 leading-relaxed opacity-90">
-              我们为你精选了当前最优秀、最实用的 AI 工具，帮助你在写作、工作、学习和创作中释放全部潜能。
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <span className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium border border-white/20">
-                🚀 提升效率
-              </span>
-              <span className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium border border-white/20">
-                ✨ 激发创意
-              </span>
-              <span className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium border border-white/20">
-                🛠️ 解决问题
-              </span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {tools.filter(t => t.featured).map((tool, index) => (
+                <ToolCard key={tool.id} tool={tool} index={index} featured />
+              ))}
             </div>
           </div>
-        </div>
-
-        {/* Categories (Static UI for server component) */}
-        <div className="mb-10 overflow-x-auto pb-2 scrollbar-hide">
-          <div className="flex gap-2 min-w-max">
-            {categories.map((cat) => (
-              <div 
-                key={cat.id}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium cursor-pointer transition-all ${
-                  cat.id === activeCategory 
-                    ? 'bg-slate-800 text-white shadow-md' 
-                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-                }`}
-              >
-                {cat.icon}
-                {cat.name}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Featured Tools Section */}
-        <div className="mb-12">
-          <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-            <Star className="text-yellow-400 fill-yellow-400" size={20} />
-            编辑精选必用工具
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tools.filter(t => t.featured).map((tool) => (
-              <ToolCard key={tool.id} tool={tool} featured={true} />
-            ))}
-          </div>
-        </div>
+        )}
 
         {/* All Tools Section */}
         <div>
-          <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-            <Bot className="text-indigo-500" size={20} />
-            发现更多工具
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tools.filter(t => !t.featured).map((tool) => (
-              <ToolCard key={tool.id} tool={tool} featured={false} />
-            ))}
-          </div>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+            {searchQuery ? "Search Results" : activeCategory === "All" ? "All Tools" : `${activeCategory} Tools`}
+            <span className="text-gray-500 text-sm font-normal ml-3">({filteredTools.length} found)</span>
+          </h2>
+          
+          {filteredTools.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredTools.map((tool, index) => (
+                <ToolCard key={tool.id} tool={tool} index={index} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20">
+              <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="w-8 h-8 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No tools found</h3>
+              <p className="text-gray-500">Try adjusting your search or filters to find what you're looking for.</p>
+              <button 
+                onClick={() => {setSearchQuery(""); setActiveCategory("All")}}
+                className="mt-4 text-blue-600 hover:underline"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
         </div>
-
-        {/* Call to action */}
-        <div className="mt-16 bg-white border rounded-2xl p-8 text-center max-w-2xl mx-auto shadow-sm">
-          <div className="w-16 h-16 bg-indigo-100 text-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-            💡
-          </div>
-          <h3 className="text-2xl font-bold text-slate-800 mb-2">有推荐的 AI 工具？</h3>
-          <p className="text-slate-500 mb-6">如果你发现了好用的 AI 工具，或者你就是一款优秀 AI 工具的开发者，欢迎向我们推荐！</p>
-          <a 
-            href="#" 
-            className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition-colors"
-          >
-            提交工具推荐
-            <ExternalLink size={18} />
-          </a>
-        </div>
-      </main>
+      </div>
     </div>
-  );
+  )
 }
 
-// Tool Card Component
-function ToolCard({ tool, featured }: { tool: any, featured: boolean }) {
+function ToolCard({ tool, index, featured = false }: { tool: any, index: number, featured?: boolean }) {
   return (
-    <div className={`bg-white rounded-2xl p-6 transition-all hover:shadow-xl border flex flex-col h-full group ${
-      featured ? 'border-indigo-100 shadow-md hover:-translate-y-1' : 'border-slate-100 shadow-sm hover:-translate-y-1'
-    }`}>
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex items-center gap-3">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm ${
-            featured ? 'bg-gradient-to-br from-indigo-50 to-purple-50' : 'bg-slate-50'
-          }`}>
-            {tool.logo}
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-800 text-lg group-hover:text-indigo-600 transition-colors">
-              {tool.name}
-            </h4>
-            <div className="flex items-center gap-1 mt-0.5 text-xs text-slate-500">
-              <Star className="text-yellow-400 fill-yellow-400" size={12} />
-              <span className="font-medium text-slate-700">{tool.rating}</span>
-              <span className="mx-1">•</span>
-              <span>{tool.price}</span>
-            </div>
-          </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05 }}
+      className={`group relative bg-white dark:bg-gray-800 rounded-2xl border ${
+        featured ? 'border-amber-200 dark:border-amber-900/50 shadow-md' : 'border-gray-200 dark:border-gray-700 shadow-sm'
+      } overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}
+    >
+      {featured && (
+        <div className="absolute top-0 right-0 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-bold px-3 py-1 rounded-bl-lg">
+          Featured
         </div>
-        <a 
-          href={tool.url} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-          title="访问网站"
-        >
-          <ExternalLink size={18} />
-        </a>
-      </div>
+      )}
       
-      <p className="text-slate-600 text-sm mb-5 flex-grow line-clamp-3 leading-relaxed">
-        {tool.description}
-      </p>
-      
-      <div className="flex flex-wrap gap-2 mt-auto">
-        {tool.tags.map((tag: string, index: number) => (
-          <span 
-            key={index} 
-            className="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md text-xs font-medium"
+      <div className="p-6">
+        <div className="flex justify-between items-start mb-4">
+          <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center text-xl font-bold text-gray-700 dark:text-gray-300">
+            {tool.name.charAt(0)}
+          </div>
+          <button className="text-gray-400 hover:text-blue-500 transition-colors">
+            <BookmarkPlus className="w-5 h-5" />
+          </button>
+        </div>
+        
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+          {tool.name}
+        </h3>
+        
+        <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 line-clamp-2">
+          {tool.description}
+        </p>
+        
+        <div className="flex flex-wrap gap-2 mb-6">
+          {tool.tags.map((tag: string) => (
+            <span key={tag} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-md">
+              {tag}
+            </span>
+          ))}
+        </div>
+        
+        <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
+          <div className="flex items-center gap-1 text-sm font-medium text-amber-500">
+            <Star className="w-4 h-4 fill-current" />
+            <span>{tool.stars}</span>
+          </div>
+          
+          <a 
+            href={tool.url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
           >
-            {tag}
-          </span>
-        ))}
+            Visit Site
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        </div>
       </div>
-    </div>
-  );
+    </motion.div>
+  )
 }
