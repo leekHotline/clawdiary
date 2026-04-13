@@ -1,0 +1,1780 @@
+
+> ai-diary@0.1.0 lint
+> eslint
+
+
+/root/.openclaw/workspace/ai-diary/app/achievements/[id]/page.tsx
+   74:6   warning  React Hook useEffect has a missing dependency: 'fetchAchievement'. Either include it or remove the dependency array                                                                                                                                                                      react-hooks/exhaustive-deps
+  264:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  291:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/achievements/page.tsx
+  40:6  warning  React Hook useEffect has a missing dependency: 'fetchAchievements'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/agent-memory/page.tsx
+    3:20  warning  'useEffect' is defined but never used     @typescript-eslint/no-unused-vars
+  243:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/agent-tasks/page.tsx
+  216:10  warning  'isGenerating' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/ai-coach/page.tsx
+  51:80  warning  '_topic' is defined but never used  @typescript-eslint/no-unused-vars
+  51:96  warning  '_mood' is defined but never used   @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/ai-tools-radar/page.tsx
+  5:44  warning  'Filter' is defined but never used        @typescript-eslint/no-unused-vars
+  5:52  warning  'ExternalLink' is defined but never used  @typescript-eslint/no-unused-vars
+  5:66  warning  'Star' is defined but never used          @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/ai-tools/page.tsx
+  5:38  warning  'Filter' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/assistant/chat/route.ts
+  87:9  warning  '_limit' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/chat-diary/route.ts
+   4:45  warning  'conversationHistory' is defined but never used  @typescript-eslint/no-unused-vars
+  75:23  warning  'userId' is assigned a value but never used      @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/collab/[id]/export/route.ts
+  130:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  141:39  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  142:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  163:49  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  167:39  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  168:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/collections/[id]/items/route.ts
+  4:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/collections/[id]/route.ts
+  4:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/collections/groups/route.ts
+  4:40  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/comments/[id]/replies/route.ts
+  4:16  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/comments/[id]/route.ts
+  4:17  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/comments/stats/route.ts
+  4:17  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/daily-answers/route.ts
+  10:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:12  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+  67:14  warning  'e' is defined but never used             @typescript-eslint/no-unused-vars
+  82:12  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/decision-helper/route.ts
+  13:3  warning  'style' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/diaries/[id]/pin/route.ts
+  71:3   warning  '_request' is defined but never used  @typescript-eslint/no-unused-vars
+  72:13  warning  '_params' is defined but never used   @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/diaries/[id]/related/route.ts
+  51:20  warning  '_score' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/diaries/[id]/sensitive/route.ts
+  63:3   warning  '_request' is defined but never used  @typescript-eslint/no-unused-vars
+  64:13  warning  '_params' is defined but never used   @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/diaries/[id]/versions/[version]/route.ts
+  2:22  warning  'compareVersions' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/diaries/[id]/versions/route.ts
+  2:40  warning  'getVersion' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/diaries/ai/route.ts
+  2:23  warning  'getDiaries' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/diaries/batch/route.ts
+  56:9  warning  'operation' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/diary-compare/route.ts
+   12:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   91:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   91:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   91:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  227:26  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/diary-podcast/route.ts
+  64:12  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  69:39  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/diary-polish/route.ts
+  6:19  warning  'style' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/diary-treasure/route.ts
+  174:28  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/diary/[id]/related/route.ts
+  13:38  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  13:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/emotion-weather/route.ts
+  218:9   warning  'today' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  220:37  warning  'i' is defined but never used               @typescript-eslint/no-unused-vars
+  230:3   warning  'currentWeather' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/energy-station/route.ts
+  30:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/events/[id]/route.ts
+  4:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/export/diaries/route.ts
+   74:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   99:35  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  126:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  235:29  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/feed/route.ts
+  123:9  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/feedback/route.ts
+  236:11  warning  'feedbackId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/friends/online/route.ts
+  6:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/friends/route.ts
+  113:9  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/gratitude/export/route.ts
+  113:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  127:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/gratitude/route.ts
+  4:14  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/gratitude/stats/route.ts
+  6:9  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  7:9  warning  'range' is assigned a value but never used   @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/groups/[id]/diaries/route.ts
+  52:15  warning  'groupId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/groups/[id]/members/route.ts
+  19:15  warning  'groupId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/groups/[id]/stats/route.ts
+  6:9  warning  'groupId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  7:9  warning  'period' is assigned a value but never used   @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/groups/messages/route.ts
+  10:9  warning  'limit' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  11:9  warning  'before' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/groups/route.ts
+  118:7  warning  'mockMembers' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  128:9  warning  'userId' is assigned a value but never used       @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/habits/archive/route.ts
+  37:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/image/generate/route.ts
+   73:16  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+  116:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/import/route.ts
+    4:16  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   12:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  120:47  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  132:47  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/insights/route.ts
+  6:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/inspiration-wall/pin/route.ts
+  4:7   warning  'inspirationWall' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  4:24  warning  Unexpected any. Specify a different type              @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/inspirations/[id]/route.ts
+  6:3  warning  'likeInspiration' is defined but never used  @typescript-eslint/no-unused-vars
+  7:3  warning  'saveInspiration' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/inspirations/random/route.ts
+  5:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/inspirations/route.ts
+  27:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/interactions/route.ts
+  114:15  warning  'data' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/leaderboard/milestones/route.ts
+  3:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/leaderboard/route.ts
+  9:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/leaderboard/user-rank/route.ts
+  10:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/likes/[type]/[id]/route.ts
+  14:11  warning  'likeKey' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/mental-health/assessment/route.ts
+    6:9   warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+    7:9   warning  'type' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  108:35  warning  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  163:61  warning  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  166:28  warning  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/mental-health/checkin/route.ts
+   6:9   warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  73:38  warning  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  90:36  warning  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/mental-health/recommendations/route.ts
+   47:48  warning  'timeOfDay' is defined but never used          @typescript-eslint/no-unused-vars
+   47:67  warning  'weather' is defined but never used            @typescript-eslint/no-unused-vars
+   84:50  warning  Unexpected any. Specify a different type       @typescript-eslint/no-explicit-any
+   85:40  warning  'location' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  111:26  warning  'context' is defined but never used            @typescript-eslint/no-unused-vars
+  111:35  warning  Unexpected any. Specify a different type       @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/mental-health/report/route.ts
+  65:35  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/messages/inbox/route.ts
+   8:9  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   9:9  warning  'limit' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  10:9  warning  'before' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/messages/route.ts
+   7:11  warning  'Message' is defined but never used          @typescript-eslint/no-unused-vars
+  87:9   warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/messages/unread/route.ts
+  8:9  warning  'groupBy' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/mood/prediction/route.ts
+  90:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/notifications/[id]/read/route.ts
+  8:11  warning  'id' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/points/route.ts
+   46:28  warning  'userId' is defined but never used           @typescript-eslint/no-unused-vars
+  162:11  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/pomodoro/analytics/route.ts
+  5:9  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  6:9  warning  'range' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  9:9  warning  'now' is assigned a value but never used     @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/pomodoro/route.ts
+  4:15  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/pomodoro/sessions/route.ts
+  4:15  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/pomodoro/stats/route.ts
+  6:9  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/quests/route.ts
+  107:9  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/ratings/history/route.ts
+  27:9  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/ratings/stats/route.ts
+  3:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/reactions/[id]/route.ts
+  59:9  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/reactions/route.ts
+  108:9  warning  'summary' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/reading-history/stats/route.ts
+  4:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/reading-progress/route.ts
+  1:10  warning  'NextRequest' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/reading-time/route.ts
+  5:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/recommendations/route.ts
+  3:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/reminders/[id]/toggle/route.ts
+  8:11  warning  'id' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/reports/[id]/route.ts
+  2:19  warning  'Report' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/restore/route.ts
+  76:24  warning  'mergeMode' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/scheduled/publish/route.ts
+  6:28  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/second-me/chat/route.ts
+   50:3   warning  'history' is defined but never used                      @typescript-eslint/no-unused-vars
+   58:9   warning  'personalityContext' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  115:53  warning  'personality' is defined but never used                  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/shop/route.ts
+  182:24  warning  'userId' is defined but never used           @typescript-eslint/no-unused-vars
+  232:19  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/sleep/pattern/route.ts
+  3:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/sleep/quality/route.ts
+  3:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/stats/charts/word-trend/route.ts
+    8:13  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   86:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  104:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  104:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/stats/dashboard/route.ts
+  4:7  warning  'MOOD_EMOJIS' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/stats/heatmap/route.ts
+    8:11  warning  'months' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  131:53  warning  'year' is defined but never used             @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/story-continuer/route.ts
+  36:13  warning  'styleDesc' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  37:13  warning  'lengthDesc' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/tags/cloud/route.ts
+  1:10  warning  'NextRequest' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/tags/stats/route.ts
+  1:10  warning  'NextRequest' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/templates/recommend/route.ts
+  7:9  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/time-capsule/[id]/open/route.ts
+  4:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/time-capsule/[id]/route.ts
+  4:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/time-capsule/route.ts
+  4:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/time-mailbox/route.ts
+  149:7  warning  'diaryId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/trash/[id]/restore/route.ts
+  3:23  warning  'getDiaries' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/txt2img/route.ts
+  58:56  warning  'model' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/upload/route.ts
+  30:11  warning  'allowedDocTypes' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/users/[id]/activities/route.ts
+  6:9  warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/users/[id]/preferences/route.ts
+  4:39  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/users/[id]/route.ts
+  44:13  warning  'email' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/users/route.ts
+  60:36  warning  'email' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/version-compare/route.ts
+  8:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/voice/route.ts
+  39:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/weather/route.ts
+  39:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-analysis/style/route.ts
+  6:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-assistant/route.ts
+  8:40  warning  'previousContent' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-goals/[id]/progress/route.ts
+   5:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  56:35  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-goals/[id]/route.ts
+  5:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-goals/history/route.ts
+   5:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  47:35  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  80:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-goals/stats/route.ts
+    5:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   71:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   72:29  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  113:35  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  126:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-goals/today/route.ts
+  14:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-habits/[id]/route.ts
+  5:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  6:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-habits/log/route.ts
+   5:22  warning  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+   6:18  warning  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+  23:9   warning  'userId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-habits/route.ts
+  5:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  6:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-habits/stats/route.ts
+  5:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  6:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/api/writing-style/analyze/route.ts
+   38:42  warning  'words' is defined but never used               @typescript-eslint/no-unused-vars
+  207:11  warning  'rareWords' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  287:17  warning  '_' is defined but never used                   @typescript-eslint/no-unused-vars
+  294:17  warning  '_' is defined but never used                   @typescript-eslint/no-unused-vars
+  309:50  warning  'index' is defined but never used               @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/assistant/chat/page.tsx
+  94:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/badges/page.tsx
+    3:20  warning  'useEffect' is defined but never used           @typescript-eslint/no-unused-vars
+  151:18  warning  'setBadges' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/bookmarks/manage/page.tsx
+  108:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  150:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/challenges/[id]/page.tsx
+  3:28  warning  'getChallengeProgress' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/challenges/[id]/stats/page.tsx
+  29:21  warning  'setChallenge' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  38:25  warning  'setDailyProgress' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  44:26  warning  'setRecentActivity' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/challenges/my/page.tsx
+   9:7   warning  'statusColors' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  15:7   warning  'statusLabels' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  24:26  warning  'categories' is assigned a value but never used    @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/chat-diary/page.tsx
+  13:11  warning  'ChatSession' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/checkin/leaderboard/page.tsx
+  146:42  warning  'index' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/checkin/page.tsx
+  77:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/citations/create/page.tsx
+  57:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/citations/graph/page.tsx
+  51:6  warning  React Hook useEffect has a missing dependency: 'drawGraph'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/citations/page.tsx
+  24:38  warning  Unexpected any. Specify a different type                                                                      @typescript-eslint/no-explicit-any
+  30:6   warning  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/citations/stats/page.tsx
+   17:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  194:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/collab/[id]/page.tsx
+    3:20  warning  'useEffect' is defined but never used                  @typescript-eslint/no-unused-vars
+  161:44  warning  'params' is defined but never used                     @typescript-eslint/no-unused-vars
+  166:25  warning  'setRemainingDays' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/collab/join/[code]/page.tsx
+  44:6   warning  React Hook useEffect has a missing dependency: 'fetchInviteInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  56:14  warning  'err' is defined but never used                                                                                     @typescript-eslint/no-unused-vars
+  89:14  warning  'err' is defined but never used                                                                                     @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/collab/page.tsx
+  202:62  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/community/leaderboard/page.tsx
+   44:6   warning  React Hook useEffect has a missing dependency: 'fetchLeaderboard'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  179:51  warning  'index' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/compare/page.tsx
+  28:11  warning  'maxLen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/components/CommentSection.tsx
+  45:6  warning  React Hook useEffect has a missing dependency: 'fetchComments'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/contests/[id]/page.tsx
+  47:10  warning  'userJoined' is assigned a value but never used                                                                  @typescript-eslint/no-unused-vars
+  50:10  warning  'submitting' is assigned a value but never used                                                                  @typescript-eslint/no-unused-vars
+  50:22  warning  'setSubmitting' is assigned a value but never used                                                               @typescript-eslint/no-unused-vars
+  54:6   warning  React Hook useEffect has a missing dependency: 'fetchContest'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/contests/page.tsx
+  48:6  warning  React Hook useEffect has a missing dependency: 'fetchContests'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/covers/create/CreateCoverContent.tsx
+  241:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/covers/page.tsx
+  94:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/create/page.tsx
+   63:14  warning  '_error' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  171:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/daily-challenge/page.tsx
+  175:31  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-explicit-any
+  198:60  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-explicit-any
+  205:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/root/.openclaw/workspace/ai-diary/app/daily-challenge/page.tsx:205:5
+  203 |   // 初始化
+  204 |   useEffect(() => {
+> 205 |     setMounted(true);
+      |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  206 |     const storage = getStorage();
+  207 |     if (!storage) return;
+  208 |  react-hooks/set-state-in-effect
+
+/root/.openclaw/workspace/ai-diary/app/daily-philosophy/page.tsx
+  240:24  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  251:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/daily-question/page.tsx
+  149:6   warning  React Hook useEffect has a missing dependency: 'selectedCategory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  189:14  warning  'error' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+  238:14  warning  'error' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary-agent/page.tsx
+  27:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/root/.openclaw/workspace/ai-diary/app/diary-agent/page.tsx:27:7
+  25 |     const saved = localStorage.getItem("diaryAgent");
+  26 |     if (saved) {
+> 27 |       setAgent(JSON.parse(saved));
+     |       ^^^^^^^^ Avoid calling setState() directly within an effect
+  28 |       setStep("ready");
+  29 |     }
+  30 |   }, []);  react-hooks/set-state-in-effect
+
+/root/.openclaw/workspace/ai-diary/app/diary-avatar/page.tsx
+   44:7   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/root/.openclaw/workspace/ai-diary/app/diary-avatar/page.tsx:44:7
+  42 |
+  43 |     if (savedPersona) {
+> 44 |       setPersona(JSON.parse(savedPersona));
+     |       ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  45 |     }
+  46 |     if (savedMessages) {
+  47 |       const parsed = JSON.parse(savedMessages);  react-hooks/set-state-in-effect
+   81:14  warning  'error' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  133:14  warning  'error' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary-blindbox/page.tsx
+   32:26  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  216:40  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  230:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/diary-card/page.tsx
+    3:28  warning  'useEffect' is defined but never used                  @typescript-eslint/no-unused-vars
+  116:10  warning  'showTemplates' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  116:25  warning  'setShowTemplates' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary-chat/page.tsx
+  131:7  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/root/.openclaw/workspace/ai-diary/app/diary-chat/page.tsx:131:7
+  129 |   useEffect(() => {
+  130 |     if (selectedDiary && messages.length === 0) {
+> 131 |       setMessages([
+      |       ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  132 |         {
+  133 |           id: "1",
+  134 |           role: "diary",  react-hooks/set-state-in-effect
+  140:6  warning  React Hook useEffect has a missing dependency: 'messages.length'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/diary-coach/page.tsx
+   89:63  warning  'i' is defined but never used                          @typescript-eslint/no-unused-vars
+   93:58  warning  'i' is defined but never used                          @typescript-eslint/no-unused-vars
+  117:10  warning  'selectedDiary' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  117:25  warning  'setSelectedDiary' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary-dialogue/page.tsx
+   5:10  warning  'MessageCircle' is defined but never used                                                                        @typescript-eslint/no-unused-vars
+   5:46  warning  'ArrowLeft' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+  32:6   warning  React Hook useEffect has a missing dependency: 'fetchDiaries'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/diary-dna/page.tsx
+  2:27  warning  'DiaryDNA' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary-fortune/history/page.tsx
+  119:33  warning  '_' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+  119:36  warning  'i' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+  120:13  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-fortune/history/page.tsx:120:13
+  118 |   const stars = useMemo(() => 
+  119 |     Array.from({ length: 30 }, (_, i) => ({
+> 120 |       left: Math.random() * 100,
+      |             ^^^^^^^^^^^^^ Cannot call impure function
+  121 |       top: Math.random() * 100,
+  122 |       animationDelay: Math.random() * 3,
+  123 |       opacity: Math.random() * 0.5 + 0.1,  react-hooks/purity
+  121:12  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-fortune/history/page.tsx:121:12
+  119 |     Array.from({ length: 30 }, (_, i) => ({
+  120 |       left: Math.random() * 100,
+> 121 |       top: Math.random() * 100,
+      |            ^^^^^^^^^^^^^ Cannot call impure function
+  122 |       animationDelay: Math.random() * 3,
+  123 |       opacity: Math.random() * 0.5 + 0.1,
+  124 |     })),                         react-hooks/purity
+  122:23  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-fortune/history/page.tsx:122:23
+  120 |       left: Math.random() * 100,
+  121 |       top: Math.random() * 100,
+> 122 |       animationDelay: Math.random() * 3,
+      |                       ^^^^^^^^^^^^^ Cannot call impure function
+  123 |       opacity: Math.random() * 0.5 + 0.1,
+  124 |     })), 
+  125 |   []);                                                  react-hooks/purity
+  123:16  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-fortune/history/page.tsx:123:16
+  121 |       top: Math.random() * 100,
+  122 |       animationDelay: Math.random() * 3,
+> 123 |       opacity: Math.random() * 0.5 + 0.1,
+      |                ^^^^^^^^^^^^^ Cannot call impure function
+  124 |     })), 
+  125 |   []);
+  126 |                                                                                          react-hooks/purity
+
+/root/.openclaw/workspace/ai-diary/app/diary-fortune/page.tsx
+  114:10  warning  'showDetail' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+  114:22  warning  'setShowDetail' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  179:24  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-fortune/page.tsx:179:24
+  177 |             className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+  178 |             style={{
+> 179 |               left: `${Math.random() * 100}%`,
+      |                        ^^^^^^^^^^^^^ Cannot call impure function
+  180 |               top: `${Math.random() * 100}%`,
+  181 |               animationDelay: `${Math.random() * 3}s`,
+  182 |               opacity: Math.random() * 0.8 + 0.2,  react-hooks/purity
+  180:23  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-fortune/page.tsx:180:23
+  178 |             style={{
+  179 |               left: `${Math.random() * 100}%`,
+> 180 |               top: `${Math.random() * 100}%`,
+      |                       ^^^^^^^^^^^^^ Cannot call impure function
+  181 |               animationDelay: `${Math.random() * 3}s`,
+  182 |               opacity: Math.random() * 0.8 + 0.2,
+  183 |             }}                                                                 react-hooks/purity
+  181:34  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-fortune/page.tsx:181:34
+  179 |               left: `${Math.random() * 100}%`,
+  180 |               top: `${Math.random() * 100}%`,
+> 181 |               animationDelay: `${Math.random() * 3}s`,
+      |                                  ^^^^^^^^^^^^^ Cannot call impure function
+  182 |               opacity: Math.random() * 0.8 + 0.2,
+  183 |             }}
+  184 |           />                                                              react-hooks/purity
+  182:24  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-fortune/page.tsx:182:24
+  180 |               top: `${Math.random() * 100}%`,
+  181 |               animationDelay: `${Math.random() * 3}s`,
+> 182 |               opacity: Math.random() * 0.8 + 0.2,
+      |                        ^^^^^^^^^^^^^ Cannot call impure function
+  183 |             }}
+  184 |           />
+  185 |         ))}                                                                                                           react-hooks/purity
+
+/root/.openclaw/workspace/ai-diary/app/diary-map/page.tsx
+   16:57  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+   21:23  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  129:53  warning  'idx' is defined but never used            @typescript-eslint/no-unused-vars
+  130:21  warning  'size' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary-museum/page.tsx
+   32:6   warning  React Hook useEffect has a missing dependency: 'fetchMuseumData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   40:14  warning  'error' is defined but never used                                                                                   @typescript-eslint/no-unused-vars
+  246:89  warning  'i' is defined but never used                                                                                       @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary-musicbox/page.tsx
+   83:9   warning  'audioRef' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  153:24  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-musicbox/page.tsx:153:24
+  151 |             className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+  152 |             style={{
+> 153 |               left: `${Math.random() * 100}%`,
+      |                        ^^^^^^^^^^^^^ Cannot call impure function
+  154 |               top: `${Math.random() * 100}%`,
+  155 |               animationDelay: `${Math.random() * 3}s`,
+  156 |               animationDuration: `${2 + Math.random() * 3}s`,  react-hooks/purity
+  154:23  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-musicbox/page.tsx:154:23
+  152 |             style={{
+  153 |               left: `${Math.random() * 100}%`,
+> 154 |               top: `${Math.random() * 100}%`,
+      |                       ^^^^^^^^^^^^^ Cannot call impure function
+  155 |               animationDelay: `${Math.random() * 3}s`,
+  156 |               animationDuration: `${2 + Math.random() * 3}s`,
+  157 |             }}                                                                 react-hooks/purity
+  155:34  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-musicbox/page.tsx:155:34
+  153 |               left: `${Math.random() * 100}%`,
+  154 |               top: `${Math.random() * 100}%`,
+> 155 |               animationDelay: `${Math.random() * 3}s`,
+      |                                  ^^^^^^^^^^^^^ Cannot call impure function
+  156 |               animationDuration: `${2 + Math.random() * 3}s`,
+  157 |             }}
+  158 |           />                                                              react-hooks/purity
+  156:41  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-musicbox/page.tsx:156:41
+  154 |               top: `${Math.random() * 100}%`,
+  155 |               animationDelay: `${Math.random() * 3}s`,
+> 156 |               animationDuration: `${2 + Math.random() * 3}s`,
+      |                                         ^^^^^^^^^^^^^ Cannot call impure function
+  157 |             }}
+  158 |           />
+  159 |         ))}                                                                                          react-hooks/purity
+
+/root/.openclaw/workspace/ai-diary/app/diary-podcast/page.tsx
+   3:31  warning  'useCallback' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  48:10  warning  'isGenerating' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  52:9   warning  The 'fetchDiaries' function makes the dependencies of useEffect Hook (at line 87) change on every render. Move it inside the useEffect callback. Alternatively, wrap the definition of 'fetchDiaries' in its own useCallback() Hook                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           react-hooks/exhaustive-deps
+  57:14  warning  'error' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  86:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/root/.openclaw/workspace/ai-diary/app/diary-podcast/page.tsx:86:5
+  84 |
+  85 |   useEffect(() => {
+> 86 |     fetchDiaries();
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  87 |   }, [fetchDiaries]);
+  88 |
+  89 |   const generatePodcast = async (diary: Diary) => {  react-hooks/set-state-in-effect
+
+/root/.openclaw/workspace/ai-diary/app/diary-polish/page.tsx
+  40:9  warning  'handlePolish' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary-qa/page.tsx
+  4:8  warning  'Link' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary-radio/page.tsx
+  292:23  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-radio/page.tsx:292:23
+  290 |             className="absolute text-white/10 animate-float"
+  291 |             style={{
+> 292 |               top: `${Math.random() * 100}%`,
+      |                       ^^^^^^^^^^^^^ Cannot call impure function
+  293 |               left: `${Math.random() * 100}%`,
+  294 |               fontSize: `${Math.random() * 20 + 10}px`,
+  295 |               animationDelay: `${Math.random() * 5}s`,      react-hooks/purity
+  293:24  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-radio/page.tsx:293:24
+  291 |             style={{
+  292 |               top: `${Math.random() * 100}%`,
+> 293 |               left: `${Math.random() * 100}%`,
+      |                        ^^^^^^^^^^^^^ Cannot call impure function
+  294 |               fontSize: `${Math.random() * 20 + 10}px`,
+  295 |               animationDelay: `${Math.random() * 5}s`,
+  296 |               animationDuration: `${Math.random() * 10 + 10}s`,  react-hooks/purity
+  294:28  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-radio/page.tsx:294:28
+  292 |               top: `${Math.random() * 100}%`,
+  293 |               left: `${Math.random() * 100}%`,
+> 294 |               fontSize: `${Math.random() * 20 + 10}px`,
+      |                            ^^^^^^^^^^^^^ Cannot call impure function
+  295 |               animationDelay: `${Math.random() * 5}s`,
+  296 |               animationDuration: `${Math.random() * 10 + 10}s`,
+  297 |             }}    react-hooks/purity
+  295:34  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-radio/page.tsx:295:34
+  293 |               left: `${Math.random() * 100}%`,
+  294 |               fontSize: `${Math.random() * 20 + 10}px`,
+> 295 |               animationDelay: `${Math.random() * 5}s`,
+      |                                  ^^^^^^^^^^^^^ Cannot call impure function
+  296 |               animationDuration: `${Math.random() * 10 + 10}s`,
+  297 |             }}
+  298 |           >                                react-hooks/purity
+  296:37  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-radio/page.tsx:296:37
+  294 |               fontSize: `${Math.random() * 20 + 10}px`,
+  295 |               animationDelay: `${Math.random() * 5}s`,
+> 296 |               animationDuration: `${Math.random() * 10 + 10}s`,
+      |                                     ^^^^^^^^^^^^^ Cannot call impure function
+  297 |             }}
+  298 |           >
+  299 |             {["♪", "♫", "♬", "🎵", "🎶"][Math.floor(Math.random() * 5)]}   react-hooks/purity
+  299:53  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-radio/page.tsx:299:53
+  297 |             }}
+  298 |           >
+> 299 |             {["♪", "♫", "♬", "🎵", "🎶"][Math.floor(Math.random() * 5)]}
+      |                                                     ^^^^^^^^^^^^^ Cannot call impure function
+  300 |           </div>
+  301 |         ))}
+  302 |       </div>                                                                                                                        react-hooks/purity
+
+/root/.openclaw/workspace/ai-diary/app/diary-skills/page.tsx
+  274:9  warning  'level' is assigned a value but never used              @typescript-eslint/no-unused-vars
+  311:9  warning  'selectedSkillData' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary-timemachine/page.tsx
+  95:24  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-timemachine/page.tsx:95:24
+  93 |             className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+  94 |             style={{
+> 95 |               left: `${Math.random() * 100}%`,
+     |                        ^^^^^^^^^^^^^ Cannot call impure function
+  96 |               top: `${Math.random() * 100}%`,
+  97 |               animationDelay: `${Math.random() * 3}s`,
+  98 |               opacity: Math.random() * 0.7 + 0.3,  react-hooks/purity
+  96:23  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-timemachine/page.tsx:96:23
+  94 |             style={{
+  95 |               left: `${Math.random() * 100}%`,
+> 96 |               top: `${Math.random() * 100}%`,
+     |                       ^^^^^^^^^^^^^ Cannot call impure function
+  97 |               animationDelay: `${Math.random() * 3}s`,
+  98 |               opacity: Math.random() * 0.7 + 0.3,
+  99 |             }}                                                                 react-hooks/purity
+  97:34  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-timemachine/page.tsx:97:34
+   95 |               left: `${Math.random() * 100}%`,
+   96 |               top: `${Math.random() * 100}%`,
+>  97 |               animationDelay: `${Math.random() * 3}s`,
+      |                                  ^^^^^^^^^^^^^ Cannot call impure function
+   98 |               opacity: Math.random() * 0.7 + 0.3,
+   99 |             }}
+  100 |           />                                                       react-hooks/purity
+  98:24  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/diary-timemachine/page.tsx:98:24
+   96 |               top: `${Math.random() * 100}%`,
+   97 |               animationDelay: `${Math.random() * 3}s`,
+>  98 |               opacity: Math.random() * 0.7 + 0.3,
+      |                        ^^^^^^^^^^^^^ Cannot call impure function
+   99 |             }}
+  100 |           />
+  101 |         ))}                                                                                                    react-hooks/purity
+
+/root/.openclaw/workspace/ai-diary/app/diary-video/page.tsx
+  113:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  114:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/bookmarks/page.tsx
+  50:6  warning  React Hook useEffect has a missing dependency: 'fetchBookmarks'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/comments/page.tsx
+  46:6  warning  React Hook useEffect has missing dependencies: 'fetchComments' and 'fetchStats'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/compare/page.tsx
+  31:9  warning  'router' is assigned a value but never used                                                                       @typescript-eslint/no-unused-vars
+  42:6  warning  React Hook useEffect has a missing dependency: 'fetchDiary'. Either include it or remove the dependency array     react-hooks/exhaustive-deps
+  75:6  warning  React Hook useEffect has a missing dependency: 'calculateDiff'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/history/page.tsx
+  5:40  warning  'getVersion' is defined but never used       @typescript-eslint/no-unused-vars
+  5:52  warning  'compareVersions' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/likes/page.tsx
+  35:6  warning  React Hook useEffect has missing dependencies: 'fetchLikes' and 'fetchStats'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/page.tsx
+  109:13  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/password/page.tsx
+    9:9   warning  'router' is assigned a value but never used                                                                               @typescript-eslint/no-unused-vars
+   31:6   warning  React Hook useEffect has a missing dependency: 'fetchProtectionStatus'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   83:14  warning  '_error' is defined but never used                                                                                        @typescript-eslint/no-unused-vars
+  120:14  warning  '_error' is defined but never used                                                                                        @typescript-eslint/no-unused-vars
+  155:14  warning  '_error' is defined but never used                                                                                        @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/score/page.tsx
+  19:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/sentiment/page.tsx
+  19:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/share/page.tsx
+  14:9  warning  'shareText' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/unlock/page.tsx
+  49:14  warning  '_error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/diary/[id]/versions/page.tsx
+  55:10  warning  'comparing' is assigned a value but never used                                                                    @typescript-eslint/no-unused-vars
+  56:10  warning  'compareVersion' is assigned a value but never used                                                               @typescript-eslint/no-unused-vars
+  62:6   warning  React Hook useEffect has a missing dependency: 'fetchVersions'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/dream-decoder/page.tsx
+   3:20  warning  'useRef' is defined but never used        @typescript-eslint/no-unused-vars
+  49:50  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  78:14  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/emotion-bank/page.tsx
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/emotion-constellation/page.tsx
+   37:7   warning  'STAR_SVG' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+  235:24  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/emotion-constellation/page.tsx:235:24
+  233 |             className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+  234 |             style={{
+> 235 |               left: `${Math.random() * 100}%`,
+      |                        ^^^^^^^^^^^^^ Cannot call impure function
+  236 |               top: `${Math.random() * 100}%`,
+  237 |               animationDelay: `${Math.random() * 5}s`,
+  238 |               opacity: Math.random() * 0.6 + 0.1,  react-hooks/purity
+  236:23  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/emotion-constellation/page.tsx:236:23
+  234 |             style={{
+  235 |               left: `${Math.random() * 100}%`,
+> 236 |               top: `${Math.random() * 100}%`,
+      |                       ^^^^^^^^^^^^^ Cannot call impure function
+  237 |               animationDelay: `${Math.random() * 5}s`,
+  238 |               opacity: Math.random() * 0.6 + 0.1,
+  239 |             }}                                                                 react-hooks/purity
+  237:34  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/emotion-constellation/page.tsx:237:34
+  235 |               left: `${Math.random() * 100}%`,
+  236 |               top: `${Math.random() * 100}%`,
+> 237 |               animationDelay: `${Math.random() * 5}s`,
+      |                                  ^^^^^^^^^^^^^ Cannot call impure function
+  238 |               opacity: Math.random() * 0.6 + 0.1,
+  239 |             }}
+  240 |           />                                                              react-hooks/purity
+  238:24  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/emotion-constellation/page.tsx:238:24
+  236 |               top: `${Math.random() * 100}%`,
+  237 |               animationDelay: `${Math.random() * 5}s`,
+> 238 |               opacity: Math.random() * 0.6 + 0.1,
+      |                        ^^^^^^^^^^^^^ Cannot call impure function
+  239 |             }}
+  240 |           />
+  241 |         ))}                                                                                                           react-hooks/purity
+
+/root/.openclaw/workspace/ai-diary/app/emotion-cycle/page.tsx
+  3:31  warning  'useMemo' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/emotion-forecast/page.tsx
+  81:9  warning  'getScoreStyle' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/emotion-lens/page.tsx
+    3:20  warning  'useRef' is defined but never used     @typescript-eslint/no-unused-vars
+    3:28  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+  572:74  warning  'index' is defined but never used      @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/emotion-map/page.tsx
+  133:7   warning  'MONTH_NAMES' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  274:42  warning  'index' is defined but never used                 @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/emotion-palette/page.tsx
+  78:5  error  Error: Cannot access variable before it is declared
+
+`generatePalette` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/root/.openclaw/workspace/ai-diary/app/emotion-palette/page.tsx:78:5
+  76 |     }
+  77 |     // 生成初始调色盘
+> 78 |     generatePalette();
+     |     ^^^^^^^^^^^^^^^ `generatePalette` accessed before it is declared
+  79 |   }, []);
+  80 |
+  81 |   const generatePalette = async (themeId?: string) => {
+
+/root/.openclaw/workspace/ai-diary/app/emotion-palette/page.tsx:81:3
+   79 |   }, []);
+   80 |
+>  81 |   const generatePalette = async (themeId?: string) => {
+      |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  82 |     setIsGenerating(true);
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  83 |     
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 127 |     setIsGenerating(false);
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 128 |   };
+      | ^^^^^ `generatePalette` is declared here
+  129 |
+  130 |   const savePalette = () => {
+  131 |     if (!currentPalette) return;  react-hooks/immutability
+
+/root/.openclaw/workspace/ai-diary/app/emotion-weather/page.tsx
+  110:10  warning  'diaries' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  177:9   warning  'getMiniWeather' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/emotion-wheel/page.tsx
+  302:47   warning  'index' is defined but never used  @typescript-eslint/no-unused-vars
+  370:114  warning  'i' is defined but never used      @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/energy-station/page.tsx
+  53:18  warning  'setStreak' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  54:10  warning  'todayWritten' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  54:24  warning  'setTodayWritten' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/export-center/page.tsx
+  107:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  108:50  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  142:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/export/page.tsx
+  14:9  warning  'dateRange' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/feature-audit/page.tsx
+  104:10  warning  'showExport' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  104:22  warning  'setShowExport' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  230:47  warning  Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+  257:58  warning  Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/feature-vote/page.tsx
+  145:10  warning  'hasVotedToday' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/feedback/[id]/page.tsx
+  34:9  warning  'router' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/feedback/page.tsx
+   44:24  warning  'setActiveStatus' is assigned a value but never used                                                          @typescript-eslint/no-unused-vars
+   57:6   warning  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  118:9   warning  'getTypeName' is assigned a value but never used                                                              @typescript-eslint/no-unused-vars
+  233:50  warning  Unexpected any. Specify a different type                                                                      @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/gratitude-jar/page.tsx
+  51:7  error  Error: Cannot access variable before it is declared
+
+`updateJarFill` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/root/.openclaw/workspace/ai-diary/app/gratitude-jar/page.tsx:51:7
+  49 |       const loadedNotes = JSON.parse(saved)
+  50 |       setNotes(loadedNotes)
+> 51 |       updateJarFill(loadedNotes.length)
+     |       ^^^^^^^^^^^^^ `updateJarFill` accessed before it is declared
+  52 |     }
+  53 |   }, [])
+  54 |
+
+/root/.openclaw/workspace/ai-diary/app/gratitude-jar/page.tsx:56:3
+  54 |
+  55 |   // Update jar fill level
+> 56 |   const updateJarFill = (count: number) => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 57 |     // Max capacity: 50 notes = 100% fill
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 58 |     const fill = Math.min((count / 50) * 100, 95)
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 59 |     setJarFill(fill)
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 60 |   }
+     | ^^^^ `updateJarFill` is declared here
+  61 |
+  62 |   // Save notes to localStorage
+  63 |   const saveNotes = (updatedNotes: GratitudeNote[]) => {  react-hooks/immutability
+
+/root/.openclaw/workspace/ai-diary/app/growth-path/page.tsx
+  86:11  warning  'FeatureStatus' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/growth-roadmap/page.tsx
+  241:41  warning  'index' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/growth/page.tsx
+  88:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/guestbook/page.tsx
+   3:28  warning  'useEffect' is defined but never used                @typescript-eslint/no-unused-vars
+   5:8   warning  'gsap' is defined but never used                     @typescript-eslint/no-unused-vars
+   8:7   warning  'fadeInUp' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  33:9   warning  'messagesEndRef' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/habits/[id]/history/page.tsx
+   5:8   warning  'Link' is defined but never used                                                                                      @typescript-eslint/no-unused-vars
+  10:3   warning  'TrendingDown' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+  51:6   warning  React Hook useEffect has a missing dependency: 'fetchHabitHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  77:14  warning  '_error' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/habits/[id]/page.tsx
+  28:6  warning  React Hook useEffect has a missing dependency: 'fetchHabit'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  68:9  warning  'getDayOfWeek' is assigned a value but never used                                                              @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/habits/[id]/streak/page.tsx
+    5:8   warning  'Link' is defined but never used                                                                                    @typescript-eslint/no-unused-vars
+   56:6   warning  React Hook useEffect has a missing dependency: 'fetchStreakData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+   68:14  warning  '_error' is defined but never used                                                                                  @typescript-eslint/no-unused-vars
+  256:52  warning  'index' is defined but never used                                                                                   @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/habits/page.tsx
+  324:94  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/habits/stats/page.tsx
+  28:6  warning  React Hook useEffect has a missing dependency: 'fetchStats'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/heatmap/page.tsx
+   36:6  warning  React Hook useEffect has a missing dependency: 'fetchHeatmapData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  116:9  warning  'maxValue' is assigned a value but never used                                                                        @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/image-history/page.tsx
+    5:8   warning  'Image' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   98:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  131:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/inspiration-wall/page.tsx
+  35:38  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/inspirations/[id]/page.tsx
+  3:30  warning  'getUserInspirationStatus' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/inspirations/saved/page.tsx
+  21:29  warning  'categories' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/life-chapters/page.tsx
+  400:39  warning  'index' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/life-milestones/page.tsx
+  261:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/root/.openclaw/workspace/ai-diary/app/life-milestones/page.tsx:261:7
+  259 |   useEffect(() => {
+  260 |     if (selectedType === "all") {
+> 261 |       setFilteredMilestones(milestones);
+      |       ^^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  262 |     } else {
+  263 |       setFilteredMilestones(milestones.filter((m) => m.type === selectedType));
+  264 |     }  react-hooks/set-state-in-effect
+
+/root/.openclaw/workspace/ai-diary/app/meditation/history/page.tsx
+   56:6   warning  React Hook useEffect has a missing dependency: 'fetchHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  207:63  warning  Unexpected any. Specify a different type                                                                         @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/meditation/page.tsx
+  51:9  warning  'router' is assigned a value but never used                                                                    @typescript-eslint/no-unused-vars
+  78:6  warning  React Hook useEffect has a missing dependency: 'fetchStats'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/meditation/stats/page.tsx
+  51:6  warning  React Hook useEffect has a missing dependency: 'fetchStats'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/memory-gallery/page.tsx
+  295:53  warning  'index' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/mental-health/report/page.tsx
+  66:6  warning  React Hook useEffect has a missing dependency: 'fetchReport'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  97:9  warning  'getScoreColor' is assigned a value but never used                                                              @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/mentors/page.tsx
+    6:3   warning  'User' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+    6:16  warning  'Lightbulb' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+  556:56  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/mentors/page.tsx:556:56
+  554 |                   <Quote className="w-4 h-4 text-slate-400" />
+  555 |                   <span className="text-sm text-slate-500 italic">
+> 556 |                     "{selectedMentor.quotes[Math.floor(Math.random() * selectedMentor.quotes.length)]}"
+      |                                                        ^^^^^^^^^^^^^ Cannot call impure function
+  557 |                   </span>
+  558 |                 </div>
+  559 |               </div>  react-hooks/purity
+
+/root/.openclaw/workspace/ai-diary/app/milestones/page.tsx
+  102:10  warning  'stats' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/monthly-report/page.tsx
+   72:6  warning  React Hook useEffect has a missing dependency: 'analyzeMonth'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  402:5  warning  'growthAreas' is defined but never used                                                                          @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/mood-bingo/page.tsx
+    3:20  warning  'useEffect' is defined but never used             @typescript-eslint/no-unused-vars
+  130:10  warning  'winLines' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  130:20  warning  'setWinLines' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  218:31  warning  'index' is defined but never used                 @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/mood-forecast/page.tsx
+   35:7  warning  'weatherBg' is assigned a value but never used            @typescript-eslint/no-unused-vars
+   42:7  warning  'forecastSuggestions' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  101:9  warning  'avgMood' is assigned a value but never used              @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/mood-store/page.tsx
+  199:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/root/.openclaw/workspace/ai-diary/app/mood-store/page.tsx:199:5
+  197 |   // 从 localStorage 加载数据 - 仅在客户端
+  198 |   useEffect(() => {
+> 199 |     setMounted(true);
+      |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  200 |     try {
+  201 |       const savedCoins = localStorage.getItem("mood-store-coins");
+  202 |       const savedPurchased = localStorage.getItem("mood-store-purchased");  react-hooks/set-state-in-effect
+
+/root/.openclaw/workspace/ai-diary/app/mood-trends/page.tsx
+  124:9  warning  'neutralCount' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/mood/calendar-view/page.tsx
+   69:6   warning  React Hook useEffect has a missing dependency: 'fetchMoodData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  219:21  warning  'dateStr' is assigned a value but never used                                                                      @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/mood/calendar/page.tsx
+  43:6  warning  React Hook useEffect has a missing dependency: 'fetchMoodData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/mood/history/page.tsx
+  96:32  warning  'i' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/my/follows/page.tsx
+   37:6   warning  React Hook useEffect has a missing dependency: 'fetchFollows'. Either include it or remove the dependency array                                                                                                                                                                          react-hooks/exhaustive-deps
+  177:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/on-this-day/page.tsx
+  161:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  254:41  warning  'index' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/page.tsx
+  158:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/playground/page.tsx
+   9:10  warning  'userInput' is assigned a value but never used      @typescript-eslint/no-unused-vars
+   9:21  warning  'setUserInput' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  10:10  warning  'showResult' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  10:22  warning  'setShowResult' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/pomodoro/page.tsx
+   35:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  104:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  357:65  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/product-canvas/page.tsx
+    3:20  warning  'useEffect' is defined but never used               @typescript-eslint/no-unused-vars
+  152:10  warning  'showExport' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  152:22  warning  'setShowExport' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  268:35  warning  'index' is defined but never used                   @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/progress-tracker/page.tsx
+  75:7   warning  'categoryColors' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  90:16  warning  'setData' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+  95:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/root/.openclaw/workspace/ai-diary/app/progress-tracker/page.tsx:95:5
+  93 |
+  94 |   useEffect(() => {
+> 95 |     setMounted(true)
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  96 |   }, [])
+  97 |
+  98 |   const levelProgress = ((data.xpToNextLevel - (data.xp % 1000)) / data.xpToNextLevel) * 100  react-hooks/set-state-in-effect
+
+/root/.openclaw/workspace/ai-diary/app/prompt-market/page.tsx
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/prompt-optimizer/page.tsx
+  5:40  warning  'ArrowRight' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/random/page.tsx
+  108:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/rant-room/page.tsx
+   7:28  warning  'Moon' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+   7:34  warning  'Sun' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  85:7   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/root/.openclaw/workspace/ai-diary/app/rant-room/page.tsx:85:7
+  83 |     if (saved) {
+  84 |       const history = JSON.parse(saved);
+> 85 |       setRantHistory(history);
+     |       ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  86 |       setReleaseCount(history.length);
+  87 |     }
+  88 |   }, []);  react-hooks/set-state-in-effect
+
+/root/.openclaw/workspace/ai-diary/app/reading-history/page.tsx
+  39:6  warning  React Hook useEffect has a missing dependency: 'fetchRecords'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/reading-progress/page.tsx
+  17:38  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/reports/[id]/page.tsx
+  41:9   warning  'router' is assigned a value but never used                                                                     @typescript-eslint/no-unused-vars
+  50:6   warning  React Hook useEffect has a missing dependency: 'fetchReport'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  84:14  warning  '_error' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/reports/create/page.tsx
+   4:8   warning  'Link' is defined but never used    @typescript-eslint/no-unused-vars
+  67:14  warning  '_error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/reports/page.tsx
+  60:6  warning  React Hook useEffect has a missing dependency: 'fetchReports'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/rituals/page.tsx
+  145:7   warning  'categoryEmojis' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  180:10  warning  'showCreateForm' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  208:5   error    Error: Cannot access variable before it is declared
+
+`loadData` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/root/.openclaw/workspace/ai-diary/app/rituals/page.tsx:208:5
+  206 |
+  207 |   useEffect(() => {
+> 208 |     loadData();
+      |     ^^^^^^^^ `loadData` accessed before it is declared
+  209 |   }, []);
+  210 |
+  211 |   const loadData = () => {
+
+/root/.openclaw/workspace/ai-diary/app/rituals/page.tsx:211:3
+  209 |   }, []);
+  210 |
+> 211 |   const loadData = () => {
+      |   ^^^^^^^^^^^^^^^^^^^^^^^^
+> 212 |     const savedCustom = localStorage.getItem('customRituals');
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 213 |     const savedHistory = localStorage.getItem('ritualHistory');
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 220 |     }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 221 |   };
+      | ^^^^^ `loadData` is declared here
+  222 |
+  223 |   const calculateStats = (history: RitualRecord[]) => {
+  224 |     const now = new Date();  react-hooks/immutability
+  209:6   warning  React Hook useEffect has a missing dependency: 'loadData'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/self-dialogue/page.tsx
+    3:20  warning  'useEffect' is defined but never used          @typescript-eslint/no-unused-vars
+  146:11  warning  'scenario' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  159:15  warning  'messages' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/settings/backup/page.tsx
+  14:52  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  15:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/settings/level/page.tsx
+  54:6  warning  React Hook useEffect has a missing dependency: 'fetchLevelData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/shadow-work/page.tsx
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/share/[token]/page.tsx
+  55:6  warning  React Hook useEffect has a missing dependency: 'fetchSharedDiary'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/skill-tree/page.tsx
+  320:9   warning  'getSkillPosition' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+  430:23  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/skill-tree/page.tsx:430:23
+  428 |             className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+  429 |             style={{
+> 430 |               top: `${Math.random() * 100}%`,
+      |                       ^^^^^^^^^^^^^ Cannot call impure function
+  431 |               left: `${Math.random() * 100}%`,
+  432 |               animationDelay: `${Math.random() * 3}s`,
+  433 |               opacity: Math.random() * 0.7 + 0.3,  react-hooks/purity
+  431:24  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/skill-tree/page.tsx:431:24
+  429 |             style={{
+  430 |               top: `${Math.random() * 100}%`,
+> 431 |               left: `${Math.random() * 100}%`,
+      |                        ^^^^^^^^^^^^^ Cannot call impure function
+  432 |               animationDelay: `${Math.random() * 3}s`,
+  433 |               opacity: Math.random() * 0.7 + 0.3,
+  434 |             }}                                                               react-hooks/purity
+  432:34  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/skill-tree/page.tsx:432:34
+  430 |               top: `${Math.random() * 100}%`,
+  431 |               left: `${Math.random() * 100}%`,
+> 432 |               animationDelay: `${Math.random() * 3}s`,
+      |                                  ^^^^^^^^^^^^^ Cannot call impure function
+  433 |               opacity: Math.random() * 0.7 + 0.3,
+  434 |             }}
+  435 |           />                                                             react-hooks/purity
+  433:24  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/skill-tree/page.tsx:433:24
+  431 |               left: `${Math.random() * 100}%`,
+  432 |               animationDelay: `${Math.random() * 3}s`,
+> 433 |               opacity: Math.random() * 0.7 + 0.3,
+      |                        ^^^^^^^^^^^^^ Cannot call impure function
+  434 |             }}
+  435 |           />
+  436 |         ))}                                                                                                         react-hooks/purity
+
+/root/.openclaw/workspace/ai-diary/app/sleep/[id]/analysis/page.tsx
+  62:6   warning  React Hook useEffect has a missing dependency: 'fetchAnalysis'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  73:14  warning  '_error' is defined but never used                                                                                @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/stats/charts/page.tsx
+  18:26  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/stats/dashboard/page.tsx
+  53:6  warning  React Hook useEffect has a missing dependency: 'fetchStats'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/stats/heatmap/page.tsx
+  25:7  warning  'moodColors' is assigned a value but never used                                                                  @typescript-eslint/no-unused-vars
+  58:6  warning  React Hook useEffect has a missing dependency: 'fetchHeatmap'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/stats/insights/page.tsx
+   11:52  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   30:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   53:40  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   73:38  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  105:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  139:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/stories/page.tsx
+  218:11  error  Do not use an `<a>` element to navigate to `/feedback/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+/root/.openclaw/workspace/ai-diary/app/streak-guardian/page.tsx
+    3:31  warning  'useCallback' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+  143:31  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-explicit-any
+  200:5   error    Error: Cannot access variable before it is declared
+
+`analyzeWritingPattern` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/root/.openclaw/workspace/ai-diary/app/streak-guardian/page.tsx:200:5
+  198 |     
+  199 |     // 计算写作模式
+> 200 |     analyzeWritingPattern(days);
+      |     ^^^^^^^^^^^^^^^^^^^^^ `analyzeWritingPattern` accessed before it is declared
+  201 |   }, []);
+  202 |
+  203 |   // 分析风险
+
+/root/.openclaw/workspace/ai-diary/app/streak-guardian/page.tsx:218:3
+  216 |
+  217 |   // 分析写作模式
+> 218 |   const analyzeWritingPattern = (days: Date[]) => {
+      |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 219 |     if (days.length < 3) {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 220 |       setWritingPattern(null);
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 246 |     });
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 247 |   };
+      | ^^^^^ `analyzeWritingPattern` is declared here
+  248 |
+  249 |   // 模拟今日写作
+  250 |   const simulateWrite = () => {  react-hooks/immutability
+  328:23  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/streak-guardian/page.tsx:328:23
+  326 |             className="absolute w-1 h-1 bg-white/50 rounded-full animate-pulse"
+  327 |             style={{
+> 328 |               top: `${Math.random() * 100}%`,
+      |                       ^^^^^^^^^^^^^ Cannot call impure function
+  329 |               left: `${Math.random() * 100}%`,
+  330 |               animationDelay: `${Math.random() * 2}s`,
+  331 |             }}                                                                                                                                                                                                                                                                  react-hooks/purity
+  329:24  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/streak-guardian/page.tsx:329:24
+  327 |             style={{
+  328 |               top: `${Math.random() * 100}%`,
+> 329 |               left: `${Math.random() * 100}%`,
+      |                        ^^^^^^^^^^^^^ Cannot call impure function
+  330 |               animationDelay: `${Math.random() * 2}s`,
+  331 |             }}
+  332 |           />                                                                                                                                                                                                                                                                                                                                    react-hooks/purity
+  330:34  error    Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/root/.openclaw/workspace/ai-diary/app/streak-guardian/page.tsx:330:34
+  328 |               top: `${Math.random() * 100}%`,
+  329 |               left: `${Math.random() * 100}%`,
+> 330 |               animationDelay: `${Math.random() * 2}s`,
+      |                                  ^^^^^^^^^^^^^ Cannot call impure function
+  331 |             }}
+  332 |           />
+  333 |         ))}                                                                                                                                                                                                                                                                                                                                   react-hooks/purity
+
+/root/.openclaw/workspace/ai-diary/app/style-alchemist/page.tsx
+  119:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/style-analyzer/page.tsx
+    3:20  warning  'useMemo' is defined but never used                    @typescript-eslint/no-unused-vars
+  132:9   warning  'exclamationMarks' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  133:9   warning  'commas' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  237:9   warning  'bgPath' is assigned a value but never used            @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/tags/cloud/page.tsx
+  142:78  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  145:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  154:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  156:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/tags/graph/page.tsx
+   83:17  warning  'setNodes' is assigned a value but never used   @typescript-eslint/no-unused-vars
+   84:17  warning  'setEdges' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  208:25  warning  'isHovered' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/tags/manage/page.tsx
+  27:6  warning  React Hook useEffect has a missing dependency: 'fetchTags'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/templates/[id]/page.tsx
+  66:6  warning  React Hook useEffect has a missing dependency: 'fetchTemplate'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/themes/[id]/page.tsx
+  238:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/themes/page.tsx
+  147:9  warning  'otherThemes' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/time-capsule/[id]/page.tsx
+  27:10  warning  'opening' is assigned a value but never used                                                                     @typescript-eslint/no-unused-vars
+  31:6   warning  React Hook useEffect has a missing dependency: 'fetchCapsule'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  47:9   warning  'handleOpen' is assigned a value but never used                                                                  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/timeline/page.tsx
+  92:35  warning  'dayIndex' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/txt2img/page.tsx
+  294:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  338:19  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/root/.openclaw/workspace/ai-diary/app/user/[id]/level/page.tsx
+  40:7   warning  'XP_PER_LEVEL' is assigned a value but never used                                                                  @typescript-eslint/no-unused-vars
+  52:6   warning  React Hook useEffect has a missing dependency: 'fetchLevelInfo'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  69:14  warning  '_error' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/user/[id]/page.tsx
+  40:6  warning  React Hook useEffect has a missing dependency: 'fetchUser'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/version-compare/page.tsx
+   11:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   12:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  179:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/root/.openclaw/workspace/ai-diary/app/voice-diary/page.tsx
+  166:6  warning  React Hook useEffect has a missing dependency: 'isRecording'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/weekly-reflection/page.tsx
+   41:6  warning  React Hook useEffect has a missing dependency: 'fetchDiaries'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  234:9  warning  'getScoreColor' is assigned a value but never used                                                               @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/weekly-report/history/client.tsx
+  22:6  warning  React Hook useEffect has a missing dependency: 'fetchReports'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/wisdom-mentors/page.tsx
+  170:14  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/writing-buddy/page.tsx
+   3:20  warning  'useEffect' is defined but never used               @typescript-eslint/no-unused-vars
+  30:7   warning  'styleAnalysis' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/writing-calendar/page.tsx
+  53:6  warning  React Hook useEffect has missing dependencies: 'calculateStats' and 'generateCalendar'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/writing-goals/history/page.tsx
+  71:6  warning  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/writing-habit/page.tsx
+  139:53  warning  'data' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+  188:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/root/.openclaw/workspace/ai-diary/app/writing-habit/page.tsx:188:5
+  186 |   
+  187 |   useEffect(() => {
+> 188 |     setData(mockData);
+      |     ^^^^^^^ Avoid calling setState() directly within an effect
+  189 |     setStats(calculatedStats);
+  190 |     setAchievements(unlockedAchievements);
+  191 |   }, [mockData, calculatedStats, unlockedAchievements]);  react-hooks/set-state-in-effect
+  195:9   warning  'monthData' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/writing-habits/[id]/page.tsx
+  59:6  warning  React Hook useEffect has a missing dependency: 'fetchHabit'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/root/.openclaw/workspace/ai-diary/app/writing-habits/page.tsx
+   59:16  warning  'setLogs' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  132:11  warning  'today' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  162:27  warning  'habitId' is defined but never used           @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/app/writing-personality/page.tsx
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/lib/ai-service.ts
+  551:1  warning  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+/root/.openclaw/workspace/ai-diary/lib/auth.ts
+  13:28  warning  '_request' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/lib/diary-dna.ts
+  141:15  warning  '_' is defined but never used  @typescript-eslint/no-unused-vars
+  161:15  warning  '_' is defined but never used  @typescript-eslint/no-unused-vars
+
+/root/.openclaw/workspace/ai-diary/lib/writing-analysis.ts
+  163:42  warning  '_' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 554 problems (49 errors, 505 warnings)
+
