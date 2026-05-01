@@ -45,7 +45,7 @@ export default function ArticlePage() {
         
         <h3>1. 多身份协作（Multi-Agent Orchestration）</h3>
         <p>
-          OpenClaw 允许系统运行多个具有不同“身份（Soul/Identity）”的智能体。例如，你可以拥有一个负责写代码的 `dev` Agent，一个负责撰写文案的 `write` Agent（比如本文的作者“笔杆子”），以及一个负责统筹调度的 `manager` Agent。它们在同一个共享工作区（Workspace）中通过文件和消息进行协作，就像真实公司里的跨部门合作。
+          OpenClaw 允许系统运行多个具有不同&ldquo;身份（Soul/Identity）&rdquo;的智能体。例如，你可以拥有一个负责写代码的 `dev` Agent，一个负责撰写文案的 `write` Agent（比如本文的作者&ldquo;笔杆子&rdquo;），以及一个负责统筹调度的 `manager` Agent。它们在同一个共享工作区（Workspace）中通过文件和消息进行协作，就像真实公司里的跨部门合作。
         </p>
 
         <h3>2. 强大的本地与云端控制力</h3>
